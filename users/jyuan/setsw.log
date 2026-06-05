@@ -1,0 +1,29 @@
+configure terminal
+configure terminal
+% Warning: The following users are currently configuring the system:
+User "" on line console0
+QA_SWITCH_9(conf)#interface vlan 905
+interface vlan 905
+QA_SWITCH_9(conf-if-vl-905)#untagged Gi5/29
+untagged Gi5/29
+QA_SWITCH_9(conf-if-vl-905)#interface Gi5/29
+interface Gi5/29
+QA_SWITCH_9(conf-if-gi-5/29)#description vlabVlan
+description vlabVlan
+QA_SWITCH_9(conf-if-gi-5/29)#spanning-tree mstp edge-port bpduguard shutdown-on-violation
+spanning-tree mstp edge-port bpduguard shutdown[47D                                                  [50D$-tree mstp edge-port bpduguard shutdown-on-viol[48D                                                  [50D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_9(conf-if-gi-5/29)#spanning-tree rstp edge-port bpduguard shutdown-on-violation
+spanning-tree rstp edge-port bpduguard shutdown[47D                                                  [50D$-tree rstp edge-port bpduguard shutdown-on-viol[48D                                                  [50D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_9(conf-if-gi-5/29)#spanning-tree
+spanning-tree
+QA_SWITCH_9(conf-if-gi-5/29)#protocol lldp
+protocol lldp
+QA_SWITCH_9(conf-if-gi-5/29-lldp)#disable
+disable
+QA_SWITCH_9(conf-if-gi-5/29-lldp)#exit
+exit
+QA_SWITCH_9(conf-if-gi-5/29)#no shutdown
+no shutdown
+QA_SWITCH_9(conf-if-gi-5/29)#end
+end
+QA_SWITCH_9#

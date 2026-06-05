@@ -1,0 +1,11 @@
+configure terminal
+configure terminal
+% Warning: The following users are currently configuring the system:
+User "admin" on line vty0 ( 10.103.50.183 )
+QA_SWITCH_10(conf)#interface g3/32
+interface g3/32
+QA_SWITCH_10(conf-if-gi-3/32)#shutdown
+shutdown
+QA_SWITCH_10(conf-if-gi-3/32)#end
+end
+QA_SWITCH_10#

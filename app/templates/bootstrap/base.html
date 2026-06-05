@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="static/images/user.jpg" type="image/x-icon">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>{% block title %}Sonicwall VLAB{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    {% block css %}　<!--css模块区域-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/bootstrap/dist/css/bootstrap.css') }}">
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-3.3.7-dist/css/bootstrap.css') }}">-->
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='vendors/jquery/dist/jquery.js') }}"></script>
+    <!-- Bootstrap -->
+    <script src="{{ url_for('static', filename='vendors/bootstrap/dist/js/bootstrap.js') }}"></script>
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-3.3.7-dist/js/bootstrap.js') }}">-->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/font-awesome/css/font-awesome.min.css') }}">
+    <!-- NProgress -->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/nprogress/nprogress.css') }}">-->
+    <!-- iCheck -->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/iCheck/skins/flat/green.css') }}">-->
+    <!-- bootstrap-progressbar -->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}">-->
+    <!-- JQVMap -->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/jqvmap/dist/jqvmap.min.css') }}">-->
+    <!-- Custom Theme Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='build/css/custom.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/btncircle.css') }}">
+    <!-- bootstrap-wysiwyg -->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/google-code-prettify/bin/prettify.min.css') }}">-->
+    <!-- Select2 -->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/select2/dist/css/select2.min.css') }}">-->
+    <!-- Switchery -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/switchery/dist/switchery.min.css') }}">
+    <!-- starrr -->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/starrr/dist/starrr.css') }}">-->
+    <!-- ledstatus -->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='css/ledstatus.css') }}">-->
+    <!-- Datatables -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}">
+    <!-- Flot -->
+    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.pie.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.time.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.stack.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/Flot/jquery.flot.resize.js') }}"></script>
+    <!-- Flot plugins -->
+    <script src="{{ url_for('static', filename='vendors/flot.orderbars/js/jquery.flot.orderBars.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/flot-spline/js/jquery.flot.spline.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/flot.curvedlines/curvedLines.js') }}"></script>
+    <!-- morris.js -->
+    <script src="{{ url_for('static', filename='vendors/raphael/raphael.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/morris.js/morris.js') }}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{{ url_for('static', filename='js/moment/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/datepicker/daterangepicker.js') }}"></script>
+    <!-- Switchery -->
+        <script src="{{ url_for('static', filename='vendors/switchery/dist/switchery.min.js') }}"></script>
+    <!-- Parsley -->
+        <script src="{{ url_for('static', filename='vendors/parsleyjs/dist/parsley.min.js') }}"></script>
+    <!-- Autosize -->
+        <script src="{{ url_for('static', filename='vendors/autosize/dist/autosize.min.js') }}"></script>
+    <!-- jQuery autocomplete -->
+        <script src="{{ url_for('static', filename='vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js') }}"></script>
+    <!-- starrr -->
+        <script src="{{ url_for('static', filename='vendors/starrr/dist/starrr.js') }}"></script>
+    <!-- Datatables -->
+    <script src="{{ url_for('static', filename='vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
+    <!-- gauge.js -->
+    <script src="{{ url_for('static', filename='vendors/gauge.js/dist/gauge.min.js') }}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{{ url_for('static', filename='vendors/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
+    <!-- Chart.js -->
+    <script src="{{ url_for('static', filename='vendors/Chart.js/dist/Chart.min.js') }}"></script>
+    <!-- jtopo Scripts -->
+    <script src="{{ url_for('static', filename='js/jtopo/jtopo-0.4.8-min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jtopo/toolbar.js') }}"></script>
+    <!-- index Scripts -->
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    {% endblock %}
+</head>
+<body class="nav-sm">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view ">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="/myhome" class="site_title"><i class="fa fa-home"></i> <span>Shanghai VLAB</span></a>
+            </div>
+            <div class="clearfix"></div>
+            {% include "bootstrap/sidebar.html" %}
+            {% include "bootstrap/menufooter.html" %}
+          </div>
+            {% include "bootstrap/topnav.html" %}
+            {% block content %}<!--自定义模板区域-->
+            {% endblock %}
+            {% include "bootstrap/footer.html" %}
+        </div>
+      </div>
+    </div>
+    {% block js %}<!--js模块区域-->
+<!--    <script src="{{ url_for('static', filename='js/nanobar.min.js') }}"></script>-->
+    <!-- FastClick -->
+<!--    <script src="{{ url_for('static', filename='vendors/fastclick/lib/fastclick.js') }}"></script>-->
+    <!-- NProgress -->
+<!--    <script src="{{ url_for('static', filename='vendors/nprogress/nprogress.js') }}"></script>-->
+
+
+    <!-- iCheck -->
+<!--    <script src="{{ url_for('static', filename='vendors/iCheck/icheck.min.js') }}"></script>-->
+    <!-- Skycons -->
+<!--    <script src="{{ url_for('static', filename='vendors/skycons/skycons.js') }}"></script>-->
+
+    <!-- DateJS -->
+<!--    <script src="{{ url_for('static', filename='vendors/DateJS/build/date.js') }}"></script>-->
+    <!-- JQVMap -->
+<!--    <script src="{{ url_for('static', filename='vendors/jqvmap/dist/jquery.vmap.js') }}"></script>-->
+<!--    <script src="{{ url_for('static', filename='vendors/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>-->
+<!--    <script src="{{ url_for('static', filename='vendors/jqvmap/examples/js/jquery.vmap.sampledata.js') }}"></script>-->
+
+
+    <!-- Custom Theme Scripts -->
+    <script async src="{{ url_for('static', filename='build/js/custom.js') }}"></script>
+
+    <!-- bootstrap-wysiwyg -->
+<!--    <script src="{{ url_for('static', filename='vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js') }}"></script>-->
+<!--    <script src="{{ url_for('static', filename='vendors/jquery.hotkeys/jquery.hotkeys.js') }}"></script>-->
+<!--    <script src="{{ url_for('static', filename='vendors/google-code-prettify/src/prettify.js') }}"></script>-->
+    <!-- jQuery Tags Input -->
+<!--        <script src="{{ url_for('static', filename='vendors/jquery.tagsinput/src/jquery.tagsinput.js') }}"></script>-->
+
+    <!-- Select2 -->
+<!--        <script src="{{ url_for('static', filename='vendors/select2/dist/js/select2.full.min.js') }}"></script>-->
+<!--        <script src="{{ url_for('static', filename='bootstrap-3.3.7-dist/js/bootstrap-multiselect.js') }}"></script>-->
+
+
+
+    {% endblock %}
+
+</body>
+</html>

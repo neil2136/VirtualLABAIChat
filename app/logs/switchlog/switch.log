@@ -1,0 +1,25 @@
+show interfaces f4/38 status | include 0
+show interfaces f4/38 status | include 0
+Fa4/38    VLAB_dut117_0-Trun connected    trunk      a-full  a-100 10/100BaseTX
+QA_CORE_SWITCH_4#show running-config interface f4/38
+show running-config interface f4/38
+Building configuration...
+
+Current configuration : 416 bytes
+!
+interface FastEthernet4/38
+ description VLAB_dut117_0-Trunk
+ switchport access vlan 732
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 736
+ switchport trunk allowed vlan 105,106,731-740,911-918
+ switchport mode trunk
+ switchport nonegotiate
+ storm-control broadcast level 0.10
+ no cdp enable
+ spanning-tree portfast trunk
+ spanning-tree bpdufilter disable
+ spanning-tree bpduguard enable
+end
+
+QA_CORE_SWITCH_4#

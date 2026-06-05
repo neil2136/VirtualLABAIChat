@@ -1,0 +1,845 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="row">
+<!--<div id="table-div">-->
+<!--<table id="table-batabase">-->
+<!--  <tr><th>编号</th><th>名字</th><th>年龄</th><th>性别</th><th>爱好</th></tr>-->
+<!--  <tr><td>1</td><td>小明</td><td>20</td><td>男</td><td>篮球</td></tr>-->
+<!--  <tr><td>2</td><td>小猪</td><td>1</td><td>女</td><td>游泳</td></tr>-->
+<!--  <tr><td>3</td><td>小狗</td><td>3</td><td>女</td><td>吃饭</td></tr>-->
+<!--  </table>-->
+<!--</div>-->
+<!--<div id="dongzuo">-->
+<!--  <form id="myform" action="#" method="post">-->
+<!--    <input id="JSONText" name="jsontext" type="text" value="" hidden>-->
+<!--  </form>-->
+<!--  <button id="save-cookie">暂存</button><button id="save">提交</button>-->
+<!--</div>-->
+<!--<script>-->
+<!--  var cookie = document.getElementById('save-cookie');-->
+<!--  var save = document.getElementById('save');-->
+<!--  var table = document.getElementById('table-batabase');-->
+<!--  var myform = document.getElementById('myform');-->
+<!--  cookie.onclick = function(){-->
+<!--    alert('你点击了暂存功能');-->
+<!--  }-->
+<!--  save.onclick = function(){-->
+<!--    //alert(table.rows.length);-->
+<!--    var tr;-->
+<!--    var dataArray = new Array();-->
+<!--    for(var i=1;i<table.rows.length;i++){-->
+<!--      date = new Object();-->
+<!--      tr = table.rows[i];-->
+<!--      date.Code = tr.childNodes[0].innerHTML;-->
+<!--      date.Name = tr.childNodes[1].innerHTML;-->
+<!--      date.Age  = tr.childNodes[2].innerHTML;-->
+<!--      date.Sex  = tr.childNodes[3].innerHTML;-->
+<!--      date.Like = tr.childNodes[4].innerHTML;-->
+<!--      //将table表对象转换成数组装成json放在数组里-->
+<!--      dataArray.push(JSON.stringify(date));-->
+<!--      }-->
+<!--    //将数组装成json放在数组里-->
+<!--    document.getElementById('JSONText').value = dataArray.toString();-->
+<!--    myform.submit();-->
+<!--  }-->
+<!--</script>-->
+
+    <div class="col-md-4 col-sm-4 col-xs-12" style="width:30%">
+      <div class="x_panel tile fixed_height_325">
+        <div class="x_title">
+          <h2>Basic Information</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+              </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table class="table table-striped">
+            <thead>
+            </thead>
+            <tbody>
+            <tr>
+              <td><b>Name</b></td>
+              <td>
+                {% if deviceinfo.classify %}
+                  {{ deviceinfo.Product }}_{{ deviceinfo.classify }}
+                {% else %}
+                  {{ deviceinfo.Product }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td><b>ID</b></td>
+              <td>{{ deviceinfo.id }}</td>
+            </tr>
+            <tr>
+              <td><b>Owner</b></td>
+              <td>{{ deviceinfo.Owner }}</td>
+            </tr>
+            <tr>
+              <td><b>User</b></td>
+              <td>{{ deviceinfo.User }}</td>
+            </tr>
+            <tr>
+              <td><b>SN</b></td>
+              <td>{{ deviceinfo.SN }}</td>
+            </tr>
+            <tr>
+              <td><b>Registration Code</b></td>
+              <td>{{ deviceinfo.RegistrationCode }}</td>
+            </tr>
+            <tr>
+              <td><b>Maintanence Key</b></td>
+              <td>{{ deviceinfo.MaintanenceKey }}</td>
+            </tr>
+            <tr>
+              <td><b>Description</b></td>
+              <td>{{ deviceinfo.Description }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12" style="width:30%">
+      <div class="x_panel tile fixed_height_320">
+        <div class="x_title">
+          <h2>Console Information</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+              </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table class="table table-striped">
+            <thead>
+            </thead>
+            <tbody>
+            <tr>
+              <td><b>Server</b></td>
+              <td>{{ deviceinfo.ConsoleInfo.ConsoleManager }}</td>
+            </tr>
+            <tr>
+              <td><b>Server IP</b></td>
+              <td>{{ deviceinfo.ConsoleInfo.ip }}</td>
+            </tr>
+            <tr>
+              <td><b>Telnet Port</b></td>
+              <td>{{ deviceinfo.ConsoleInfo.TelnetPort }}</td>
+            </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12" style="width:30%">
+      <div class="x_panel tile fixed_height_320">
+        <div class="x_title">
+          <h2>Power Information</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+              </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table class="table table-striped">
+            <thead>
+            </thead>
+            <tbody>
+            <tr>
+              <td><b>Power Control</b></td>
+              <td>{{ deviceinfo.PowerInfo.PowerController }}</td>
+            </tr>
+            <tr>
+              <td><b>Power Control IP</b></td>
+              <td>{{ deviceinfo.PowerInfo.ip }}</td>
+            </tr>
+            <tr>
+              <td><b>Power Channel</b></td>
+              <td>{{ deviceinfo.PowerInfo.PowerChannel }}</td>
+            </tr>
+            <tr><td>
+              {% if deviceinfo.keepAlive == "1" %}
+              <label><nobr><img src="static/images/green_led.png" >  Power On(real-time)</nobr></label>
+              {% else %}
+              <label><nobr><img src="static/images/red_led.png">  Power Off(real-time)</nobr></label>
+              {% endif %}
+            </td><td></td></tr>
+            <tr>
+              <form role="form" class="form-inline" method="post" action="/powercontrol">
+            <input type="hidden" name="id" value="{{ deviceinfo.id }}">
+            <input type="hidden" name="type" value="{{ deviceinfo.DeviceType }}">
+            <div class="form-group pull-right ">
+              <td>
+              <select name="kind" class="form-control" required >
+                <option value="none" selected>-Selete-</option>
+                <option value="Up">Power On</option>
+                <option value="Down">Power Off</option>
+                <option value="reboot">Reboot</option>
+              </select>
+              </td>
+              <td>
+              <button type="submit" class="btn btn-success" name="submit" value="mydevices">Submit</button>
+              </td>
+            </div>
+          </form>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<!--  <div class="row">-->
+<!--    <div class="col-md-6" style="width:80%">-->
+<!--              <div class="x_panel">-->
+<!--                <div class="x_title">-->
+<!--                  <h2>Parameters explaination<small> </small></h2>-->
+<!--                  <ul class="nav navbar-right panel_toolbox">-->
+<!--                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>-->
+<!--                    </li>-->
+<!--                    <li class="dropdown">-->
+<!--                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+<!--                      <ul class="dropdown-menu" role="menu">-->
+<!--                        <li><a href="#">Settings 1</a>-->
+<!--                        </li>-->
+<!--                        <li><a href="#">Settings 2</a>-->
+<!--                        </li>-->
+<!--                      </ul>-->
+<!--                    </li>-->
+<!--                    <li><a class="close-link"><i class="fa fa-close"></i></a>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                  <div class="clearfix"></div>-->
+<!--                </div>-->
+<!--                <div class="x_content bs-example-popovers">-->
+
+<!--                  <div class="alert alert-info alert-dismissible fade in" role="alert">-->
+<!--                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>-->
+<!--                    </button>-->
+<!--                    For Untag and tag VLAN input, Your authorized VLAN is:  <strong><font color="#0000FF" size="2"><b>{{ vlanranges }}</b> </font></strong>-->
+<!--                    <br>For Spanning Tree, when you test L2 bridge/wire mode, must set to off.-->
+<!--                    <br>For Refresh button, He will get the information in Core Switch for the port of your choice.-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--  </div>-->
+  <div class="row">
+  <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>({{ deviceinfo.id }}) {{ deviceinfo.Product }} port settings<small></small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a></li>
+              <li><a href="#">Settings 2</a></li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li></ul>
+        <div class="clearfix"></div>
+      </div>
+        <fieldset>
+        <div class="col-md-12">
+          <div class="form-group pull-left">
+              {% if operateauth == 'check' %}
+              <form role="form" class="form-inline" method="post" action="/dutborrow">
+                <input type="hidden" name="dut_id" value="{{ deviceinfo.id }}">
+                <input type="hidden" name="duttype" value="{{ deviceinfo.DeviceType }}">
+                <button type="submit" class="btn btn-warning" onclick="return borrowset()">Borrow DUT</button>
+              </form>
+              {% else %}
+              <form role="form" class="form-inline" method="post" action="/dutreturn">
+                  <input type="hidden" name="id" value="{{ deviceinfo.id }}">
+                  <input type="hidden" name="type" value="{{ deviceinfo.DeviceType }}">
+                  {% if deviceinfo.User == current_user.svname %}
+                    {% if deviceinfo.Owner == current_user.fullname %}
+                    {% else %}
+                      <button type="submit" class="btn btn-warning" onclick="return returnset()">Return DUT</button>
+                    {% endif %}
+                  {% else %}
+                    <button type="submit" class="btn btn-warning" onclick="return getbackset()">Get Back DUT</button>
+                  {% endif %}
+                </form>
+                {% endif %}
+          </div>
+          <div class="form-group pull-left">
+            <form role="form" class="form-inline" method="post" action="/refreshall">
+		      <input type="hidden" name="dut_id" value="{{ deviceinfo.id }}">
+		      <input type="hidden" name="duttype" value="{{ deviceinfo.DeviceType }}">
+              <button type="submit" class="btn btn-danger" onclick="return borrowset()"><b>Refresh All Ports</b></button>
+		    </form>
+          </div>
+          <div class="form-group pull-left">
+            <form role="form" class="form-inline" method="post" action="/submitall">
+		      <input type="hidden" name="dut_id" value="{{ deviceinfo.id }}">
+		      <input type="hidden" name="duttype" value="{{ deviceinfo.DeviceType }}">
+              <button type="submit" class="btn btn-danger" onclick="return borrowset()"><b>Submit All Ports</b></button>
+		    </form>
+          </div>
+        </div>
+        </fieldset>
+      <div class="x_content">
+        <div id="table-div">
+        <table id="table-batabase" class="table table-bordered" width="100%" style="margin:auto">
+          <tr>
+            <th scope="col" width="10%">Interface</th>
+            <th scope="col" width="12%">port Mode</th>
+            <th scope="col" width="25%">VLAN Tags</th>
+            <th scope="col" width="8%">Spanning Tree</th>
+            <th scope="col" width="8%">LAG(Read only)</th>
+            <th scope="col" width="9%">Configure</th>
+            <th scope="col" width="9%">Power Status</th>
+            <th scope="col">VM Name and NIC</th>
+          </tr>
+          {% if deviceinfo.User == current_user.svname %}
+          {% for dutport in deviceinfo.InterfaceInfo.Interface %}
+            <tr><td width="10%"><br />
+			<b>Name: <font color="#0000FF" size="2">{{ dutport.name }}</font></b><br>({{ dutport.SwitchID }}: {{ dutport.SwitchPort }})</td>
+              <td width="12%"><br />
+				<label class="radio-inline">
+                  {% if dutport.lag == 'on' %}
+                    <input name="portmode" type="radio" class="flat" value="access" readonly checked> access <img src="static/checkmark.png"><br />
+                    <input name="portmode" type="radio" class="flat" value="trunk" readonly> trunk
+                  {% else %}
+                    {% if dutport.portmode == 'access' %}
+                    <input name="portmode" type="radio" class="flat" value="access" checked> access <img src="static/checkmark.png"><br />
+                    <input name="portmode" type="radio" class="flat" value="trunk" > trunk
+                    {% else %}
+                    <input name="portmode" type="radio" value="access" > access <br />
+                    <input name="portmode" type="radio" value="trunk" checked> trunk <img src="static/checkmark.png">
+                    {% endif %}
+                  {% endif %}
+                </label>
+              </td><td width="10%"><br />
+			<b>Name: <font color="#0000FF" size="2">{{ dutport.name }}</font></b><br>({{ dutport.SwitchID }}: {{ dutport.SwitchPort }})</td>
+              <td width="12%"><br />
+				<label class="radio-inline">
+                  {% if dutport.lag == 'on' %}
+                    <input name="portmode" type="radio" class="flat" value="access" readonly checked> access <img src="static/checkmark.png"><br />
+                    <input name="portmode" type="radio" class="flat" value="trunk" readonly> trunk
+                  {% else %}
+                    {% if dutport.portmode == 'access' %}
+                    <input name="portmode" type="radio" class="flat" value="access" checked> access <img src="static/checkmark.png"><br />
+                    <input name="portmode" type="radio" class="flat" value="trunk" > trunk
+                    {% else %}
+                    <input name="portmode" type="radio" value="access" > access <br />
+                    <input name="portmode" type="radio" value="trunk" checked> trunk <img src="static/checkmark.png">
+                    {% endif %}
+                  {% endif %}
+                </label>
+              </td>
+              <td>{{ dutport.SwitchPort }}</td><td></td><td></td><td></td><td></td><td></td></tr>
+
+          {% endfor %}
+          {% else %}
+          {% endif %}
+          <thead>
+          <tr>
+            <th scope="col" width="10%">Interface</th>
+            <th scope="col" width="12%">port Mode</th>
+            <th scope="col" width="25%">VLAN Tags</th>
+            <th scope="col" width="8%">Spanning Tree</th>
+            <th scope="col" width="8%">LAG(Read only)</th>
+            <th scope="col" width="9%">Configure</th>
+            <th scope="col" width="9%">Power Status</th>
+            <th scope="col">VM Name and NIC</th> 
+          </tr>
+          </thead>
+          <tbody>
+        {% if deviceinfo.User == current_user.svname %}
+        {% for dutport in deviceinfo.InterfaceInfo.Interface %}
+          <form data-parsley-validate class="form-horizontal form-label-left" action="/dutportset" method="post" >
+            <input type="hidden" name="id" value="{{ deviceinfo.id }}">
+            <input type="hidden" name="type" value="{{ deviceinfo.DeviceType }}">
+            <input type="hidden" name="portname" value="{{ dutport.name }}">
+<!--            <input type="hidden" name="operate">-->
+            <table class="table table-bordered" width="100%" style="margin:auto; text-align:left; vertical-align: auto;">
+          <tr style="background-color:ghostwhite">
+            <td width="10%"><br />
+			<b>Name: <font color="#0000FF" size="2">{{ dutport.name }}</font></b><br>({{ dutport.SwitchID }}: {{ dutport.SwitchPort }})</td>
+              <td width="12%"><br />
+				<label class="radio-inline">
+                  {% if dutport.lag == 'on' %}
+                    <input name="portmode" type="radio" class="flat" value="access" readonly checked> access <img src="static/checkmark.png"><br />
+                    <input name="portmode" type="radio" class="flat" value="trunk" readonly> trunk
+                  {% else %}
+                    {% if dutport.portmode == 'access' %}
+                    <input name="portmode" type="radio" class="flat" value="access" checked> access <img src="static/checkmark.png"><br />
+                    <input name="portmode" type="radio" class="flat" value="trunk" > trunk
+                    {% else %}
+                    <input name="portmode" type="radio" value="access" > access <br />
+                    <input name="portmode" type="radio" value="trunk" checked> trunk <img src="static/checkmark.png">
+                    {% endif %}
+                  {% endif %}
+                </label>
+              </td>
+              <td width="25%"><br />
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Untag<span class="required">*</span></label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+<!--                   <input type="text" class="form-control" name="untagvlan" value="{{ dutport.untagvlan }}" oninput="value=value.replace(/[^\d]/g,'')">
+                 -->
+                    {% if dutport.lag == 'on' %}
+                    <input type="text" class="form-control" name="untagvlan" value="{{ dutport.untagvlan }}"  readonly>
+                    {% else %}
+					  <select id="untag2" name="untagvlan" class="form-control" required >
+						<option value="{{ dutport.untagvlan }}" selected>{{ dutport.untagvlan }}</option>
+						{% for vlan in vlanranges %}
+						  <option value="{{ vlan }}">{{ vlan }}</option>
+						{% endfor %}
+						</select>
+                    {% endif %}
+				  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Tag<span class="required">*</span></label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+					  <!-- {% if dutport.portmode == 'access' %}
+						<input type="text" class="form-control" name="tagvlan" value="{{ dutport.tagvlan }}" oninput="value=value.replace(/[^\d\,\-]/g,'')" disabled="disabled">
+					  {% else %}
+						<input type="text" class="form-control" name="tagvlan" value="{{ dutport.tagvlan }}" oninput="value=value.replace(/[^\d\,\-]/g,'')">
+					  {% endif %} -->
+                    {% if dutport.lag == 'on' %}
+                      <input type="text" class="form-control" name="tagvlan" value="{{ dutport.tagvlan }}" oninput="value=value.replace(/[^\d\,\-]/g,'')" readonly>
+                    {% else %}
+					  <input type="text" class="form-control" name="tagvlan" value="{{ dutport.tagvlan }}" oninput="value=value.replace(/[^\d\,\-]/g,'')">
+					{% endif %}
+				  </div>
+                </div>
+              </td>
+              <td align="left" width="8%"><br /><br />
+                <input type="text" name="stp" hidden>
+                {% if dutport.lag == 'on' %}
+                  <label><input  type="checkbox" class="js-switch" onclick="this.form.stp.value='off';" checked readonly></label>
+                {% else %}
+                  {% if dutport.stp == 'on' %}
+                  <label><input  type="checkbox" class="js-switch" onclick="this.form.stp.value='off';" checked ></label>
+                  {% else %}
+                  <label><input  type="checkbox" class="js-switch" onclick="this.form.stp.value='on';" ></label>
+                  {% endif %}
+                {% endif %}
+              </td>
+              <td align="left" width="8%"><br /><br />
+                {% if dutport.lag == 'on' %}
+                <input type="hidden" name="lag" value="on">
+                <label><input type="checkbox" class="js-switch" checked disabled></label>
+                {% else %}
+                <input type="hidden" name="lag" value="off">
+                <label><input type="checkbox" class="js-switch" readonly></label>
+                {% endif %}
+              </td>
+			  <td width="9%" align="center"><br />
+<!--			<button type="submit" class="btn btn-warning" onclick="this.form.operate.value='refresh';">Refresh</button>-->
+<!--            <button type="submit" class="btn btn-success" onclick="this.form.operate.value='submit';">Submit .</button>-->
+                <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#waitingModal" name="operate" value="refresh" onclick="showWaiting()" >Refresh</button>
+                <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#waitingModal" name="operate" value="submit" onclick="showWaiting()" >Submit .</button>
+
+              <div class="modal fade" tabindex="-1" role="dialog" id="waitingModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">In Operation ... </h4>
+                        </div>
+                        <div class="modal-body">
+                          <p><b>Note, you can refresh the current page manually to see the Console Log in progressing.</b><p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">100%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" disabled class="btn btn-default" data-dismiss="modal">Configuration in progress. Do not repeat！</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+
+              </td>
+			  <td width="9%" style="background-color:antiquewhite" align="center"><br />
+                {% if dutport.portpower == "no shutdown" %}
+                <nobr><img src="static/images/green_led.png">Link Up</nobr>
+<!--			<button type="submit" class="btn btn-info" onclick="this.form.operate.value='shutdown';">Disable</button>-->
+                <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#waitingModal" name="operate" value="shutdown" onclick="showWaiting()" >Disable </button>
+                {% else %}
+                <nobr><img src="static/images/red_led.png">Link Down</nobr>
+<!--			 <button type="submit" class="btn btn-info" onclick="this.form.operate.value='no shutdown';">Enable</button>-->
+                <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#waitingModal" name="operate" value="no shutdown" onclick="showWaiting()" >Enable </button>
+                {% endif %}
+			  </td>
+              <td style="background-color:lavenderblush" align="center">
+                <!-- <div class="form-group">
+                  <textarea class="form-control" rows="3" readonly>{% for vms in dutport.vmname %}{{ vms.name }}{{ vms.nic }};                                                             {% endfor %}</textarea>
+                </div> -->
+				<select name="vmname" class="form-control" required >
+					{% for vms in dutport.vmname %}
+						<option value="{{ vms.name }}{{ vms.nic }}">{{ vms.name }}{{ vms.nic }}</option>
+						{% endfor %}
+				</select>
+				<select name="vmvlan" class="form-control" required >
+					<option value="none" selected>--Select--</option>
+						{% for vlan in vlanranges %}
+							<option value="{{ vlan }}">{{ vlan }}</option>
+						{% endfor %}
+					<option value="trunk">Trunk</option>
+				</select>
+<!--				<button type="submit" class="btn btn-primary" onclick="this.form.operate.value='vmvlanchange';" >VM VLAN Change</button>-->
+				<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#waitingModal" name="operate" value="vmvlanchange" onclick="showWaiting()" >VM VLAN Change </button>
+
+            <!-- <div class="btn-group"> -->
+            <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#VMModal" data-whatever="inputtovalue">Change VLAN</button> -->
+            <!-- <button type="submit" class="btn btn-info"><a href="/vlansearch?untag={{ dutport.untagvlan }}&portmode={{ dutport.portmode }}&from=mydevices">Goto Change</a></button> -->
+            <!-- <button type="submit" class="btn btn-info"><a href="/vlansearch?searchtype=vm&searchvlan={{ dutport.untagvlan }}&portmode={{ dutport.portmode }}">Goto Change</a></button>
+			<div class="modal fade" id="VMModal" tabindex="-1" role="dialog" aria-labelledby="VMModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="VMModalLabel">VM VLAN Setting</h4>
+                  </div>
+                  <div class="modal-body">
+            			<div class="form-group">
+            				<label class="control-label col-md-3 col-sm-3 col-xs-12">VM name: <span class="required">*</span></label>
+            					<div class="col-md-6 col-sm-6 col-xs-12">
+            						<select name="vmname" class="form-control" required >
+            							<option value="none" selected>--Selete--</option>
+										<option value="uuuu">{{ dutport }}</option>
+            							{% for vms in dutport.vmname %}
+                                          <option value="{{ vms.name }}{{ vms.nic }}">{{ vms.name }}{{ vms.nic }}</option>
+            							{% endfor %}
+            						</select>
+                                </div>
+                        </div><p>&nbsp;</p>
+                      <div class="form-group" >
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">VM VLAN: <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  <select  name="vmvlan" class="form-control" required >
+                                    <option value="none" selected>--Selete--</option>
+                                    {% for vlan in vlanranges %}
+                                      <option value="{{ vlan }}">{{ vlan }}</option>
+                                    {% endfor %}
+                                  </select>
+                                </div>
+                        </div>
+                  </div>
+                  <div class="divider">&nbsp;</div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info" onclick="this.form.operate.value='vmsetting';">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div> -->
+              </td>
+              
+              
+          </tr>
+            </table>
+          </form>
+        {% endfor %}
+        {% else %}
+        {% endif %}
+          </tbody>
+        </table>
+        </div>
+      <div id="dongzuo">
+        <form id="myform" action="#" method="post">
+          <input id="JSONText" name="jsontext" type="text" value="" hidden>
+        </form>
+        <button id="save-cookie">暂存</button><button id="save">提交</button>
+      </div>
+      <script>
+        var cookie = document.getElementById('save-cookie');
+        var save = document.getElementById('save');
+        var table = document.getElementById('table-batabase');
+        var myform = document.getElementById('myform');
+        cookie.onclick = function(){
+          alert('你点击了暂存功能');
+        }
+        save.onclick = function(){
+          //alert(table.rows[0]);
+          var tr;
+          var dataArray = new Array();
+          for(var i=1;i<table.rows.length;i++){
+            date = new Object();
+            tr = table.rows[i];
+            date.id = i
+            date.Interface = tr.childNodes[0].innerHTML;
+            date.Portmode = tr.childNodes[1].innerHTML;
+            date.Untag  = tr.childNodes[2].innerHTML;
+            date.Tag  = tr.childNodes[3].innerHTML;
+            date.STP = tr.childNodes[4].innerHTML;
+            date.LAG = tr.childNodes[5].innerHTML;
+            //date.Code = tr.childNodes[0].innerHTML;
+            //date.Name = tr.childNodes[1].innerHTML;
+            //date.Age  = tr.childNodes[2].innerHTML;
+            //date.Sex  = tr.childNodes[3].innerHTML;
+            //date.Like = tr.childNodes[4].innerHTML;
+            //将table表对象转换成数组装成json放在数组里
+            dataArray.push(JSON.stringify(date));
+            }
+          //将数组装成json放在数组里
+          document.getElementById('JSONText').value = dataArray.toString();
+          myform.submit();
+        }
+      </script>
+      </div>
+    </div>
+  </div>
+  <div class="x_content bs-example-popovers">
+                  <div class="alert alert-info alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    Parameters explaination:
+                    <br>For Untag and tag VLAN input, Your authorized VLAN is:  <strong><font color="#0000FF" size="2"><b>{{ vlanranges }}</b> </font></strong>
+                    <br>For Spanning Tree, when you test L2 bridge/wire mode, must set to off.
+                    <br>For Refresh button, It will get the information in Core Switch port of your choice.
+                    <br>For LAG, only support read only in SW, If you want switch it. Please contact LAB Administrator.
+                    <a href="https://engineering.eng.sonicwall.com/display/SQ/How+to+config+LAG+in+Switch+for+FW" style="color: #0000FF">User Manual</a>
+                  </div>
+                </div>
+  </div>
+
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Switch Console <small>Displays the process of configuring the switch and prints it</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a></li>
+              <li><a href="#">Settings 2</a></li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!--log monitor-->
+      <div id="sw" style="height:500px; overflow:auto">
+        <div>
+          <table>
+            {% for sw_line in consoledata %}
+            <tr class="even pointer">{{ sw_line }}<br></tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Operated Log <small>Displays configure result for all users</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a></li>
+                          <li><a href="#">Settings 2</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <p>All log <code>log_point</code> will show from last Week to now.</p>
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th width="2%"><input type="checkbox" id="check-all" class="flat"></th>
+                            <th class="column-title" width="6%">Users </th>
+                            <th class="column-title" width="8%">Type </th>
+                            <th class="column-title" width="13%">Device </th>
+                            <th class="column-title">Operated </th>
+                            <th class="column-title" width="15%">Local Time</th>
+                          </tr>
+                        </thead>
+                    </table>
+                    <div class="pre-scrollable" style="height: 490px;overflow: auto; margin-top: -22px;">
+                    <table class="table table-striped jambo_table bulk_action table-hover">
+                        <tbody>
+                        {% for log in logs %}
+                          <tr class="even pointer">
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" ">{{ log.svname }}</td>
+                            <td class=" ">{{ log.type }}</td>
+                            <td class=" ">{{ log.device }}</td>
+                            <td class=" last">{{ log.operated }}</td>
+                            <td class=" last">{{ log.time }}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- /page content -->
+
+<script>
+
+function GetInfoFromTable() {
+  var dataArray = new Array();
+          var tableInfo = "";
+          var tableObj = document.getElementById("booktable");
+        alert(tableObj.rows.length);
+          //从第二行开始获取数据
+          for (var i = 2; i < tableObj.rows.length; i++) {  //遍历Table的所有Row
+            for (var j = 0; j < tableObj.rows[i].cells.length; j++) {  //遍历Row中的每一列
+              tableInfo += tableObj.rows[i].cells[j].getElementsByTagName("input")[0].value;  //获取Table中单元格的内容
+              tableInfo += ",";
+            }
+          }
+          alert (tableInfo);
+          /将table表对象转换成数组装成json放在数组里
+          dataArray.push(JSON.stringify(tableInfo));
+
+        //将数组装成json放在数组里
+    document.getElementById('JSONText').value = dataArray.toString();
+    myform.submit();
+}
+
+
+function saveToModal(){
+     var btn = $("#saveButton");
+     btn.button('loading');
+     setTimeout(function () { btn.button('reset'); },5000);
+}
+
+
+
+
+
+　　　 <script>
+　　　　　　function showWaiting() {
+　　　　　　　　$('#waitingModal').modal({
+　　　　　　　　　　keyboard: false,
+　　　　　　　　　　backdrop: 'static',
+　　　　　　　　　　show: true
+　　　　　　　　});
+　　　　　　}
+　　　　　　function hideWaiting() {
+　　　　　　　　$('#waitingModal').modal('hide');
+　　　　　　}
+　　　　</script>
+
+
+function validateForm(){
+	var vmname=document.forms["myForm"]["vmname"].value;
+	var vmvlan=document.forms["myForm"]["vmvlan"].value;	
+	if (vmname=="Not VMs" || vmvlan=="none"){
+	  alert("Error: not VMs or not selete vmvlan !");
+	  return false;
+	  }
+	}	
+function lagoperate()
+{
+  if(window.confirm("Are you sure you want to keep alive/cancel keep alive this DUT in the following week？ Note: Power will be forced to be turned off at 8 pm every Friday night."))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function returnset()
+{
+  if(window.confirm("Are you sure you want to RETURN this Device？ Please confirm again !"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function borrowset()
+{
+  if(window.confirm("Are you sure you want to Borrow this Device？ Please contact the current user of the device first !"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function getbackset()
+{
+  if(window.confirm("Are you sure you want to Get Back this Device？ Please contact the current user of the device first !"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+</script>
+
+{% endblock %}
+

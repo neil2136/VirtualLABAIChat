@@ -1,0 +1,242 @@
+
+<!-- menu profile quick info -->
+<div class="profile">
+  <div class="profile_pic">
+      <a href="/showlabvlans">
+      <img src="static/images/user.jpg" alt="..." class="img-circle profile_img"></a>
+  </div>
+  <div class="profile_info">
+    <span>Welcome,</span>
+    <h2>{{ current_user.fullname }}</h2>
+  </div>
+</div>
+<!-- /menu profile quick info -->
+<br>
+<!-- sidebar menu -->
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+<div class="menu_section">
+  <h3>QA Team</h3>
+    <!--
+  <ul class="nav side-menu">
+    <li><a><i class="fa fa-home"></i> My Devices iiiiiiii<span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+          {% for userdevice in fwfilters %}
+                <form action="/mydeviceinfo" method="get">
+                    <li class="sub_menu">
+                        <input type="hidden" id="id" name="id" value="{{ userdevice.id }}">
+                        <input type="hidden" id="type" name="type" value="{{ userdevice.DeviceType }}">
+                        <button type="submit" class="btn btn-default btn-xs" id="submitid"><b>({{ userdevice.id }}) {{ userdevice.Product }}</b></button>
+                    </li>
+                </form>
+          {% endfor %}
+          <script>
+              var submit = document.getElementById('submitid');
+              submit.onreadystatechange = function () {
+                  var xhr = new XMLHttpRequest();
+                  xhr.onreadystatechange = function () {
+                      if (xhr.readState == 4 && xhr.status == 200) {
+                          console.log(typeof xhr.responseText);
+
+                      }
+                  }
+                  var id = document.getElementById('id').value;
+                  var type = documet.getElementById('type').value;
+                  var url = 'mydeviceid?id=' + id + '&type=' + type;
+                  xhr.open('get', url, true);
+                  xhr.send(null);
+                  return false
+              }
+          </script>
+      </ul>
+    </li>
+  </ul>
+  -->
+  <ul class="nav side-menu">
+    <li><a><i class="fa fa-th-list"></i> My Devices <span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+<!--          <li><a href="{{ url_for('.showlabvlans') }}" style="color: Aquamarine;">LAB Devices Summary</a></li>-->
+          <li style="color: yellow;">Firewall:  </li>
+          {% if fwfilters %}
+          {% for fwfilter in fwfilters %}
+          {% if fwfilter.Owner == 'Public' %}
+          {% else %}
+            <li><a href="/mydeviceinfo?id={{ fwfilter.id }}&type={{ fwfilter.DeviceType }}">|-&#45;&#45;  ({{ fwfilter.id }})
+                {% if fwfilter.classify %}
+                  {{ fwfilter.Product }}_{{ fwfilter.classify }}
+                {% else %}
+                  {{ fwfilter.Product }}
+                {% endif %}
+                </a></li>
+          {% endif %}
+          {% endfor %}
+          {% else %}
+          <li><a style="color:red">|-&#45;&#45;  Not Device</a></li>
+          {% endif %}
+          <li style="color: yellow;">SonicPoint:  </li>
+          {% if spfilters %}
+          {% for spfilter in spfilters %}
+            <li><a href="/mydeviceinfo?id={{ spfilter.id }}&type={{ spfilter.DeviceType }}">|-&#45;&#45;  ({{ spfilter.id }}) {{ spfilter.Product }}</a></li>
+          {% endfor %}
+          {% else %}
+          <li><a style="color:red">|-&#45;&#45;  Not Device</a></li>
+          {% endif %}
+          <li style="color: yellow;">Lent Device:  </li>
+          {% if lentlist %}
+          {% for lent in lentlist %}
+            <li><a href="/mydeviceinfo?id={{ lent.id }}&type={{ lent.DeviceType }}">|-&#45;&#45;  ({{ lent.id }})
+                {% if lent.classify %}
+                  {{ lent.Product }}_{{ lent.classify }}
+                {% else %}
+                  {{ lent.Product }}
+                {% endif %}
+            </a></li>
+          {% endfor %}
+          {% else %}
+          <li><a style="color:red">|-&#45;&#45;  Not Device</a></li>
+          {% endif %}
+          <li style="color: yellow;">Public Pool:  </li>
+          {% if publicpool %}
+          {% for public in publicpool %}
+            <li><a href="/devicepool?id={{ public.id }}&type={{ public.DeviceType }}">|-&#45;&#45;  ({{ public.id }})
+                {% if public.classify %}
+                  {{ public.Product }}_{{ public.classify }}
+                {% else %}
+                  {{ public.Product }}
+                {% endif %}
+            </a></li>
+          {% endfor %}
+          {% else %}
+          <li><a style="color:red">|-&#45;&#45;  Not Device</a></li>
+          {% endif %}
+      </ul>
+    </li>
+  </ul>
+  <ul class="nav side-menu">
+    <li><a><i class="fa fa-windows"></i> My VMs <span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu ">
+          {% for vmnames in vmlists %}
+          <li style="color: yellow;">ESXi: {{ vmnames.ip }}</li>
+
+          {% for vmname in vmnames.name %}
+            <li><a href="/myvms?vmname={{ vmname }}">|---  {{ vmname }}</a></li>
+          {% endfor %}
+          {% endfor %}
+      </ul>
+    </li>
+  </ul>
+  <ul class="nav side-menu">
+    <li><a><i class="glyphicon glyphicon-random"></i>&nbsp;&nbsp;&nbsp; My VLANs <span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+          {% for vlanlist in vlanlists %}
+          <li style="color: yellow;">{{ vlanlist.type }} VLAN ：</li>
+          {% for vlan in vlanlist.id %}
+            <li><a href="#">|---  {{ vlan.vlan }} &nbsp;&nbsp;&nbsp;&nbsp;{{ vlan.inused }}</a></li>
+          {% endfor %}
+          {% endfor %}
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="menu_section">
+<h3>LAB Managment</h3>
+  <ul class="nav side-menu">
+   <li><a><i class="fa fa-table"></i> Devices Summary<span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="{{ url_for('.labdut') }}">LAB Devices</a></li>
+        <li><a href="{{ url_for('.cubedut') }}">Cube Devices</a></li>
+        <li><a href="{{ url_for('.phywpc') }}">Wireless PC Control</a></li>
+        <li><a href="{{ url_for('.ixia') }}">Ixia Control</a></li>
+      </ul>
+    </li>
+<!--    <li><a><i class="fa fa-bug"></i> Switch Debug <span class="fa fa-chevron-down"></span></a>-->
+<!--      <ul class="nav child_menu">-->
+<!--        <li><a href="/">VLAN Check(old VLAB)</a></li>-->
+<!--        <li><a href="/">Config Queue(old VLAB)</a></li>-->
+<!--      </ul>-->
+<!--    </li>-->
+  </ul>
+</div>
+
+<div class="menu_section">
+<h3>Auto & Batch Tools</h3>
+  <ul class="nav side-menu">
+   <li><a><i class="fa fa-code"></i> Auto Tools <span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+        <li><a href="{{ url_for('.batchfwcfg') }}">Firewall Configure</a></li>
+<!--        <li><a href="#">aptest tools</a></li>-->
+<!--        <li><a href="#">Coredump tools</a></li>-->
+<!--        <li><a href="#">Bantley download</a></li>-->
+      </ul>
+    </li>
+
+   <li><a><i class="glyphicon glyphicon-th"></i> Public Testbed <span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+        <li><a href="{{ url_for('.connectiontool') }}">Connection Tool</a></li>
+
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="menu_section">
+  <h3>LAB & VLAB Administrator</h3>
+  <ul class="nav side-menu">
+
+    <li><a><i class="fa fa-tasks"></i> Switch config(admin) <span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+        <li><a href="{{ url_for('.resetsw') }}">Reset Setting</a></li>
+<!--        <li><a href="#">Switch Scripts</a></li>-->
+<!--        <li><a href="#">Switch List</a></li>-->
+      </ul>
+    </li>
+    <li><a><i class="fa fa-user-md"></i> VLAB MGMT(admin) <span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+        <li><a href="{{ url_for('.allg7status') }}">ALL G7 DUT Status</a></li>
+        <li><a href="{{ url_for('.usersetting') }}">User Setting</a></li>
+        <li><a href="{{ url_for('.devicesetting') }}">Devices Setting</a></li>
+        <li><a href="{{ url_for('.vmcontrol') }}">VM Setting</a></li>
+        <li><a href="{{ url_for('.ticket') }}">Ticket(Feedback)</a></li>
+      </ul>
+    </li>
+    <li><a><i class="glyphicon glyphicon-list-alt"></i> VLAB LOG <span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+        <li><a href="{{ url_for('.asynctasklog') }}">Long Tasks Log</a></li>
+        <li><a href="{{ url_for('.deviceconfiglog') }}">Device Configure Log</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+</div>
+<!--
+<div class="menu_section">
+<h3>LAB Topology</h3>
+  <ul class="nav side-menu">
+   <li><a><i class="fa fa-sitemap"></i> LAB Network Topo <span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+        <li><a href="#level1_1">Topo Summary</a></li>
+        <li><a href="#level1_1">Switch Topo</a>
+        <li><a>Router Topo<span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+          <li class="sub_menu"><a href="level2.html">Level Two</a>
+          </li>
+          <li><a href="#level2_1">Level Two</a>
+          </li>
+          <li><a href="#level2_2">Level Two</a>
+          </li>
+        </ul>
+      </li>
+      </ul>
+    </li>
+    <li><a><i class="fa fa-desktop"></i>Devices Testbad<span class="fa fa-chevron-down"></span></a>
+      <ul class="nav child_menu">
+        <li><a href="#">Private TB</a></li>
+        <li><a href="#">Public TB</a></li>
+        <li><a href="#">Else TB</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+ /sidebar menu
+-->
+

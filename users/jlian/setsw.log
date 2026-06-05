@@ -1,0 +1,32 @@
+configure terminal
+configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+QA_SWITCH_3(config)#interface gi5/39
+interface gi5/39
+QA_SWITCH_3(config-if)#no switchport trunk native vlan 68
+no switchport trunk native vlan 68
+QA_SWITCH_3(config-if)#no switchport trunk allowed vlan 69
+no switchport trunk allowed vlan 69
+QA_SWITCH_3(config-if)#switchport mode access
+switchport mode access
+QA_SWITCH_3(config-if)#switchport access vlan 164
+switchport access vlan 164
+QA_SWITCH_3(config-if)#description vlab-Vlan164
+description vlab-Vlan164
+QA_SWITCH_3(config-if)#switchport nonegotiate
+switchport nonegotiate
+QA_SWITCH_3(config-if)#no switchport trunk encapsulation dot1q
+no switchport trunk encapsulation dot1q
+QA_SWITCH_3(config-if)#spanning-tree portfast
+spanning-tree portfast
+QA_SWITCH_3(config-if)#spanning-tree bpdufilter disable
+spanning-tree bpdufilter disable
+QA_SWITCH_3(config-if)#no cdp enable
+no cdp enable
+QA_SWITCH_3(config-if)#shutdown
+shutdown
+QA_SWITCH_3(config-if)#no shutdown
+no shutdown
+QA_SWITCH_3(config-if)#end
+end
+QA_SWITCH_3#

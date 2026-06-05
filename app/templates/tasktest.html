@@ -1,0 +1,276 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+  <h2>Example 1: Send Asynchronous Email</h2>
+    {% for message in get_flashed_messages() %}
+    <p style="color: red;">{{ message }}</p>
+    {% endfor %}
+    <form method="POST" action="/tasktest">
+      <p>Send test email to: <input type="text" name="email" value="{{ email }}"></p>
+      <input type="submit" name="submit" value="Send">
+      <input type="submit" name="submit" value="Send in 1 minute">
+    </form>
+    <hr>
+    <h2>Example 2: Long running task with progress updates</h2>
+    <input id="esxi" type="text" name="esxi" value="test1" hidden>
+    <button id="start-bg-job">Start Long Calculation</button><br><br>
+    <div id="progress"></div>
+    <script src="{{ url_for('static', filename='js/nanobar.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/jquery/dist/jquery.min.js') }}"></script>
+    <script>
+        function start_long_task() {
+          var esxi=document.getElementById("esxi");
+            // add task status elements
+            div = $('<div class="progress"><div></div><div>0%</div><div>...</div><div>&nbsp;</div></div><hr>');
+            $('#progress').append(div);
+
+            // create a progress bar
+            var nanobar = new Nanobar({
+                bg: '#44f',
+                target: div[0].childNodes[0]
+            });
+
+            // send ajax POST request to start background job
+            $.ajax({
+                type: 'POST',
+                url: '/longtask',
+                data: {
+                        esxhost: esxi.value,
+                        username: 'lezhang',
+                        password: 'password'
+                       },
+                success: function(data, status, request) {
+                    status_url = request.getResponseHeader('Location');
+                    update_progress(status_url, nanobar, div[0]);
+                },
+                error: function() {
+                    alert('Unexpected error');
+                }
+            });
+        }
+        function update_progress(status_url, nanobar, status_div) {
+            // send GET request to status URL
+            $.getJSON(status_url, function(data) {
+                // update UI
+                percent = parseInt(data['current'] * 100 / data['total']);
+                nanobar.go(percent);
+                $(status_div.childNodes[1]).text(percent + '%        ' + data['state']);
+                $(status_div.childNodes[2]).text(data['status']);
+                if (data['state'] != 'PENDING' && data['state'] != 'PROGRESS') {
+                    if ('result' in data) {
+                        // show result
+                        $(status_div.childNodes[3]).text('Result: ' + data['result']);
+                    }
+                    else {
+                        // something unexpected happened
+                        $(status_div.childNodes[3]).text('Result: ' + data['state']);
+                    }
+                }
+                else {
+                    // rerun in 2 seconds
+                    setTimeout(function() {
+                        update_progress(status_url, nanobar, status_div);
+                    }, 1000);
+                }
+            });
+        }
+        $(function() {
+            $('#start-bg-job').click(start_long_task);
+        });
+    </script>
+
+    <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>tasks test<small>
+                      Set the VMs parameter for ESXI  </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+
+    </div>
+    <div class="col-md-6 col-xs-12" style="width:60%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>VMs VLAN settings on ESXI <small>There are will add/edit/delete VLAN for ESXI </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form class="form-horizontal form-label-left" action="/vmcontrol" method="post">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Standard VLAN Type</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" disabled="disabled" value="lezhang_vlan731,UnusedNetwork, MUST range(0-4095)" style="color:#FF0000">
+                            </div>
+                        </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Firewall Function<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="select" id="select" onChange="selectchange()" style="background:#fff;border:1px solid #ccc;">
+                                <option value="none" selected>--Selete--</option>
+                                <option value="getpg">get VLAN</option>
+                                <option value="addpg">add VLAN</option>
+                                <option value="delpg">delete VLAN</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="form-group" id="esxiip">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">ESXI Host <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="esxiip" value="10.8.2.25">
+                        </div>
+                      </div>
+                      <div class="form-group" id="pgname">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Port Group Name <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="pgname" value="lezhang_vlan731">
+                        </div>
+                      </div>
+                      <div class="form-group" id="svname">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">SV Name <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="svname" value="lezhang">
+                        </div>
+                      </div>
+                      <div class="form-group" id="vlanstart">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">VLAN ID Start<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="vlanstart" value="731" min="0" max="4096">
+                        </div>
+                      </div>
+                      <div class="form-group" id="vlanend">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">VLAN ID End<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="vlanend" value="740" min="0" max="4096">
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-primary">Cancel</button>
+                          <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2> Console Result<small>Displays the process of configuring the switch and prints it</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a></li>
+              <li><a href="#">Settings 2</a></li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!--log monitor-->
+      <div id="sw" style="height:500px; overflow:auto">
+        <div>
+          <table>
+            {% for sw_line in consoledata %}
+            <tr class="even pointer">{{ sw_line.pg}}</tr><br>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- /page content -->
+
+<script>
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to occupy this PC？ If yes, Your Email account will receive an email with a wireless PC message in it "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function selectchange(){
+if(document.getElementById("select").value=="addpg"){
+document.getElementById("esxiip").style.display="";
+document.getElementById("pgname").style.display="none";
+document.getElementById("svname").style.display="";
+document.getElementById("vlanstart").style.display="";
+document.getElementById("vlanend").style.display="";
+}
+else if(document.getElementById("select").value=="getpg"){
+document.getElementById("esxiip").style.display="";
+document.getElementById("pgname").style.display="";
+document.getElementById("svname").style.display="none";
+document.getElementById("vlanstart").style.display="none";
+document.getElementById("vlanend").style.display="none";
+
+}
+else if(document.getElementById("select").value=="delpg"){
+document.getElementById("esxiip").style.display="";
+document.getElementById("pgname").style.display="none";
+document.getElementById("svname").style.display="";
+document.getElementById("vlanstart").style.display="";
+document.getElementById("vlanend").style.display="";
+
+}
+else{
+document.getElementById("esxiip").style.display="";
+document.getElementById("pgname").style.display="none";
+document.getElementById("svname").style.display="";
+document.getElementById("vlanstart").style.display="";
+document.getElementById("vlanend").style.display="";
+}
+}
+</script>
+
+{% endblock %}
+
+

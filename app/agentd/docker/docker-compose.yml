@@ -1,0 +1,22 @@
+services:
+  agentd:
+    image: agentd:v0.1
+    container_name: agentd
+    restart: unless-stopped
+    ports:
+      - "10443:10443"
+    volumes:
+      - ../.env:/app/.env
+      - ../certs:/app/certs
+      - ../agentd:/app/agentd:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "20"
+    networks:
+      - agentd_network
+
+networks:
+  agentd_network:
+    driver: bridge

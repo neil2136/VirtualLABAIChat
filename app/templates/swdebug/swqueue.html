@@ -1,0 +1,98 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Switch Configure Check (Old vlab 10.103.2.135) <small>Displays the Old VLABconfiguration of the queue executing in Core Switch</small></h2>
+                      <div style="margin-top:10px" align="right">
+                            <form action="/swqueue" method="post">
+                                <style>
+                                .freshbutton {
+                                     width:100px;
+                                     text-align:center;
+                                     line-height:100%;
+                                     padding:0.3em;
+                                     font:16px Arial,sans-serif bold;
+                                     font-style:normal;
+                                     text-decoration:none;
+                                     margin:2px;
+                                     vertical-align:text-bottom;
+                                     zoom:1;
+                                     outline:none;
+                                     font-size-adjust:none;
+                                     font-stretch:normal;
+                                     border-radius:50px;
+                                     box-shadow:0px 1px 2px rgba(0,0,0,0.2);
+                                     text-shadow:0px 1px 1px rgba(0,0,0,0.3);
+                                     color:#fefee9;
+                                     border:0.2px solid #2299ff;
+                                     background-repeat:repeat;
+                                     background-size:auto;
+                                     background-origin:padding-box;
+                                     background-clip:padding-box;
+                                     background-color:#3399ff;
+                                     background: linear-gradient(to bottom, #eeeff9 0%,#3399ff 100%);
+                                }
+
+                                .freshbutton:hover {
+                                    background: #268DFF;
+                                }
+                                </style>
+                                <button type="submit" class="freshbutton" value="Submit" style="width:100px; height:30px;"><b>Refresh</b></button>
+                            </form>
+                        </div>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <!--log monitor-->
+                  <div id="log" style="height:800px; overflow:auto">
+                  <div class="x_content">
+                    <p>本页面显示VLAB（2.135）配置后在Switch中的执行情况；有pending状态的User表示正在排队中，为空则表示已经在switch中配置完成。</p>
+                  </div>
+                    <div>
+                      <table>
+                        {% for sw_line in swconf %}
+
+                          <tr class="even pointer"><td>
+                              {% if sw_line == 'none' %}
+                                <font size="2" color="Green">
+                                  Not any Process.
+                              </font>
+                              {% else %}
+                              <font size="2" color="Green">
+                                  Time: {{ sw_line.ts }}    Status: {{ sw_line.status }}    User: {{ sw_line.User }}    CMD: {{ sw_line.Cmd }}<br>
+                              </font>
+                              {% endif %}
+                          </td></tr>
+
+                        {% endfor %}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                </div>
+</div>
+</div>
+<!-- /page content -->
+
+{% endblock %}
+
+

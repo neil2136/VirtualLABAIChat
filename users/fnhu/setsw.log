@@ -1,0 +1,39 @@
+configure terminal
+configure terminal
+QA_SWITCH_TB5(conf)#interface range vlan 380
+interface range vlan 380
+QA_SWITCH_TB5(conf-if-range-vl-380)#no untagged Gi0/34
+no untagged Gi0/34
+QA_SWITCH_TB5(conf-if-range-vl-380)#no tagged Gi0/34
+no tagged Gi0/34
+% Error: No such port in Vlan, config ignored Gi 0/34.
+QA_SWITCH_TB5(conf-if-range-vl-380)#exit
+exit
+QA_SWITCH_TB5(conf)#interface vlan 
+interface vlan 
+% Error: Incomplete command.
+QA_SWITCH_TB5(conf)#untagged Gi0/34
+untagged Gi0/34
+                    ^
+% Error: Invalid input at "^" marker.
+QA_SWITCH_TB5(conf)#interface Gi0/34
+interface Gi0/34
+QA_SWITCH_TB5(conf-if-gi-0/34)#description vlabVlan
+description vlabVlan
+QA_SWITCH_TB5(conf-if-gi-0/34)#spanning-tree mstp edge-port bpduguard shutdown-on-violation
+spanning-tree mstp edge-port bpduguard shutdo[45D                                                [48D$-tree mstp edge-port bpduguard shutdown-on-vi[46D                                                [48D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_TB5(conf-if-gi-0/34)#spanning-tree rstp edge-port bpduguard shutdown-on-violation
+spanning-tree rstp edge-port bpduguard shutdo[45D                                                [48D$-tree rstp edge-port bpduguard shutdown-on-vi[46D                                                [48D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_TB5(conf-if-gi-0/34)#spanning-tree
+spanning-tree
+QA_SWITCH_TB5(conf-if-gi-0/34)#protocol lldp
+protocol lldp
+QA_SWITCH_TB5(conf-if-gi-0/34-lldp)#disable
+disable
+QA_SWITCH_TB5(conf-if-gi-0/34-lldp)#exit
+exit
+QA_SWITCH_TB5(conf-if-gi-0/34)#shutdown
+shutdown
+QA_SWITCH_TB5(conf-if-gi-0/34)#end
+end
+QA_SWITCH_TB5#

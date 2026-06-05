@@ -1,0 +1,428 @@
+
+
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}LAB tools{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h3>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h3>
+    <b>{% if current_user.is_authenticated %}{{ user.email }}{% else %}Stranger{% endif %}!</b>
+</div>
+<div>
+    {% if current_user.can(Permission.WRITE) %}
+    {{ wtf.quick_form(form) }}
+    {% endif %}
+</div>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#nav {
+    line-height:30px;
+    background-color:#eeeeee;
+    height:600px;
+    width:20%;
+    float:left;
+    padding:5px;
+}
+#section {
+    width:80%;
+    float:left;
+    padding:10px;
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+   padding:5px;
+}
+
+.menu_list {
+width: auto;
+margin: 0;
+}
+.menu_head {
+height: auto;
+line-height: 47px;
+padding-left: 4px;
+font-size: 17px;
+color: #F5F5DC;
+cursor: pointer;
+border: 1px solid #f1f1f1;
+position: relative;
+margin: 0px;
+font-weight: bold;
+background: #51a9f18c;
+}
+
+.menu_list .current {
+background: #51a9f18c;
+}
+.menu_nva {
+line-height: 38px;
+border-left: 1px solid #51a9f18c;
+backguound: #fff;
+border-right: 1px solid #51a9f18c;
+}
+.menu_nva a {
+display: block;
+height: auto;
+line-height: 38px;
+padding-left: 10px;
+color: #777777;
+background: #fff;
+text-decoration: none;
+border-bottom: 1px solid #51a9f18c;
+}
+
+.menu_nva a:hover {
+text-decoration: none;
+}
+
+table.gridtable {
+font-family: verdana,arial,sans-serif;
+font-size:11px;
+color:#333333;
+border-width: 1px;
+border-color: #666666;
+border-collapse: collapse;
+}
+table.gridtable th {
+border-width: 1px;
+padding: 8px;
+border-style: solid;
+border-color: #666666;
+background-color: #dedede;
+}
+table.gridtable td {
+border-width: 1px;
+padding: 8px;
+border-style: solid;
+border-color: #666666;
+background-color: #ffffff;
+}
+</style>
+</head>
+<body>
+<div id="nav" class="menu_list" style="width:16%; overflow:auto">
+
+    <div style="display:block" class="menu_nva">
+        <div style="display:block" class="menu_nva">
+            <h5 class="menu_head current">Device MGMT</h5>
+            <a href="{{ url_for('.dutlist') }}"><font face="verdana" color="green">├─FW Summary</font></a>
+            <a href="{{ url_for('.splist') }}"><font face="verdana" color="green">├─SP Summary</font></a>
+            <a href="{{ url_for('.mydevicelist') }}"><font face="verdana" color="green">├─My Devices</font></a>
+            <a href="{{ url_for('.dutsetting') }}"><font face="verdana" color="green">├─My Device Port</font></a>
+            <a href="{{ url_for('.wpc') }}"><font face="verdana" color="green">├─Wireless PC</font></a>
+            <a href="{{ url_for('.ixia') }}"><font face="verdana" color="green">├─Ixia Control</font></a>
+            <h5 class="menu_head current">Switch Debug</h5>
+            <a href="{{ url_for('.vlansearch') }}"><font face="verdana" color="green">├─VLAN Check(VLAB)</font></a>
+            <a href="{{ url_for('.vlab135swcfgstatus') }}"><font face="verdana" color="green">├─Config Queue</font></a>
+            <a href="{{ url_for('.vlanlist') }}"><font face="verdana" color="green">├─VLAN list(SWs)</font></a>
+            <h5 class="menu_head current">Auto Tools</h5>
+            <a href="{{ url_for('.dutcfgbatch') }}"><font face="verdana" color="green">├─DUT Config</font></a>
+        </div>
+    </div>
+</div>
+
+
+<input type="button" name="Submit" onclick="javascript:history.back(-1);" value="Return to previous page">
+
+
+<table border="1" align="right">
+<tr>
+    <td>
+        <form action="/macfilter" method="post">
+            <input  name="mac_id" value='C0EAE4599C7E'>
+            <input type="hidden" name="duttype" value="{{ duttype }}">
+            <button type="submit" value="Submit" ><b>MAC Filter</b></button>
+        </form>
+
+    </td>
+</tr>
+</table>
+
+
+
+<div id="section" style="height:600px; overflow:auto">
+
+<table width="100%" border="1" cellspacing="7" cellpadding="7" align="center">
+<colgroup>
+    <col span="2" style="background-color:#e9faff">
+    <col style="background-color:#f2fbfe">
+  </colgroup>
+
+<script language="javascript">
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to renewal this DUT？ If yes, Your will receive an email that include DUT information "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function dutkeeponline()
+{
+  if(window.confirm("Are you sure you want to keep alive/cancel keep alive this DUT in the following week？ Note: Power will be forced to be turned off at 8 pm every Friday night."))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function cduset()
+{
+  if(window.confirm("Are you sure you want to power on/off/reboot this DUT？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function borrowset()
+{
+  if(window.confirm("Are you sure you want to borrow this DUT？ Please confirm that you have communicated with the current user!"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function submitForm0(){
+    var form = document.getElementById("cdufilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm1(){
+    var form = document.getElementById("productfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm2(){
+    var form = document.getElementById("ownerfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm3(){
+    var form = document.getElementById("userfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+
+function save()
+{
+  if(window.confirm("Are you sure you want to save？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+$("#editModal").modal("hide");
+function values(ID,swinfo){
+    $("#id").val(ID);
+    $("#swinfo").val(swinfo);
+    }
+</script>
+
+<tr><td colspan=8 width="100%"><h3><b>Devices Summary</b></h3>
+    <b>Note: It will show all devices information include old VLAB and L2L3 VLAB.</b>
+    </td>
+</tr>
+<tr align="center">
+    <td width="3%"><b>ID</b></td>
+    <td width="7%"><b>Product</b>
+    <form id="productfilter" method="get" action="/productfilter">
+        <input type="hidden" name="duttype" value="{{ duttype }}">
+        <select onchange="submitForm1();" name="kind" style="background:#fff;border:1px solid #ccc;width:100px">
+            <option value="none" selected>-Selete-</option>
+            {% for product in productinfo %}
+            {% if product.product != "NA" %}
+            <option value="{{ product.product}}">{{ product.product }}</option>
+            {%else %}
+            {%endif %}
+            {% endfor %}
+        </select>
+    </form>
+    </td>
+	<td width="12%"><b>SN</b></td>
+    <td width="15%"><b>Owner</b>
+    <form id="ownerfilter" method="get" action="/ownerfilter">
+        <input type="hidden" name="duttype" value="{{ duttype }}">
+        <select onchange="submitForm2();" name="kind" style="background:#fff;border:1px solid #ccc;width:100px">
+            <option value="none" selected>-Selete-</option>
+            {% for owner in userfilter %}
+            {% if owner.id != "NA" %}
+            <option value="{{ owner.username}}">{{ owner.username }}</option>
+            {%else %}
+            {%endif %}
+            {% endfor %}
+        </select>
+    </form>
+    </td>
+    <td width="15%"><b>User</b>
+    <form id="userfilter" method="get" action="/userfilter">
+        <input type="hidden" name="duttype" value="{{ duttype }}">
+        <select onchange="submitForm3();" name="kind" style="background:#fff;border:1px solid #ccc;">
+            <option value="none" selected>-Selete-</option>
+            {% for user in userfilter %}
+            {% if user.id != "NA" %}
+            <option value="{{ user.id}}">{{ user.id }}</option>
+            {%else %}
+            {%endif %}
+            {% endfor %}
+        </select>
+    </form>
+    </td>
+    <td width="16%"><b>Power Operator</b></td>
+    <td><b>Keep alive?</b></td>
+    <td width="16%"><b>Interface</b></td>
+</tr>
+
+{% for dutnum in filter %}
+<tr align="center">
+    <td>{{ dutnum['id'] }}</td>
+    <td>{{ dutnum['Product'] }}</td>
+    <td>{{ dutnum['SN'] }}</td>
+    <td>{{ dutnum['Owner'] }}</td>
+    <td align="center">
+    <div title="Please ask user's permission first">
+        {{ dutnum['User'] }}
+        <form action="/dutborrow" method="post">
+            <input type="hidden" name="duttype" value="{{ duttype }}">
+            <input type="hidden" name="dut_id" value="{{ dutnum['id'] }}">
+            <button type="submit" value="Submit" onclick="return borrowset()"><b>borrow</b></button>
+        </form>
+    </div>
+    </td>
+     <td>
+     <div title="It's not displayed in real time, please press the refresh button to refresh the status first">
+        <form action="/powerrefresh" method="post">
+            {% if dutnum['keepAlive'] == "1" %}
+                &nbsp;&nbsp;&nbsp;&nbsp;<img src="static/green_led.png"> <b>ON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+            {% else %}
+                &nbsp;&nbsp;&nbsp;&nbsp;<img src="static/red_led.png"> <b>OFF&nbsp;&nbsp;&nbsp;</b>
+            {% endif %}
+            <input type="hidden" name="duttype" value="{{ duttype }}">
+            <input type="hidden" name="cdu_id" value="{{ dutnum['id'] }}">
+            <input type="hidden" name="key" value="refresh">
+            <button type="submit" value="Submit"><img src="static/refrash.png"></button>
+        </form>
+     </div>
+      <div title="press the power apply button will put the config into CDU">
+      <form id="powercontrol" method="post" action="/powercontrol">
+                <input type="hidden" name="duttype" value="{{ duttype }}">
+                <input type="hidden" name="cdu_id" value="{{ dutnum.id }}">
+                <select name="kind" style="background:#fff;border:1px solid #ccc;">
+                    <option value="none" selected>-Selete-</option>
+                    <option value="on">on</option>
+                    <option value="off">off</option>
+                    <option value="reboot">reboot</option>
+                </select>
+                <button type="submit" value="Submit" onclick="return cduset()"><img src="static/powerapply.png"></button>
+       </form>
+        </div>
+    </td>
+    <td ><div title=" If you need continued to keep the device power on in next week, yes it !">
+        <form action="/cductrl" method="post">
+                <input type="hidden" name="duttype" value="{{ duttype }}">
+                <input type="hidden" name="dutid" value="{{ dutnum.id }}">
+                {% if dutnum['Operator'] == "NA" %}
+                <input type="hidden" name="cduoperator" value="yes">
+                <button type="submit" value="Submit" onclick="return dutkeeponline()"><b>Yes</b></button>
+                {% else %}
+                    <input type="hidden" name="cduoperator" value="no">
+                    <button type="submit" value="Submit" onclick="return dutkeeponline()"><b>No</b></button>
+                    <br> <font size="2" color="ForestGreen">Mark by {{ dutnum.Operator }}</font>
+                {% endif %}
+            </form>
+        </div>
+    </td>
+    <td>
+        <div title="press the config button will redirect to FW Configure page">
+            <form id="dutsetting" method="post" action="dutsetting">
+                <input type="hidden" name="duttype" value="{{ duttype }}">
+                <input type="hidden" name="dutnum" value="{{ dutnum.id }}">
+                <input type="hidden" name="idfilter" value="NA">
+                <input type="hidden" name="pagemark" value="dutlist">
+                    {% if duttype == "DUT" %}
+                        <select name="kind" style="background:#fff;border:1px solid #ccc;width:80px">
+                           <option value="none" selected>-Selete-</option>
+                           <option value="X0">X0</option>
+                           <option value="X1">X1</option>
+                           <option value="X2">X2</option>
+                           <option value="X3">X3</option>
+                           <option value="X4">X4</option>
+                           <option value="X5">X5</option>
+                           <option value="X6">X6</option>
+                           <option value="X7">X7</option>
+                           <option value="X8">X8</option>
+                           <option value="MGMT">MGMT</option>
+                        </select>
+                    {% elif duttype == "SonicPoint" %}
+                        <select name="kind" style="background:#fff;border:1px solid #ccc;">
+                           <option value="X0" selected>X0</option>
+                        </select>
+                    {% endif %}
+                <button type="submit" value="submit"><img src="static/interfaceconfig.png"></button>
+            </form>
+        </div>
+</form>
+
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<p></p>
+<div id="log" style="height:300px; overflow:auto">
+
+<table class="gridtable" width="900px" border="1" cellspacing="10" cellpadding="10" align="justify">
+<tr><th><h5>User Log - operated devices</h5></th></tr>
+<tr><td>
+{% for log_line in log_print %}
+    {{ log_line }}<br />
+{% endfor %}
+ </td></tr>
+</table>
+</div>
+
+</div>
+
+<div class="col-md-4" style="width:250px; height:100px; background:white; float:right;">
+    <br>
+    <p>Go Back to first page <a href="{{ url_for('.index') }}">Click here</a>.</p>
+</div>
+
+<div id="footer" align="right">
+Copyright Sonicwall.com
+</div>
+
+</body>
+</html>
+
+{% endblock %}

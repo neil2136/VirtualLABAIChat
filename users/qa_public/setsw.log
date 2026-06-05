@@ -1,0 +1,36 @@
+configure terminal
+configure terminal
+QA_SWITCH_TB4(conf)#interface range vlan 126
+interface range vlan 126
+QA_SWITCH_TB4(conf-if-range-vl-126)#no untagged Gi0/1
+no untagged Gi0/1
+QA_SWITCH_TB4(conf-if-range-vl-126)#no tagged Gi0/1
+no tagged Gi0/1
+% Error: No such port in Vlan, config ignored Gi 0/1.
+QA_SWITCH_TB4(conf-if-range-vl-126)#exit
+exit
+QA_SWITCH_TB4(conf)#interface vlan 126
+interface vlan 126
+QA_SWITCH_TB4(conf-if-vl-126)#untagged Gi0/1
+untagged Gi0/1
+QA_SWITCH_TB4(conf-if-vl-126)#interface Gi0/1
+interface Gi0/1
+QA_SWITCH_TB4(conf-if-gi-0/1)#description vlabVlan
+description vlabVlan
+QA_SWITCH_TB4(conf-if-gi-0/1)#spanning-tree mstp edge-port bpduguard shutdown-on-violation
+spanning-tree mstp edge-port bpduguard shutdow[46D                                                 [49D$-tree mstp edge-port bpduguard shutdown-on-vio[47D                                                 [49D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_TB4(conf-if-gi-0/1)#spanning-tree rstp edge-port bpduguard shutdown-on-violation
+spanning-tree rstp edge-port bpduguard shutdow[46D                                                 [49D$-tree rstp edge-port bpduguard shutdown-on-vio[47D                                                 [49D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_TB4(conf-if-gi-0/1)#spanning-tree
+spanning-tree
+QA_SWITCH_TB4(conf-if-gi-0/1)#protocol lldp
+protocol lldp
+QA_SWITCH_TB4(conf-if-gi-0/1-lldp)#disable
+disable
+QA_SWITCH_TB4(conf-if-gi-0/1-lldp)#exit
+exit
+QA_SWITCH_TB4(conf-if-gi-0/1)#no shutdown
+no shutdown
+QA_SWITCH_TB4(conf-if-gi-0/1)#end
+end
+QA_SWITCH_TB4#

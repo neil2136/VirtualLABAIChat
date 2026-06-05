@@ -1,0 +1,31 @@
+Start check cisco Switch configure
+==================================================
+************************************************************
+show etherchannel summary | include 6/44
+QA_SWITCH_4
+************************************************************
+show interfaces gi6/44 status | include 0
+Gi6/44    vlab-Vlan388       connected    388        a-full a-1000 10/100/1000-TX
+QA_SWITCH_4
+************************************************************
+show running-config interface gi6/44
+Building configuration...
+
+Current configuration : 248 bytes
+!
+interface GigabitEthernet6/44
+ description vlab-Vlan388
+ switchport access vlan 388
+ switchport mode access
+ switchport nonegotiate
+ storm-control broadcast level 0.01
+ no cdp enable
+ spanning-tree portfast
+ spanning-tree bpdufilter disable
+end
+
+QA_SWITCH_4
+************************************************************
+show interfaces gi6/44 | include protocol
+GigabitEthernet6/44 is up, line protocol is up (connected)
+QA_SWITCH_4

@@ -1,0 +1,184 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+  <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>VLAN Check (Old vlab 10.103.2.135) <small>
+                      Here Users can search for any vlab device on the switch and sync VLAN, To help diagnose network interface problems.  </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table class="table table-bordered" style="width:60%">
+                      <thead>
+                        <tr>
+                            <th scope="col" >Device ID </th>
+                            <th scope="col" >Device Type</th>
+                            <th scope="col" >Check it</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr align="center">
+                          <form action="/vlancheck" method="post" >
+                          <input type="hidden" name="devicecheck" value="devicecheck">
+                          <td ><input type="text" name="dut_id" value="{{ dutid }}" min="1" max="999" size="15" oninput="value=value.replace(/[^\d]/g,'')" style="width:100px;height:25px; ">&nbsp;&nbsp;(e.g 180)</td>
+                          <td ><select name="kind" style="background:#fff;border:1px solid #ccc;width:100px;height:25px;">
+                                <option value="UTM" selected>SonicWall</option>
+                                <option value="SonicPoint">SonicPoint</option>
+                            </select></td>
+                          <td ><button type="submit" value="Submit"><b>Submit</b></button></td>
+                          </form>
+                          </tr>
+                      </tbody>
+                      </tbody>
+                    </table>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                            <th scope="col" >No.</th>
+                            <th scope="col" >DUT Interface</th>
+                            <th scope="col" >SW Name</th>
+                            <th scope="col" >SW Port</th>
+                            <th scope="col" >vlan in DB</th>
+                            <th scope="col" >vlan in SW</th>
+                            <th scope="col" >Port Status</th>
+                            <th scope="col" >Port Setting</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                         {% for dutport in interinfo %}
+                          <tr>
+                          <td >{{ dutport.id }}</td>
+                          <td >{{ dutport.Interface }}</td>
+                          <td >{{ dutport.SwitchName }}</td>
+                          <td >{{ dutport.SwitchPort}}</td>
+                          <td ><font size="2" color="Red">{{ dutport.VlabinDB }}</font></td>
+                          <td ><font size="2" color="ForestGreen">{{ dutport.VlabinSwitch }}</font></td>
+                          {% if dutport.PortStatus == "Up" %}
+                              <td><img src="static/images/green_led.png"> <b>Link Up</b></td>
+                          {% else %}
+                              <td><img src="static/images/red_led.png"> <b>Link Down</b></td>
+                          {% endif %}
+                          <td ><button type="submit" value="Submit" disabled="disabled"><b>Settings</b></button></td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+  </div>
+  <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Introduction of functions <small>Collect various problems in the process of use</small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <ul class="list-unstyled timeline">
+                    <li>
+                      <div class="block">
+                        <div class="tags">
+                          <a class="tag"><span>Notes</span></a>
+                        </div>
+                        <div class="block_content">
+                          <h2 class="title">
+                              <a>How to check vlan in VLAB ?</a>
+                          </h2>
+                          <div class="byline">
+                            <span>11:27 2020/4/4</span> by <a>Neil Zhang</a>
+                          </div>
+                          <p class="excerpt">
+                              <div style="background:#efefef;color:#F00;width:800px">
+                                  <p>&nbsp;&nbsp;正常状态：</p>
+                                  <p>&nbsp;&nbsp;&nbsp;&nbsp;DB和SW的VLAN相同并且Status是UP；</p>
+                                  <p>&nbsp;&nbsp;&nbsp;&nbsp;DB和SW的VLAN为空并且Status是Down</p>
+                                  <p>&nbsp;&nbsp;异常状态：</p>
+                                  <p>&nbsp;&nbsp;&nbsp;&nbsp;DB和SW的VLAN不同；Sync VLAN后会将SW改成DB VLAN，status UP</p>
+                                  <p>&nbsp;&nbsp;&nbsp;&nbsp;DB VLAN为空；Sync VLAN后会将SW VLAN改为空，status Down</p>
+                                  <p>&nbsp;&nbsp;&nbsp;&nbsp;SW VLAN为空；Sync VLAN后会将SW VLAN改为DB VLAN，status UP</p>
+                              </div>
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+
+                </div>
+              </div>
+            </div>
+  <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Users Log <small>Displays all configuration results and alerts</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <!--log monitor-->
+                  <div id="log" style="height:500px; overflow:auto">
+                  <div class="x_content">
+                    <p>All log <code>log_link</code> will show from last Week to now.</p>
+                  </div>
+                    <div>
+                      <table>
+                        {% for log_line in log_print %}
+                          <tr class="even pointer">{{ log_line }}<br></tr>
+                        {% endfor %}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                </div>
+</div>
+</div>
+<!-- /page content -->
+
+{% endblock %}
+
+

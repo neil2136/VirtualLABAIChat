@@ -1,0 +1,241 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+  <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LAB VMs Summary <small>
+                      Note: It will show all VMs information in ESXI. </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr align="center">
+                            <th scope="col" >Esxi host</th>
+                            <th scope="col" >VMname</th>
+                            <th scope="col" >Adapter</th>
+                            <th scope="col" >MAC</th>
+                            <th scope="col" >VLAN</th>
+                            <th scope="col" >Port Group</th>
+                            <th scope="col" >Owner</th>
+                            <th scope="col" >User</th>
+                            <th scope="col" >Hardware NIC Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for vmnum in vminfo %}
+                      {% for vmnic in vmnum.nicsinfo %}
+                      {% if frompage == 'devicesearch' %}
+                          {% if vmnic['mac'] == keyword %}
+                            <tr style="background-color:ghostwhite">
+                            <td>{{ vmnum['esxihost'] }}</td>
+                            <td><a href="/myvms?vmname={{ vmnum['vmname'] }}" style="color: #0000C6">{{ vmnum['vmname'] }}</a></td>
+                            <td>{{ vmnic['adapter'] }}</td>
+                            <td>{{ vmnic['mac'] }}</td>
+                            <td>{{ vmnic['vlan'] }}</td>
+                            <td>{{ vmnic['portgroup'] }}</td>
+                            <td>{{ vmnum['owner'] }}</td>
+                            <td>{{ vmnum['user'] }}</td>
+                            <td>{{ vmnic['nicpower'] }}</td>
+                          </tr>
+                          {% else %}
+                          <tr style="background-color:ghostwhite">
+                            <td>{{ vmnum['esxihost'] }}</td>
+                            <td><a href="/myvms?vmname={{ vmnum['vmname'] }}" style="color: #0000C6">{{ vmnum['vmname'] }}</a></td>
+                            <td>{{ vmnic['adapter'] }}</td>
+                            <td>{{ vmnic['mac'] }}</td>
+                            <td>{{ vmnic['vlan'] }}</td>
+                            <td>{{ vmnic['portgroup'] }}</td>
+                            <td>{{ vmnum['owner'] }}</td>
+                            <td>{{ vmnum['user'] }}</td>
+                            <td>{{ vmnic['nicpower'] }}</td>
+                          </tr>
+                          {% endif %}
+                      {% endif %}
+                      {% if frompage == 'vlansearch' %}
+                          {% if vmnic['vlan'] == vlanid %}
+                          <tr style="background-color:ghostwhite">
+                            <td>{{ vmnum['esxihost'] }}</td>
+                            <td><a href="/myvms?vmname={{ vmnum['vmname'] }}" style="color: #0000C6">{{ vmnum['vmname'] }}</a></td>
+                            <td>{{ vmnic['adapter'] }}</td>
+                            <td>{{ vmnic['mac'] }}</td>
+                            <td>{{ vmnic['vlan'] }}</td>
+                            <td>{{ vmnic['portgroup'] }}</td>
+                            <td>{{ vmnum['owner'] }}</td>
+                            <td>{{ vmnum['user'] }}</td>
+                            <td>{{ vmnic['nicpower'] }}</td>
+                          </tr>
+                          {% endif %}
+                      {% endif %}
+                      {% endfor %}
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+  </div>
+ <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Operated Log <small>Displays configure result for all users</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a></li>
+                          <li><a href="#">Settings 2</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <p>All log <code>log_point</code> will show from last Week to now.</p>
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th width="2%"><input type="checkbox" id="check-all" class="flat"></th>
+                            <th class="column-title" width="6%">Users </th>
+                            <th class="column-title" width="8%">Type </th>
+                            <th class="column-title" width="13%">Device </th>
+                            <th class="column-title">Operated </th>
+                            <th class="column-title" width="15%">Local Time</th>
+                          </tr>
+                        </thead>
+                    </table>
+                    <div class="pre-scrollable" style="height: 490px;overflow: auto; margin-top: -22px;">
+                    <table class="table table-striped jambo_table bulk_action table-hover">
+                        <tbody>
+                        {% for log in logs %}
+                          <tr class="even pointer">
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" ">{{ log.svname }}</td>
+                            <td class=" ">{{ log.type }}</td>
+                            <td class=" ">{{ log.device }}</td>
+                            <td class=" last">{{ log.operated }}</td>
+                            <td class=" last">{{ log.time }}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /page content -->
+<script language="javascript">
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to renewal this DUT？ If yes, Your will receive an email that include DUT information "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function dutkeeponline()
+{
+  if(window.confirm("Are you sure you want to keep alive/cancel keep alive this DUT in the following week？ Note: Power will be forced to be turned off at 8 pm every Friday night."))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function cduset()
+{
+  if(window.confirm("Are you sure you want to power on/off/reboot this DUT？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function borrowset()
+{
+  if(window.confirm("Are you sure you want to borrow this DUT？ Please confirm that you have communicated with the current user!"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function submitForm0(){
+    var form = document.getElementById("cdufilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm1(){
+    var form = document.getElementById("productfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm2(){
+    var form = document.getElementById("ownerfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm3(){
+    var form = document.getElementById("userfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+
+function save()
+{
+  if(window.confirm("Are you sure you want to save？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+$("#editModal").modal("hide");
+function values(ID,swinfo){
+    $("#id").val(ID);
+    $("#swinfo").val(swinfo);
+    }
+
+</script>
+{% endblock %}
+
+

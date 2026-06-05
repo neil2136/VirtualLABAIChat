@@ -1,0 +1,1 @@
+[{"ip": "10.8.2.56", "name": ["Ubuntu-20.04", "backup_server_ubuntu", "centos7", "gen7_auto", "win10-mao-1", "win10-mao-4", "wmao_NSv_800"]}]

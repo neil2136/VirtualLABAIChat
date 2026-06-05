@@ -1,0 +1,32 @@
+configure terminal
+configure terminal
+QA_SWITCH_9(conf)#interface range vlan 27
+interface range vlan 27
+QA_SWITCH_9(conf-if-range-vl-27)#no untagged gi5/16
+no untagged gi5/16
+QA_SWITCH_9(conf-if-range-vl-27)#no tagged gi5/16
+no tagged gi5/16
+% Error: No such port in Vlan, config ignored Gi 5/16.
+QA_SWITCH_9(conf-if-range-vl-27)#exit
+exit
+QA_SWITCH_9(conf)#interface vlan 380
+interface vlan 380
+QA_SWITCH_9(conf-if-vl-380)#untagged gi5/16
+untagged gi5/16
+QA_SWITCH_9(conf-if-vl-380)#interface gi5/16
+interface gi5/16
+QA_SWITCH_9(conf-if-gi-5/16)#description vlabVlan
+description vlabVlan
+QA_SWITCH_9(conf-if-gi-5/16)#no spanning-tree
+no spanning-tree
+QA_SWITCH_9(conf-if-gi-5/16)#protocol lldp
+protocol lldp
+QA_SWITCH_9(conf-if-gi-5/16-lldp)#disable
+disable
+QA_SWITCH_9(conf-if-gi-5/16-lldp)#exit
+exit
+QA_SWITCH_9(conf-if-gi-5/16)#no shutdown
+no shutdown
+QA_SWITCH_9(conf-if-gi-5/16)#end
+end
+QA_SWITCH_9#

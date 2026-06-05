@@ -1,0 +1,29 @@
+Start check dell Switch configure
+==================================================
+************************************************************
+show running-config interface Gi0/7
+!
+interface GigabitEthernet 0/7
+ description vlabVlan
+ no ip address
+ mtu 9216
+ portmode hybrid
+ switchport
+ no spanning-tree 
+!
+ protocol lldp 
+  disable 
+ shutdown
+QA_SWITCH_TB1
+************************************************************
+show interfaces Gi0/7 status
+Port     Description  Status Speed     Duplex Vlan  
+Gi 0/7   vlabVlan     Down   Auto      Auto   --
+QA_SWITCH_TB1
+************************************************************
+show interfaces Gi0/7 | grep protocol
+GigabitEthernet 0/7 is down, line protocol is down
+QA_SWITCH_TB1
+************************************************************
+show interfaces port-channel | grep 0/7
+QA_SWITCH_TB1

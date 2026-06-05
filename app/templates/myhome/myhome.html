@@ -1,0 +1,607 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+{% block content %}<!--自定义模板区域-->
+
+<div class="row" style="width:100%">
+            <div class="right_col" role="main">
+              <div class="col-md-12 col-sm-12 col-xs-12" style="width:90%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>My Current Devices Summary <small></small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                      <div role="tabpanel" data-example-id="togglable-tabs">
+                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">G7 FW</a>
+                        </li>
+<!--                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">G6 FW</a>-->
+<!--                        </li>-->
+<!--                        <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">SonicPoint</a>-->
+<!--                        </li>-->
+                      </ul>
+                      <div id="myTabContent" class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                          <table class="table table-striped table-bordered jambo_table bulk_action">
+<!--                          <thead >-->
+<!--                             <tr class="headings" >-->
+<!--                                 <th scope="col" >Device</th>-->
+<!--                                 <th scope="col" >SN</th>-->
+<!--                                 <th scope="col" >Firmware Version</th>-->
+<!--                                 <th scope="col" >running up time</th>-->
+<!--                                 <th scope="col" >crash in 7 days</th>-->
+<!--                             </tr>-->
+<!--                          </thead>-->
+
+                          {% for g7list in g7sortlist %}
+<!--                          <tbody >-->
+
+                            <tr><td style="background-color:gray; border-style: inset"></td>
+                                <td style="background-color:gray; border-style: inset"></td>
+                                <td style="background-color:gray; border-style: inset"></td>
+                                <td style="background-color:gray; border-style: inset"></td>
+                                <td style="background-color:gray; border-style: inset"></td>
+                            </tr>
+
+                          <tr>
+                              <td style="background-color:deepskyblue; font-weight: bolder; color: black; border-style: inset">Device</td>
+                              <td style="background-color:deepskyblue; font-weight: bolder; color: black; border-style: inset">SN</td>
+                              <td style="background-color:deepskyblue; font-weight: bolder; color: black; border-style: inset">Firmware Version</td>
+                              <td style="background-color:deepskyblue; font-weight: bolder; color: black; border-style: inset">UP Time</td>
+                              <td style="background-color:deepskyblue; font-weight: bolder; color: black; border-style: inset">Crash In 7 Days</td>
+                          </tr>
+
+                          <tr>
+                              <td style="background-color:honeydew; font-size: large; font-weight: bolder; ">
+                                  <style type="text/css">
+                                      change:hover{color:red; font-size: large}
+                                  </style>
+                                  <a href="/mydeviceinfo?id={{ g7list.id }}&type={{ g7list.DeviceType }}">
+                                      <span style="color: #0000C6; "><change>{{ g7list.Product }}_{{ g7list.classify }}({{ g7list.id }})</change></span>
+                                  </a>
+                                  </td>
+                              <td style="background-color:aliceblue; font-weight: bolder">{{ g7list.SN }}</td>
+                              {% if g7list.FWStatus.errormsg %}
+                              <td style="background-color:yellow; color: red; font-weight: bolder">
+                              {{ g7list.FWStatus.errormsg }}</td>
+                              {% else %}
+                              <td style="background-color:aliceblue; font-weight: bolder">
+                                   {{ g7list.FWStatus.version }}</td>
+                              {% endif %}
+                              {% if g7list.FWStatus.errormsg %}
+                              <td style="background-color:yellow; color: red; font-weight: bolder">
+                              {{ g7list.FWStatus.errormsg }}</td>
+                              {% else %}
+                              <td style="background-color:aliceblue; font-weight: bolder">
+                                   {{ g7list.FWStatus.uptime }}</td>
+                              {% endif %}
+                              <td style="background-color:yellow; color: #0000C6; font-weight: bolder">
+                                  {% if g7list.FWStatus.coredump == [] %}
+                                  Not Coredump
+                                  {% else %}
+                                      {% for coredump in g7list.FWStatus.coredump %}
+                                  <a href="https://10.103.2.127/bigfile/coredumps/{{ coredump }}">
+                                      <span>{{ coredump }}<br></span>
+                                  </a>
+                                      {% endfor %}
+                                  {% endif %}
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="background-color:powderblue; font-weight: bolder; color: black">Interfaces</td>
+                              <td style="background-color:powderblue; font-weight: bolder; color: black">Interface IP</td>
+                              <td style="background-color:powderblue; font-weight: bolder; color: black">Port Mode</td>
+                              <td style="background-color:powderblue; font-weight: bolder; color: black">Untag/Tag</td>
+                              <td style="background-color:powderblue; font-weight: bolder; color: black">Link Status</td>
+                          </tr>
+                          {% for fwips in g7list['InterfaceInfo']['Interface'] %}
+                              <tr class="even pointer">
+                              <td style="background-color:honeydew; font-weight: bolder">{{ fwips.name }}</td>
+                              <td style="background-color:aliceblue; color: blue">{{ fwips.fwip }}</td>
+                              <td style="background-color:aliceblue">{{ fwips.portmode }}</td>
+                              <td style="background-color:aliceblue">{{ fwips.untagvlan }}     /     {{ fwips.tagvlan }}</td>
+                              <td style="background-color:azure;">{{ fwips.linkstatus }}</td>
+
+                              </tr>
+                          {% endfor %}
+                              <tr><td>{{ g7list.FWStatus.updatelog }}</td></tr>
+<!--                          </tbody>-->
+                          {% endfor %}
+
+                          </table>
+
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
+                          <table id="datatable2" class="table table-striped table-bordered jambo_table bulk_action" style="width: 100%;">
+                          <thead>
+                             <tr class="headings">
+                                 <th></th>
+                                 <th scope="col" >Configure</th>
+                                 <th scope="col" >Operate</th>
+                                 <th scope="col" >No.</th>
+                                 <th scope="col" >Product</th>
+                                 <th scope="col" >SN</th>
+                                 <th scope="col" >Authentication Code</th>
+                                 <th scope="col" >Registration Code</th>
+                                 <th scope="col" >Owner</th>
+                                 <th scope="col" >Current User</th>
+                             </tr>
+                          </thead>
+                          <tbody>
+                             {% for cube in g6fwlist %}
+                                  <tr class="even pointer">
+                                  <td class="a-center ">
+                                      <input type="checkbox" class="flat" name="table_records">
+                                    </td>
+                                  <td>
+                                      <form method="post" action="/cubedut">
+                                      <button type="button" class="btn-xs active glyphicon glyphicon-pencil" data-toggle="modal" data-target="#CubeModal"
+                                             data-operate="Edit" data-id="{{ cube.id }}" data-product="{{ cube.product }}" data-type="{{ cube.type }}" data-classify="{{ cube.classify }}" data-sn="{{ cube.sn }}"
+                                      data-authenticationcode="{{ cube.authenticationcode }}" data-registrationcode="{{ cube.registrationcode }}" data-maintenancekey="{{ cube.maintenancekey }}"
+                                      data-owner="{{ cube.owner }}"></button>
+                                      <input type="hidden" class="form-control" name="id" value="{{ cube.id }}">
+                                      <button type="submit" class="btn-xs active glyphicon glyphicon-remove" name="operate" value="Delete" onclick="deletedut()"></button>
+                                      </form>
+                                  </td>
+                                  <td ><div title=" If you want occupy the device, yes it !">
+                                      <form action="/cubedut" method="post">
+                                          <input type="hidden" name="id" value="{{ cube.id }}">
+                                          <input type="hidden" name="operate" value="takeup">
+                                              {% if cube.tackup == "released" %}
+                                                <input type="hidden" name="owner" value="occupied">
+                                                <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Borrow</b></button>
+                                              {% else %}
+                                                  <input type="hidden" name="owner" value="released">
+                                                  <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Return</b></button>
+                                              {% endif %}
+                                          </form>
+                                      </div>
+                                  </td>
+                                  <td >{{ cube.id }}</td>
+                                  <td >{{ cube.product }}</td>
+                                  <td >{{ cube.sn }}</td>
+                                  <td >{{ cube.authenticationcode }}</td>
+                                  <td >{{ cube.registrationcode }}</td>
+                                  <td >{{ cube.owner }}</td>
+                                  <td>{{ cube.user }}</td>
+                                  </tr>
+                                  {% endfor %}
+
+                          </tbody>
+                          </table>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="home-tab">
+                          <table id="datatable3" class="table table-striped table-bordered jambo_table bulk_action" style="width: 100%;">
+                          <thead>
+                             <tr class="headings">
+                                 <th></th>
+                                 <th scope="col" >Configure</th>
+                                 <th scope="col" >Operate</th>
+                                 <th scope="col" >No.</th>
+                                 <th scope="col" >Product</th>
+                                 <th scope="col" >SN</th>
+                                 <th scope="col" >Authentication Code</th>
+                                 <th scope="col" >Owner</th>
+                                 <th scope="col" >Current User</th>
+                             </tr>
+                          </thead>
+                          <tbody>
+                             {% for cube in spfwlist %}
+                                  <tr class="even pointer">
+                                  <td class="a-center ">
+                                      <input type="checkbox" class="flat" name="table_records">
+                                    </td>
+                                  <td>
+                                      <form method="post" action="/cubedut">
+                                      <button type="button" class="btn-xs active glyphicon glyphicon-pencil" data-toggle="modal" data-target="#CubeModal"
+                                             data-operate="Edit" data-id="{{ cube.id }}" data-product="{{ cube.product }}" data-type="{{ cube.type }}" data-classify="{{ cube.classify }}" data-sn="{{ cube.sn }}"
+                                      data-authenticationcode="{{ cube.authenticationcode }}" data-registrationcode="{{ cube.registrationcode }}" data-maintenancekey="{{ cube.maintenancekey }}"
+                                      data-owner="{{ cube.owner }}"></button>
+                                      <input type="hidden" class="form-control" name="id" value="{{ cube.id }}">
+                                      <button type="submit" class="btn-xs active glyphicon glyphicon-remove" name="operate" value="Delete" onclick="deletedut()"></button>
+                                      </form>
+                                  </td>
+                                  <td ><div title=" If you want occupy the device, yes it !">
+                                      <form action="/cubedut" method="post">
+                                          <input type="hidden" name="id" value="{{ cube.id }}">
+                                          <input type="hidden" name="operate" value="takeup">
+                                              {% if cube.tackup == "released" %}
+                                                <input type="hidden" name="owner" value="occupied">
+                                                <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Borrow</b></button>
+                                              {% else %}
+                                                  <input type="hidden" name="owner" value="released">
+                                                  <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Return</b></button>
+                                              {% endif %}
+                                          </form>
+                                      </div>
+                                  </td>
+                                  <td >{{ cube.id }}</td>
+                                  <td >{{ cube.product }}</td>
+                                  <td >{{ cube.sn }}</td>
+                                  <td >{{ cube.authenticationcode }}</td>
+                                  <td >{{ cube.owner }}</td>
+                                  <td>{{ cube.user }}</td>
+                                  </tr>
+                                  {% endfor %}
+
+                          </tbody>
+                          </table>
+                        </div>
+<!--                      <div class="form-group pull-left">-->
+<!--                      <a href="/cubedut" class="btn btn-primary"><b>Refresh All Device</b></a>-->
+<!--                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#CubeModal" data-operate="Add"><b>Add A Cube Device</b></button>-->
+<!--                      </div>-->
+<!--                      <form method="post" action="/cubedut" class="form-horizontal form-label-left input_mask" onsubmit="return checkempty(this)">-->
+<!--					<div class="modal fade" id="CubeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+<!--						<div class="modal-dialog">-->
+<!--							<div class="modal-content">-->
+<!--								<div class="modal-header">-->
+<!--									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
+<!--										&times;-->
+<!--									</button>-->
+<!--									<h4 class="modal-title" id="myModalLabel"> Cube Device Edit</h4>-->
+<!--								</div>-->
+<!--								<div class="modal-body">-->
+<!--                      <input type="hidden" name="operate" value="operate">-->
+<!--                      <input type="hidden" class="form-control" name="id">-->
+<!--                      <div class="form-group" id="product">-->
+<!--                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Product Name<span class="required">*</span></label>-->
+<!--                        <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                            <input type="text" class="form-control" name="product">-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-group" id="duttype">-->
+<!--                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Device Type<span class="required">*</span></label>-->
+<!--                        <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                            <select class="form-control" name="duttype" id="fwtype" onChange="selectchange()" style="background:#fff;border:1px solid #ccc;">-->
+<!--                                <option value="G7" selected>G7</option>-->
+<!--                                <option value="G6">G6</option>-->
+<!--                                <option value="SP">SonicPoint</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-group" id="classify">-->
+<!--                        <label class="control-label col-md-4 col-sm-4 col-xs-12">classify <span class="required">*</span></label>-->
+<!--						<div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                          <select class="form-control" name="classify" style="background:#fff;border:1px solid #ccc;">-->
+<!--                                <option value="Lock" selected>Lock</option>-->
+<!--                                <option value="Unlock">Unlock</option>-->
+<!--                              <option value="NA">NA</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-group" id="sn">-->
+<!--                        <label class="control-label col-md-4 col-sm-4 col-xs-12">SN<span class="required">*</span></label>-->
+<!--                        <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                            <input type="text" class="form-control" name="sn">-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-group" id="authenticationcode">-->
+<!--                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Authentication Code<span class="required">*</span></label>-->
+<!--                        <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                            <input type="text" class="form-control" name="authenticationcode">-->
+<!--                        </div>-->
+<!--                      </div>-->
+
+<!--                      <div class="form-group" id="registrationcode">-->
+<!--                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Registration Code<span class="required"></span></label>-->
+<!--                        <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                            <input type="text" class="form-control" name="registrationcode">-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-group" id="maintenancekey">-->
+<!--                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Maintenance key<span class="required"></span></label>-->
+<!--                        <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                            <input type="text" class="form-control" name="maintenancekey">-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-group" id="owner">-->
+<!--                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Owner<span class="required">*</span></label>-->
+<!--                        <div class="col-md-4 col-sm-4 col-xs-12">-->
+<!--                            <select class="form-control" name="owner" style="background:#fff;border:1px solid #ccc;">-->
+<!--                                <option value="" selected></option>-->
+<!--                                {% for owner in alluser %}-->
+<!--                                    <option value="{{ owner.fullname }}">{{ owner.fullname }}</option>-->
+<!--                                {% endfor %}-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--								</div>-->
+<!--								<div class="modal-footer">-->
+<!--									<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>-->
+<!--									<button type="submit" class="btn btn-info">Submit</button>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</form>-->
+<!--                <script>-->
+<!--                $('#CubeModal').on('show.bs.modal', function (event) {-->
+<!--                  var button = $(event.relatedTarget) // Button that triggered the modal-->
+<!--                  var operate = button.data('operate')-->
+<!--                  var dateid = button.data('id')-->
+<!--                  var product = button.data('product')-->
+<!--                  var duttype = button.data('type')-->
+<!--                  //console.log(duttype)-->
+<!--                  var classify = button.data('classify')-->
+<!--                  var sn = button.data('sn')-->
+<!--                  var authenticationcode = button.data('authenticationcode')-->
+<!--                  var registrationcode = button.data('registrationcode')-->
+<!--                  var maintenancekey = button.data('maintenancekey')-->
+<!--                  var owner = button.data('owner')-->
+<!--                  //console.log(owner)-->
+<!--                  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).-->
+<!--                  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.-->
+<!--                  var modal = $(this)-->
+<!--                  modal.find('.modal-title').text('Cube Device Edit Information： ID ' + dateid)-->
+<!--                  modal.find('.modal-body input[name=operate]').val(operate)-->
+<!--                  modal.find('.modal-body input[name=id]').val(dateid)-->
+<!--                  modal.find('.modal-body input[name=product]').val(product)-->
+<!--                  modal.find('.modal-body select[name=duttype]').val(duttype)-->
+<!--                  modal.find('.modal-body select[name=classify]').val(classify)-->
+<!--                  modal.find('.modal-body input[name=sn]').val(sn)-->
+<!--                  modal.find('.modal-body input[name=authenticationcode]').val(authenticationcode)-->
+<!--                  if (duttype == "G6"){-->
+<!--                    var maintenancekey = ""-->
+<!--                  }-->
+<!--                  else if (duttype == "SP"){-->
+<!--                    var registrationcode = ""-->
+<!--                    var maintenancekey = ""-->
+<!--                  }-->
+<!--                  modal.find('.modal-body input[name=registrationcode]').val(registrationcode)-->
+<!--                  modal.find('.modal-body input[name=maintenancekey]').val(maintenancekey)-->
+
+<!--                  modal.find('.modal-body select[name=owner]').val(owner)-->
+<!--                  //modal.find('.modal-body textarea').val(contents)-->
+<!--                })-->
+<!--                </script>-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+</div>
+<!-- jQuery -->
+<!--<script src="{{ url_for('static', filename='vendors/jquery/dist/jquery.min.js') }}"></script>-->
+<!-- Bootstrap -->
+<!--<script src="{{ url_for('static', filename='bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>-->
+<!-- Datatables -->
+<script>
+function values(ID){
+    $('#ticketid').val(ID);
+}
+
+function dutoccupy(){
+    if(window.confirm("Are you sure you want to Borrow/Return this device？"))
+    {
+         return true;
+    }
+    else
+    {
+         return false;
+    }
+}
+
+function deletedut()
+{
+  if(window.confirm("Are you sure you want to Delete the device？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function selectchange(){
+    if(document.getElementById("fwtype").value=="G6"){
+        document.getElementById("classify").style.display="none";
+        document.getElementById("maintenancekey").style.display="none";
+    }
+    else if(document.getElementById("fwtype").value=="SP"){
+        document.getElementById("classify").style.display="none";
+        document.getElementById("registrationcode").style.display="none";
+        document.getElementById("maintenancekey").style.display="none";
+    }
+    else{
+        document.getElementById("classify").style.display="";
+        document.getElementById("registrationcode").style.display="";
+        document.getElementById("maintenancekey").style.display="";
+    }
+
+}
+
+function statusfilter(){
+    var form = document.getElementById("statusfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function typefilter(){
+    var form = document.getElementById("typefilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function priorityfilter(){
+    var form = document.getElementById("priorityfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+
+function deleteticket(){
+  if(window.confirm("Are you sure you want to Delete the ticket？")){
+    return true;
+    }
+  else{
+    return false;
+  }
+}
+
+function checkempty(form)
+{
+    if(form.product.value === "")
+    {
+         alert("Product value cannot be  empty !");
+         return false;
+    }
+    else if(form.type.value === "")
+    {
+         alert("Type value cannot be empty !");
+         return false;
+    }
+    else if(form.classify.value === "")
+    {
+         alert("Classify value cannot be  empty !");
+         return false;
+    }
+    else if(form.sn.value === "")
+    {
+         alert("SN value cannot be  empty !");
+         return false;
+    }
+    else if(form.owner.value === "")
+    {
+         alert("Owner value cannot be  empty !");
+         return false;
+    }
+    return true;
+}
+
+$(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        // $('#datatable').dataTable();
+        // $('#datatable2').dataTable();
+        // $('#datatable3').dataTable();
+        $("#datatable").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+        });
+        $("#datatable2").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+        });
+        $("#datatable3").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+        });
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive').DataTable();
+
+        $('#datatable-scroller').DataTable({
+          ajax: "js/datatables/json/scroller-demo.json",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+        TableManageButtons.init();
+      });
+
+</script>
+<!-- /Datatables -->
+{% endblock %}

@@ -1,0 +1,27 @@
+configure terminal
+configure terminal
+QA_SWITCH_12(conf)#interface vlan 926
+interface vlan 926
+QA_SWITCH_12(conf-if-vl-926)#untagged te1/49
+untagged te1/49
+QA_SWITCH_12(conf-if-vl-926)#interface te1/49
+interface te1/49
+QA_SWITCH_12(conf-if-te-1/49)#description vlabVlan
+description vlabVlan
+QA_SWITCH_12(conf-if-te-1/49)#spanning-tree mstp edge-port bpduguard shutdown-on-violation
+spanning-tree mstp edge-port bpduguard shutdow[46D                                                 [49D$-tree mstp edge-port bpduguard shutdown-on-vio[47D                                                 [49D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_12(conf-if-te-1/49)#spanning-tree rstp edge-port bpduguard shutdown-on-violation
+spanning-tree rstp edge-port bpduguard shutdow[46D                                                 [49D$-tree rstp edge-port bpduguard shutdown-on-vio[47D                                                 [49D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_12(conf-if-te-1/49)#spanning-tree
+spanning-tree
+QA_SWITCH_12(conf-if-te-1/49)#protocol lldp
+protocol lldp
+QA_SWITCH_12(conf-if-te-1/49-lldp)#disable
+disable
+QA_SWITCH_12(conf-if-te-1/49-lldp)#exit
+exit
+QA_SWITCH_12(conf-if-te-1/49)#no shutdown
+no shutdown
+QA_SWITCH_12(conf-if-te-1/49)#end
+end
+QA_SWITCH_12#

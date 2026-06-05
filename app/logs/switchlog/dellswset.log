@@ -1,0 +1,31 @@
+interface range vlan912,vlan915
+interface range vlan912,vlan915
+QA_SWITCH_10(conf-if-range-vl-912,vl-915)#tagged g3/32
+tagged g3/32
+QA_SWITCH_10(conf-if-range-vl-912,vl-915)#interface vlan UnusedNetwork
+interface vlan UnusedNetwork
+                                          ^
+% Error: Invalid input at "^" marker.
+QA_SWITCH_10(conf-if-range-vl-912,vl-915)#untagged g3/32
+untagged g3/32
+% Error: Tagged flag mis-match Gi 3/32.
+% Error: Tagged flag mis-match Gi 3/32.
+QA_SWITCH_10(conf-if-range-vl-912,vl-915)#interface g3/32
+interface g3/32
+QA_SWITCH_10(conf-if-gi-3/32)#description vlab-Trunk
+description vlab-Trunk
+QA_SWITCH_10(conf-if-gi-3/32)#no spanning-tree
+no spanning-tree
+QA_SWITCH_10(conf-if-gi-3/32)#protocol lldp
+protocol lldp
+QA_SWITCH_10(conf-if-gi-3/32-lldp)#disable
+disable
+QA_SWITCH_10(conf-if-gi-3/32-lldp)#exit
+exit
+QA_SWITCH_10(conf-if-gi-3/32)#shutdown
+shutdown
+QA_SWITCH_10(conf-if-gi-3/32)#no shutdown
+no shutdown
+QA_SWITCH_10(conf-if-gi-3/32)#end
+end
+QA_SWITCH_10#

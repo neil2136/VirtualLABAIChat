@@ -1,0 +1,18 @@
+-r prod.txt
+Flask-SSLify==0.1.5
+gunicorn==19.7.1
+psycopg2==2.7.3
+flask_bootstrap
+flask_moment
+flask_sqlalchemy
+flask_login
+flask_pagedown
+flask_script
+flask_migrate
+pymongo
+pyvim
+pyvmomi
+bleach
+flask_wtf
+email_validator
+ldap3

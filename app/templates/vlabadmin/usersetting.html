@@ -1,0 +1,225 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+    <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Administrator Managment (Only Admin) <small>
+                      add new user for Mongodb  </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+
+    </div>
+    <div class="col-md-6 col-xs-12" style="width:60%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Add a New User <small>There are will create a account in VLAB DB </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form class="form-horizontal form-label-left" action="/usersetting" method="post">
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">User Operate<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="select" id="select" onChange="selectchange()" style="background:#fff;border:1px solid #ccc;">
+                                <option value="none" selected>--Selete--</option>
+                                <option value="searchuser">search user</option>
+                                <option value="adduser">add user</option>
+                                <option value="edituser">modify user</option>
+                                <option value="deluser">delete user</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="form-group" id="svname">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">SV Name <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="svname" value="{{ userdata.svname }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="fullname">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Full Name <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="fullname" value="{{ userdata.fullname }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="email">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Email<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="email" value="{{ userdata.email }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="team">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Teams<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="team" value="{{ userdata.Group }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="allowgroup">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Allowed Group<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="allowgroup" value="{{ userdata.allowedGroups }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="adminvlan">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Admin VLAN<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="adminvlan" value="{{ userdata.AdminVLAN }}" min="0" max="4096">
+                        </div>
+                      </div>
+                      <div class="form-group" id="privatevlan">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Private VLAN<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control"  name="privatevlan" value="{{ userdata.VLAN }}" min="0" max="4096">
+                        </div>
+                      </div>
+                      <div class="form-group" id="esxiserver">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">ESXI server <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="esxiserver" value="{{ userdata.ESXServer }}">
+<!--                          <input type="text" class="form-control" name="esxiserver" value="{% for esxip in userdata.ESXServer %}{{ esxip }},{% endfor %}">-->
+
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-primary">Cancel</button>
+                          <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2> Console Result<small>Displays the process of configuring the DB and prints it</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a></li>
+              <li><a href="#">Settings 2</a></li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!--log monitor-->
+      <div id="sw" style="height:500px; overflow:auto">
+        <div>
+          <table>
+            {% for sw_line in consoledata %}
+            <tr class="even pointer">{{ sw_line }}<br></tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- /page content -->
+
+<script language="javascript">
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to occupy this PC？ If yes, Your Email account will receive an email with a wireless PC message in it "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function selectchange(){
+if(document.getElementById("select").value=="adduser"){
+document.getElementById("svname").style.display="";
+document.getElementById("fullname").style.display="";
+document.getElementById("email").style.display="";
+document.getElementById("team").style.display="";
+document.getElementById("allowgroup").style.display="";
+document.getElementById("adminvlan").style.display="";
+document.getElementById("privatevlan").style.display="";
+document.getElementById("esxiserver").style.display="";
+}
+else if(document.getElementById("select").value=="searchuser"){
+document.getElementById("svname").style.display="";
+document.getElementById("fullname").style.display="none";
+document.getElementById("email").style.display="none";
+document.getElementById("team").style.display="none";
+document.getElementById("allowgroup").style.display="none";
+document.getElementById("adminvlan").style.display="none";
+document.getElementById("privatevlan").style.display="none";
+document.getElementById("esxiserver").style.display="none";
+}
+else if(document.getElementById("select").value=="deluser"){
+document.getElementById("svname").style.display="";
+document.getElementById("fullname").style.display="none";
+document.getElementById("email").style.display="none";
+document.getElementById("team").style.display="none";
+document.getElementById("allowgroup").style.display="none";
+document.getElementById("adminvlan").style.display="none";
+document.getElementById("privatevlan").style.display="none";
+document.getElementById("esxiserver").style.display="none";
+}
+else{
+document.getElementById("svname").style.display="";
+document.getElementById("fullname").style.display="";
+document.getElementById("email").style.display="";
+document.getElementById("team").style.display="";
+document.getElementById("allowgroup").style.display="";
+document.getElementById("adminvlan").style.display="";
+document.getElementById("privatevlan").style.display="";
+document.getElementById("esxiserver").style.display="";
+}
+}
+</script>
+
+{% endblock %}
+
+

@@ -1,0 +1,31 @@
+Start check cisco Switch configure
+==================================================
+************************************************************
+show etherchannel summary | include 5/43
+QA_SWITCH_3
+************************************************************
+show interfaces gi5/43 status | include 0
+Gi5/43    vlab-VlanUnusedNet disabled     1            auto   auto 10/100/1000-TX
+QA_SWITCH_3
+************************************************************
+show running-config interface gi5/43
+Building configuration...
+
+Current configuration : 236 bytes
+!
+interface GigabitEthernet5/43
+ description vlab-VlanUnusedNetwork
+ switchport mode access
+ switchport nonegotiate
+ shutdown
+ no cdp enable
+ spanning-tree portfast
+ spanning-tree bpdufilter disable
+ spanning-tree bpduguard enable
+end
+
+QA_SWITCH_3
+************************************************************
+show interfaces gi5/43 | include protocol
+GigabitEthernet5/43 is administratively down, line protocol is down (disabled)
+QA_SWITCH_3

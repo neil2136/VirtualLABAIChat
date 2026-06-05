@@ -1,0 +1,1 @@
+[{"ip": "10.8.2.17", "name": ["Centos_lwang", "Linux_lwang", "Ubuntu-lwang", "V6-lwang", "Wanhost1-64_lwang", "win10host-64_lwang", "win10host1-32_lwang", "win10host2-32-lwang", "win10host3-32_lwang", "win10lanhost2-64_lwang", "win2016-01_lwang", "win2016_lwang"]}]

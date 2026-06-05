@@ -1,0 +1,479 @@
+{% extends "bootstrap/base2.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+    <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Download Build from Bantley <small>
+                      It will   </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+    </div>
+    <div class="col-md-6 col-xs-12" style="width:60%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>VMs VLAN settings on ESXI <small>There are will add/edit/delete VLAN for ESXI </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form class="form-horizontal form-label-left" action="/vmcontrol" method="post">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Standard VLAN Type</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" disabled="disabled" value="lezhang_vlan731,unused_vlan0,unused_vlan1,ixia_vlan911. range(0-4095)" style="color:#FF0000">
+                            </div>
+                        </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Firewall Function<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="select" id="select" onChange="selectchange()" style="background:#fff;border:1px solid #ccc;">
+                                <option value="none" selected>--Selete--</option>
+                                <option value="getpg">get portgroup</option>
+                                <option value="addpg">add portgroup</option>
+                                <option value="delpg">delete portgroup</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">ESXI Host <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="esxiip" value="10.8.2.25">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Prefix Name <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="prename" value="lezhang">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">VLAN ID Start<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="vlanstart" value="731" min="0" max="4096">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">VLAN ID End<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="vlanend" value="740" min="0" max="4096">
+                        </div>
+                      </div>
+                      <div class="form-group" id="gp" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Get/Remove GP <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="gpname" value="lezhang_vlan731">
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-primary">Cancel</button>
+                          <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2> Console Result<small>Displays the process of configuring the switch and prints it</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a></li>
+              <li><a href="#">Settings 2</a></li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!--log monitor-->
+      <div id="sw" style="height:500px; overflow:auto">
+        <div>
+          <table>
+            {% for sw_line in consoledata %}
+            <tr class="even pointer">{{ sw_line.pg }}<br></tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Users Log <small>Displays all configuration results and alerts</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <!--log monitor-->
+                  <div id="log" style="height:500px; overflow:auto">
+                  <div class="x_content">
+                    <p>All log <code>log_link</code> will show from last Week to now.</p>
+                  </div>
+                    <div>
+                      <table>
+                        {% for log_line in log_print %}
+                          <tr class="even pointer">{{ log_line }}<br></tr>
+                        {% endfor %}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                </div>
+</div>
+</div>
+<!-- /page content -->
+
+<script language="javascript">
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to occupy this PC？ If yes, Your Email account will receive an email with a wireless PC message in it "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function releaseowner()
+{
+  if(window.confirm("Are you sure you want to release current owner？ Please confirm the usage to owner first"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function selectchange(){
+if(document.getElementById("select").value=="addaddressobjects"){
+document.getElementById("aoname").style.display="";
+document.getElementById("aozone").style.display="";
+document.getElementById("aotype").style.display="";
+document.getElementById("aoip").style.display="";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addaddressgroups"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="";
+document.getElementById("agmemberof").style.display="";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addlocalusers"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="";
+document.getElementById("localpwd").style.display="";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addlocalgroups"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="";
+document.getElementById("memberof").style.display="";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addVPN"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="";
+document.getElementById("vpnname").style.display="";
+document.getElementById("primaryip").style.display="";
+document.getElementById("sharedsecret").style.display="";
+document.getElementById("localnetwork").style.display="";
+document.getElementById("remotenetwork").style.display="";
+document.getElementById("keepalive").style.display="";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addroute"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="";
+document.getElementById("metric").style.display="";
+document.getElementById("source").style.display="";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addnat"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="";
+document.getElementById("translatedsource").style.display="";
+document.getElementById("destination").style.display="";
+document.getElementById("translateddestination").style.display="";
+document.getElementById("service").style.display="";
+document.getElementById("translatedservice").style.display="";
+document.getElementById("inbound").style.display="";
+document.getElementById("outbound").style.display="";
+document.getElementById("natenable").style.display="";
+document.getElementById("times").style.display="";
+}
+else{
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="none";
+}
+}
+</script>
+
+{% endblock %}
+
+

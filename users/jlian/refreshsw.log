@@ -1,0 +1,58 @@
+Start check dell Switch configure
+==================================================
+************************************************************
+show running-config interface gi1/26
+!
+interface GigabitEthernet 1/26
+ description vlabVlan
+ no ip address
+ mtu 9216
+ portmode hybrid
+ switchport
+ spanning-tree mstp edge-port bpduguard shutdown-on-violation 
+ spanning-tree rstp edge-port bpduguard shutdown-on-violation 
+!
+ protocol lldp 
+  disable 
+ no shutdown
+QA_SWITCH_12
+************************************************************
+show interfaces gi1/26 status
+Port                 Description  Status Speed        Duplex Vlan  
+Gi 1/26              vlabVlan     Up     1000 Mbit    Full   166
+QA_SWITCH_12
+************************************************************
+show interfaces gi1/26 | grep protocol
+GigabitEthernet 1/26 is up, line protocol is up
+QA_SWITCH_12
+************************************************************
+show interfaces port-channel | grep 1/26
+QA_SWITCH_12
+************************************************************
+show running-config interface gi1/26
+!
+interface GigabitEthernet 1/26
+ description vlabVlan
+ no ip address
+ mtu 9216
+ portmode hybrid
+ switchport
+ spanning-tree mstp edge-port bpduguard shutdown-on-violation 
+ spanning-tree rstp edge-port bpduguard shutdown-on-violation 
+!
+ protocol lldp 
+  disable 
+ no shutdown
+QA_SWITCH_12
+************************************************************
+show interfaces gi1/26 status
+Port                 Description  Status Speed        Duplex Vlan  
+Gi 1/26              vlabVlan     Up     1000 Mbit    Full   166
+QA_SWITCH_12
+************************************************************
+show interfaces gi1/26 | grep protocol
+GigabitEthernet 1/26 is up, line protocol is up
+QA_SWITCH_12
+************************************************************
+show interfaces port-channel | grep 1/26
+QA_SWITCH_12

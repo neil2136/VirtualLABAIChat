@@ -1,0 +1,23 @@
+Start check dell Switch configure
+==================================================
+************************************************************
+show running-config interface g4/0
+!
+interface GigabitEthernet 4/0
+ description vlabVlan1
+ no ip address
+ mtu 9216
+ no shutdown
+QA_SWITCH_9
+************************************************************
+show interfaces g4/0 status
+Port     Description  Status Speed     Duplex Vlan  
+Gi 4/0   vlabVlan1    Up     1000 Mbit Full   --
+QA_SWITCH_9
+************************************************************
+show interfaces g4/0 | grep protocol
+GigabitEthernet 4/0 is up, line protocol is up
+QA_SWITCH_9
+************************************************************
+show interfaces port-channel | grep 4/0
+QA_SWITCH_9

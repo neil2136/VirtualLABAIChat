@@ -1,0 +1,1162 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+{% block content %}<!--自定义模板区域-->
+<div class="right_col" role="main">
+<div class="row">
+    <div class="col-md-4 col-sm-4 col-xs-12" style="width:40%">
+      <div class="x_panel tile fixed_height_325">
+        <div class="x_title">
+          <h2>Basic Information</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+              </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+<!--        <div class="x_content collapse out">-->
+          <div class="x_content">
+          <table class="table table-striped">
+            <thead>
+            </thead>
+            <tbody>
+            <tr>
+              <td><b>Name</b></td>
+              <td>
+                {% if deviceinfo.classify %}
+                  {{ deviceinfo.Product }}_{{ deviceinfo.classify }}
+                {% else %}
+                  {{ deviceinfo.Product }}
+                {% endif %}
+              </td>
+              <td><b>SN</b></td>
+              <td>{{ deviceinfo.SN }}</td>
+            </tr>
+            <tr>
+              <td><b>ID</b></td>
+              <td>{{ deviceinfo.id }}</td>
+              <td><b>Registration Code</b></td>
+              <td>{{ deviceinfo.RegistrationCode }}</td>
+            </tr>
+            <tr>
+              <td><b>Owner</b></td>
+              <td>{{ deviceinfo.Owner }}</td>
+              <td><b>Maintanence Key</b></td>
+              <td>{{ deviceinfo.MaintanenceKey }}</td>
+            </tr>
+            <tr>
+              <td><b>User</b></td>
+              <td>{{ deviceinfo.User }}
+              <form action="/publicuserconfig" method="post">
+                  {% if usercheck == True %}
+                    <input type="hidden" name="deviceid" value="{{ deviceinfo.id }}">
+                    <input type="hidden" name="operate" value="leave">
+                    <button type="submit" value="Submit" onclick="return userleave()"><b>Leave</b></button>
+                  {% else %}
+                    <input type="hidden" name="deviceid" value="{{ deviceinfo.id }}">
+                    <input type="hidden" name="operate" value="join">
+                    <button type="submit" value="Submit" onclick="return userjoin()"><b>Join</b></button>
+                  {% endif %}
+              </form>
+              </td>
+              <td><b>Description</b></td>
+              <td>{{ deviceinfo.Description }}</td>
+            </tr>
+            </tbody>
+          </table>
+          <b>Comments:</b>
+            <div class="form-group" align="right">
+             <form action="/commentconf" method="post" >
+                <input type="hidden" name="deviceid" value="{{ deviceinfo.id }}">
+                <input type="hidden" name="devicetype" value="{{ deviceinfo.DeviceType }}">
+                <input type="hidden" name="tagpage" value="pools">
+                 <textarea placeholder="leave a note for others. like: using by xxx，plan to use for xx hours/days" class="form-control" rows="2" name="comment">{{ deviceinfo.Comment }}</textarea>
+                 <button type="submit" value="Submit"><b>Submit</b></button>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12" style="width:30%">
+      <div class="x_panel tile fixed_height_325">
+        <div class="x_title">
+          <h2>Console Information</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+              </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table class="table table-striped">
+            <thead>
+            </thead>
+            <tbody>
+            <tr>
+              <td><b>Server</b></td>
+              <td>{{ deviceinfo.ConsoleInfo.ConsoleManager }}</td>
+            </tr>
+            <tr>
+              <td><b>Server IP</b></td>
+              <td>{{ deviceinfo.ConsoleInfo.ip }}</td>
+            </tr>
+            <tr>
+              <td><b>Telnet Port</b></td>
+              <td>{{ deviceinfo.ConsoleInfo.TelnetPort }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12" style="width:30%">
+      <div class="x_panel tile fixed_height_330">
+        <div class="x_title">
+          <h2>Power Information &nbsp;&nbsp;
+    <!--            {% if deviceinfo.keepAlive == "1" %}-->
+    <!--              <label><nobr><img src="static/images/green_led.png" >  On</nobr></label>-->
+    <!--              {% else %}-->
+    <!--              <label><nobr><img src="static/images/red_led.png">  Off</nobr></label>-->
+    <!--              {% endif %}-->
+            </h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+              </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table class="table table-striped">
+            <thead>
+            </thead>
+            <tbody>
+            {% for powerinfo in deviceinfo.PowerInfo %}
+            <tr>
+              <td><b>Power Control</b></td>
+              <td>{{ powerinfo.PowerController }}</td>
+            </tr>
+            <tr>
+              <td><b>Power Control IP</b></td>
+              <td>{{ powerinfo.ip }}</td>
+            </tr>
+            <tr>
+              <td><b>Power Channel</b></td>
+              <td>{{ powerinfo.PowerChannel }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="row">
+    <div class="x_content bs-example-popovers">
+        <div class="alert alert-info alert-dismissible fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+          </button>
+          Notice:
+          <br>For Spanning Tree, when you test L2 bridge/wire mode, must set to off first.
+          <br>For LAG, only support read only in SW, If you want switch it. Please contact LAB Administrator.
+          <a href="https://engineering.eng.sonicwall.com/display/SQ/How+to+config+LAG+in+Switch+for+FW" style="color: #0000FF">User Manual</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12" style="width:100%">
+    <div class="x_panel">
+      <div class="x_title">
+          <h2>({{ deviceinfo.id }}) {{ deviceinfo.Product }} port settings</h2>
+          <h2  style="color: red">
+              {% if deviceinfo.id in publicdutlist %}
+            <br>!!! This device is only configured in account "qa_public" !!!
+            {% endif %}
+          </h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a>
+              </li>
+              <li><a href="#">Settings 2</a>
+              </li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a>
+          </li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+          <div id="myTabContent" class="tab-content">
+            <div class="form-group pull-left">
+          </div>
+            <div class="form-group pull-left">
+                <form role="form" class="form-inline" method="post" action="/refreshallport">
+                  <input type="hidden" name="dutid" value="{{ deviceinfo.id }}">
+                  <input type="hidden" name="duttype" value="{{ deviceinfo.DeviceType }}">
+                  <input type="hidden" name="dutpool" value="enabled">
+                  <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#waitingModal">Refresh All Interfaces</button>
+                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#DevicePowerControlModal"
+                         data-deviceid="{{ deviceinfo.id }}" data-devicetype="{{ deviceinfo.DeviceType }}">
+                      {% if deviceinfo.keepAlive == "1" %}
+                      <img src="static/images/green_led.png" >
+                      {% else %}
+                      <img src="static/images/red_led.png">
+                      {% endif %}
+                      DUT Power Control</button>
+                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#DeviceTopoModal"
+                         data-deviceid="{{ deviceinfo.id }}" data-devicetype="{{ deviceinfo.DeviceType }}">My Device Topology</button>
+              </form>
+            </div>
+            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+              <table id="datatable" class="table table-striped table-bordered jambo_table bulk_action">
+              <thead>
+                 <tr class="headings">
+                     <th width="2%"><input type="checkbox" id="check-all" class="flat"></th>
+                    <th scope="col" style='vertical-align: middle;text-align: center;'>Interface</th>
+                    <th scope="col" style='vertical-align: middle;text-align: center;'>Port Mode</th>
+                    <th scope="col" style='vertical-align: middle;text-align: center;'>UntagVLAN</th>
+                    <th scope="col" style='vertical-align: middle;text-align: center;'>TagVLAN</th>
+                    <th scope="col" style='vertical-align: middle;text-align: center;'>STP</th>
+                    <th scope="col" style='vertical-align: middle;text-align: center;'>LAG</th>
+                    <th scope="col" style='vertical-align: middle;text-align: center;'>Port Status</th>
+                    <th scope="col" style='vertical-align: middle;text-align: center;'>Operate</th>
+                    <th scope="col" style='vertical-align: middle;text-align: center;'>Connected VMs</th>
+                 </tr>
+              </thead>
+              <tbody>
+                {% for dutport in deviceinfo.InterfaceInfo.Interface %}
+                <tr class="even pointer">
+                    <td class="a-center">
+                        <input type="checkbox" class="flat" name="table_records">
+                    </td>
+                    <td width="15%"><b>Name: <font color="#0000FF" size="2">{{ dutport.name }}</font></b>
+                        <br>({{ dutport.SwitchID }}: {{ dutport.SwitchPort }})
+                    </td>
+                    <td align="center"><br>{{ dutport.portmode }}</td>
+                    <td align="center"><br><b>{{ dutport.untagvlan }}</b>
+                    <!--    气泡窗-->
+                    {% if dutport.portmode == 'access' %}
+                        {% if dutport.untagvlan == 'UnusedNetwork' %}
+                        {% else %}
+                        <img src="static/images/info-icon.png" title="Device List:  VLAN {{ dutport.untagvlan }}" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content="
+                    {% for device in dutport.untagdevice %}
+                    ({{ device.id }}){{ device.name }}: {{ device.port }}
+                    {% if device.power == 'no shutdown' %}Link_Up
+                    {% else %}Link_Down
+                    {% endif %}
+                    <br>
+                    {% endfor %}
+                    ">
+                        {% endif %}
+                    {% endif %}
+                    </td>
+                    <td align="center"><br><b>{{ dutport.tagvlan }}</b>
+                    {% if dutport.portmode == 'trunk' %}
+                    <img src="static/images/info-icon.png" title="Device List:  Trunk" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content="
+                    {% for device in dutport.tagdevice %}
+                    ({{ device.id }}){{ device.name }}: {{ device.port }}
+                    {% if device.power == 'no shutdown' %}Link_Up
+                    {% else %}Link_Down
+                    {% endif %}
+                    <br>
+                    {% endfor %}
+                    "></button>
+                    {% endif %}
+                    </td>
+                    <td align="center"><br>
+                        {% if dutport.stp == "on" %}
+<!--                       <input type="checkbox" class="js-switch" disabled="disabled" checked="checked">-->
+                        <div title="Spanning tree Status: ON !" style="color:#ff0000">
+                            <img src="static/images/status-on.png" style="border-radius: 3px">
+                        </div>
+                        {% else %}
+<!--                        <input type="checkbox" class="js-switch" disabled="disabled">-->
+                            <div title="Spanning tree Status: OFF !" style="color:#ff0000">
+                            <img src="static/images/status-off.png" style="border-radius: 3px">
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td align="center"><br>
+                        {% if dutport.lag == "on" %}
+<!--                       <input type="checkbox" class="js-switch" disabled="disabled" checked="checked">-->
+                            <div title="LAG Status: ON !" style="color:#ff0000">
+                            <img src="static/images/status-on.png" style="border-radius: 3px">
+                        </div>
+                        {% else %}
+<!--                        <input type="checkbox" class="js-switch" disabled="disabled">-->
+                            <div title="LAG Status: OFF !" style="color:#ff0000">
+                            <img src="static/images/status-off.png" style="border-radius: 3px">
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td align="center" width="12%"><br />
+                    {% if dutport.portpower == "no shutdown" %}
+                    <nobr><img src="static/images/green_led.png">Link Up</nobr>
+                    {% else %}
+                        {% if dutport.portpower == "err-disabled" %}
+                        <div title="Warning:Layer 2 Bridged/Wire Mode/PortShield Switch Mode were be set to DUT Interfaces !" style="color:#ff0000">
+                            <img src="static/images/red_led.png">err-disabled
+                        </div>
+                        {% else %}
+                            <img src="static/images/red_led.png">Link Down
+                        {% endif %}
+                    <!--<button type="submit" class="btn btn-info" onclick="this.form.operate.value='no shutdown';">Enable</button>-->
+                    {% endif %}
+                    </td>
+                    <td style="background-color:antiquewhite" align="center"><br>
+                    <form action="/dutportrefresh" method="post">
+                        <input type="hidden" name="id" value="{{ deviceinfo.id }}">
+                        <input type="hidden" name="devicetype" value="{{ deviceinfo.DeviceType }}">
+                        <input type="hidden" name="portname" value="{{ dutport.name }}">
+                        <input type="hidden" name="dutpool" value="enabled">
+                        {% if deviceinfo.keepAlive == 0 %}
+                        <div title="DUT Power is Off. If you want config this port, Please POWER ON it via DUT Power Control Button !" style="color:#ff0000">
+                        <b style="color:#FF0000">Forbidden</b>(DUT Power Off)
+                        </div>
+                        {% else %}
+                        {% if dutport.lag == "on" %}
+                        <div title="LAG Status On, Only Sync the Switch configure !" style="color:#ff0000">
+                        <button type="submit" class="btn-xs active glyphicon glyphicon-refresh" data-toggle="modal" data-target="#waitingModal" name="operate" value="refresh"></button>
+                            <b style="color:#FF0000">LAG Is On</b>
+                        </div>
+                        {% else %}
+                        <div>
+                        <div title="Refresh The Switch Port Information Button." style="color:#ff0000; float:left; margin-right:8px">
+                        <button type="submit" class="btn-xs active glyphicon glyphicon-refresh" data-toggle="modal" data-target="#waitingModal" name="operate" value="refresh"></button>
+                        </div>
+                        <div title="Config The Switch Port Button." style="color:#ff0000; float: left">
+{% if dutport.portpower == "no shutdown" %}
+	{% if deviceinfo.id in publicdutlist %}
+		{% if username == "qa_public" %}
+			<button type="button" class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"
+             data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"
+             data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"
+             data-lag="{{ dutport.lag }}" data-portpower="no shutdown"></button>
+        {% else %}
+           <button type="button" disabled class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"
+             data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"
+             data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"
+             data-lag="{{ dutport.lag }}" data-portpower="no shutdown"></button>
+		{% endif %}
+	{% else %}
+        {% if username != "qa_public" %}
+          <button type="button" class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"
+             data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"
+             data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"
+             data-lag="{{ dutport.lag }}" data-portpower="no shutdown"></button>
+        {% else %}
+          <button type="button" disabled class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"
+             data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"
+             data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"
+             data-lag="{{ dutport.lag }}" data-portpower="no shutdown"></button>
+        {% endif %}
+	{% endif %}
+{% else %}
+	{% if deviceinfo.id in publicdutlist %}
+		{% if username == "qa_public" %}
+			<button type="button" class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"
+             data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"
+             data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"
+             data-lag="{{ dutport.lag }}" data-portpower="shutdown"></button>
+        {% else %}
+           <button type="button" disabled class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"
+             data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"
+             data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"
+             data-lag="{{ dutport.lag }}" data-portpower="shutdown"></button>
+		{% endif %}
+	{% else %}
+        {% if username != "qa_public" %}
+          <button type="button" class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"
+             data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"
+             data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"
+             data-lag="{{ dutport.lag }}" data-portpower="shutdown"></button>
+        {% else %}
+          <button type="button" disabled class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"
+             data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"
+             data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"
+             data-lag="{{ dutport.lag }}" data-portpower="shutdown"></button>
+        {% endif %}
+	{% endif %}
+{% endif %}
+<!--                        {% if dutport.portpower == "no shutdown" %}-->
+<!--                        <button type="button" class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"-->
+<!--                         data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"-->
+<!--                         data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"-->
+<!--                         data-lag="{{ dutport.lag }}" data-portpower="no shutdown"></button>-->
+<!--                        {% else %}-->
+<!--                        <button type="button" class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#DeviceEditModal"-->
+<!--                         data-name="{{ dutport.name }}" data-swport="{{ dutport.SwitchID }}: {{ dutport.SwitchPort }}"-->
+<!--                         data-portmode="{{ dutport.portmode }}" data-untagvlan="{{ dutport.untagvlan }}" data-tagvlan="{{ dutport.tagvlan }}" data-stp="{{ dutport.stp }}"-->
+<!--                         data-lag="{{ dutport.lag }}" data-portpower="shutdown"></button>-->
+                        </div>
+                        </div>
+<!--                        {% endif %}-->
+                        {% endif %}
+                        {% endif %}
+                    </form>
+                    </td>
+                    <td style="background-color:lavenderblush" align="center"><br>
+                    <select name="vmname" class="form-control" required >
+                            {% for vms in dutport.vmname %}
+                                <option value="{{ vms.name }}{{ vms.nic }}">{{ vms.name }}{{ vms.nic }}</option>
+                            {% endfor %}
+                        </select>
+
+                    </td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+              </table>
+            </div>
+        </div>
+          <!-- refresh all 模态框-->
+          <div class="modal fade" tabindex="-1" role="dialog" id="waitingModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">In Operation ... </h4>
+                        </div>
+                        <div class="modal-body">
+                          <p><b>Note, you can refresh the current page manually to see the Console Log in progressing.</b><p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">100%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" disabled class="btn btn-default" data-dismiss="modal">Configuration in progress. Do not repeat！</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+          <!--vm 模态框 -->
+         <form method="post" action="/dutvmcfg" class="form-horizontal form-label-left input_mask">
+             <input type="hidden" name="deviceid" value="{{ deviceinfo.id }}">
+             <input type="hidden" name="devicetype" value="{{ deviceinfo.DeviceType }}">
+             <input type="hidden" name="portmode">
+             <input type="hidden" name="dutpool" value="enabled">
+            <div class="modal fade" id="VMListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="vmListModalLabel"> VM Edit :</h4>
+                        </div>
+                        <div class="modal-body">
+                          <div class="form-group" >
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">VM Name</label>
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <input type="text" class="form-control" name="vmname" readonly>
+                            </div>
+                          </div>
+                          <div class="form-group" >
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">VM NIC</label>
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <input type="text" class="form-control" name="vmnic" readonly>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">VLAN<span class="required">*</span></label>
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <select class="form-control" name="untagvlan" style="background:#fff;border:1px solid #ccc;">
+                                    <option value="" selected></option>
+                                    {% for vlan in vmvlanpool %}
+                                        <option value="{{ vlan }}">{{ vlan  }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-info">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <script>
+            $('#VMListModal').on('show.bs.modal', function (event) {
+              var button = $(event.relatedTarget) // Button that triggered the modal
+              // var vm = button.data('vm')
+              var vmname = button.data('vmname')
+              var vmnic = button.data('vmnic')
+              var untagvlan = button.data('untagvlan')
+              var portmode = button.data('portmode')
+              var modal = $(this)
+              // modal.find('.modal-title').text('Edit VM ：' + vm)
+              modal.find('.modal-body input[name=vmname]').val(vmname)
+              modal.find('.modal-body input[name=vmnic]').val(vmnic)
+              modal.find('.modal-body input[name=vmnames]').val(vmname+vmnic)
+              if (portmode == "trunk"){
+                  modal.find('.modal-body select[name=untagvlan]').val('trunk_4095')
+              }
+              else {
+                  modal.find('.modal-body select[name=untagvlan]').val(untagvlan)
+              }
+
+              modal.find('.modal-body input[name=portmode]').val(portmode)
+            })
+        </script>
+          <!--device edit 模态框 -->
+          <form method="post" action="/dutportcfg" class="form-horizontal form-label-left input_mask" onsubmit="return checkempty(this)">
+<!--          <form method="post" action="/dutportcfg" class="form-horizontal form-label-left input_mask" onsubmit="return checkempty(this)">-->
+<!--      <form method="post" action="/dutportcfg" class="form-horizontal form-label-left input_mask" onsubmit="return checkempty(this)">    -->
+        <div class="modal fade" id="DeviceEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Device Edit</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="deviceid" value="{{ deviceinfo.id }}">
+                        <input type="hidden" name="devicetype" value="{{ deviceinfo.DeviceType }}">
+                        <input type="hidden" name="portname">
+                        <input type="hidden" name="dutpool" value="enabled">
+                      <div class="form-group" id="swport">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Switch Port</label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <input type="text" class="form-control" name="swport" readonly>
+                        </div>
+                      </div>
+                      <div class="form-group" id="duttype">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Switch Mode<span class="required">*</span></label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <select class="form-control" name="portmode" id="fwtype" onChange="selectchange(this.value)" style="background:#fff;border:1px solid #ccc;">
+                                <option value="access" selected>Access</option>
+                                <option value="trunk">Trunk</option>
+                            </select>
+                        </div>
+                          <script>
+                              function selectchange(portmode) {
+                                  if(portmode === 'access'){
+                                document.getElementsByName('tagvlan')[0].disabled='disabled';
+                              }else{
+                                  document.getElementsByName('tagvlan')[0].disabled='';
+                              }}
+                          </script>
+                      </div>
+                      <div class="form-group" id="untagvlan">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Untag VLAN<span class="required">*</span></label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <select class="form-control" name="untagvlan" onChange="selectchange2(this.value)" style="background:#fff;border:1px solid #ccc;">
+                                <option value="" selected></option>
+                                {% for vlan in dutvlanpool %}
+                                    <option value="{{ vlan }}">{{ vlan  }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <script>
+                            function selectchange2(untagvlan) {
+                                if(untagvlan === 'UnusedNetwork'){
+                                    document.getElementsByName('portpower')[0].disabled=true;
+                                    const x = document.getElementsByName("portpower")[0];
+                                    x.selectedIndex="Off"
+                                }
+                                else{
+                                  document.getElementsByName('portpower')[0].disabled='';
+                              }}
+                          </script>
+                      </div>
+                      <div class="form-group" id="tagvlan">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Tag VLAN<span class="required">*</span></label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div title="VLAN Ranges: 2-1100, Values Example: 731,732-733 !" style="color:#ff0000">
+                            <span style="color: #0000FF; font-size: x-small; "><b>e.g:  731,732-733,911</b> </span>
+                            <input type="text" class="form-control" name="tagvlan">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="form-group" id="stp">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12">STP<span class="required">*</span></label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <select class="form-control" name="stp" style="background:#fff;border:1px solid #ccc;">
+                                <option value="on" selected>On</option>
+                                <option value="off">Off</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="form-group" id="lag">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12">LAG</label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <input type="text" class="form-control" name="lag" readonly>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Port Link<span class="required">*</span></label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            {% if untagvlan == "UnusedNetwork" %}
+                            <select class="form-control" name="portpower" disabled style="background:#fff;border:1px solid #ccc;">
+                                <option name='shutdown' value="shutdown">Off</option>
+                                <option value="no shutdown" selected>On</option>
+                                <option value="reboot">Reboot</option>
+                            </select>
+                            {% else %}
+                            <select class="form-control" name="portpower" style="background:#fff;border:1px solid #ccc;">
+                                <option name='shutdown' value="shutdown">Off</option>
+                                <option value="no shutdown" selected>On</option>
+                                <option value="reboot">Reboot</option>
+                            </select>
+                            {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-info">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+        <script>
+        $('#DeviceEditModal').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var operate = button.data('operate')
+          var name = button.data('name')
+          var swport = button.data('swport')
+          var portmode = button.data('portmode')
+          var untagvlan = button.data('untagvlan')
+          var tagvlan = button.data('tagvlan')
+          var stp = button.data('stp')
+          var lag = button.data('lag')
+          var portpower = button.data('portpower')
+            // console.log(portpower)
+
+          var duttype = button.data('type')
+          //console.log(duttype)
+          var owner = button.data('owner')
+          //console.log(owner)
+          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+          var modal = $(this)
+          modal.find('.modal-title').text('Edit Port：' + name)
+          modal.find('.modal-body input[name=operate]').val(operate)
+          modal.find('.modal-body input[name=portname]').val(name)
+          modal.find('.modal-body input[name=swport]').val(swport)
+          modal.find('.modal-body select[name=portmode]').val(portmode)
+          modal.find('.modal-body select[name=untagvlan]').val(untagvlan)
+          if (portmode === 'access')  {
+              document.getElementsByName('tagvlan')[0].disabled='disabled';
+              modal.find('.modal-body input[name=tagvlan]').val('')
+          }
+          else{
+              modal.find('.modal-body input[name=tagvlan]').val(tagvlan)
+          }
+          modal.find('.modal-body select[name=stp]').val(stp)
+          modal.find('.modal-body input[name=lag]').val(' ' + lag)
+          modal.find('.modal-body select[name=portpower]').val(portpower)
+
+          // if (duttype == "G6"){
+          //   var maintenancekey = ""
+          // }
+          // else if (duttype == "SP"){
+          //   var registrationcode = ""
+          //   var maintenancekey = ""
+          // }
+          modal.find('.modal-body select[name=owner]').val(owner)
+          //modal.find('.modal-body textarea').val(contents)
+        })
+        </script>
+          <!--power control 模态框 -->
+         <form method="post" action="/powercontrol" class="form-horizontal form-label-left input_mask" role="form" onsubmit="return ">
+			<div class="modal fade" id="DevicePowerControlModal" tabindex="-1" role="dialog" aria-labelledby="DevicePowerControlModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="FWModal1">DUT Power Control:</h4>
+			      </div>
+			      <div class="modal-body">
+			        <form class="form-horizontal form-label-left input_mask" role="form">
+                        <input type="hidden" name="deviceid" value="{{ deviceinfo.deviceid }}">
+                        <input type="hidden" name="devicetype" value="{{ deviceinfo.DeviceType }}">
+                        <input type="hidden" name="dutpool" value="enabled">
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12">Opteate: <span class="required">*</span></label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<select  name="devicekind" class="form-control" required >
+										<option value="Refresh" selected>Refresh</option>
+                                        <option value="Up">Power On</option>
+                                        <option value="Down">Power Off</option>
+                                        <option value="Reboot">Reboot</option>
+									</select>
+								 </div>
+			            </div>
+					  <!-- <div class="divider"></div> -->
+			        </form>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			        <button type="submit" class="btn btn-info">Submit</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+         </form>
+          <script>
+            $('#DevicePowerControlModal').on('show.bs.modal', function (event) {
+              var button = $(event.relatedTarget) // Button that triggered the modal
+              // var vm = button.data('vm')
+              var deviceid = button.data('deviceid')
+              var devicetype = button.data('devicetype')
+              var modal = $(this)
+              // modal.find('.modal-title').text('Edit VM ：' + vm)
+              modal.find('.modal-body input[name=deviceid]').val(deviceid)
+              modal.find('.modal-body input[name=devicetype]').val(devicetype)
+            })
+        </script>
+            <div class="modal fade" id="DeviceTopoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="x_content">
+                              <input id="dutsinfo" value="{{ deviceinfo }}" disabled hidden>
+                              <canvas id="canvas" width="852" height="527"></canvas>
+                          </div>
+                    </div>
+                </div>
+
+        <script>
+            $(document).ready(function(){
+               var dutsinfo = document.getElementById('dutsinfo');
+               var dutinfo = dutsinfo.value.replace(/'/g, "\"");
+               var dutobj = JSON.parse(dutinfo);
+               // console.log(dutobj)
+               var portsobj = dutobj.InterfaceInfo.Interface
+
+                var canvas = document.getElementById('canvas');
+                var stage = new JTopo.Stage(canvas);
+                //显示工具栏
+                showJTopoToobar(stage);
+                var scene = new JTopo.Scene();
+                stage.add(scene);
+                scene.background = 'static/images/bg.jpg';
+
+                var dutname
+                var dutpartname = '(' + dutobj.id + ')' + dutobj.Product
+                if (dutobj.classify){
+                    dutname =dutpartname + '_' + dutobj.classify
+                }
+                else{
+                    dutname = dutpartname
+                }
+                var cloudNode = new JTopo.Node(dutname);
+                cloudNode.setImage('static/images/topo/firewall.png');
+                cloudNode.setSize(100, 50);
+                // cloudNode.setSize(30, 26);
+                cloudNode.setLocation(360,230);
+                cloudNode.layout = {type: 'circle', radius: 150};
+                scene.add(cloudNode);
+
+                function AddVLANNode(node) {
+                    node.fillStyle = '200,255,0';
+                    node.radius = 10;
+                    node.fontColor = '255,255,0'
+                    node.setLocation(scene.width * Math.random(), scene.height * Math.random());
+                    node.layout = {type: 'circle', radius: 80};
+                    scene.add(node);
+                }
+                function AddVLANLink(node) {
+                    var link = new JTopo.Link(cloudNode, node, portsobj[i].name);
+                    link.strokeColor = '0,250,0';
+                    link.fontColor = '255,255,0';
+                    scene.add(link);
+                }
+                function AddVMNode(node) {
+                    var vmNode = new JTopo.Node(node);
+                    vmNode.setImage('static/images/topo/pc.png');
+                    vmNode.setSize(40, 40);
+                    vmNode.setLocation(scene.width * Math.random(), scene.height * Math.random());
+                    scene.add(vmNode);
+                    return vmNode
+                }
+                function AddVMLink(node, vmNode, vmName) {
+                    var vmLink = new JTopo.Link(node, vmNode, vmName);
+                    vmLink.strokeColor = '0,250,0';
+                    vmLink.fontColor = '255,255,0';
+                    scene.add(vmLink);
+                }
+                function PortModeCheck(node) {
+                    AddVLANNode(node)
+                    AddVLANLink(node)
+                    for (var j in portsobj[i].vmname) {
+                        if (portsobj[i].vmname[j].name) {
+                            if (portsobj[i].vmname[j].power === 'poweredOn') {
+                                var vmNode = AddVMNode(portsobj[i].vmname[j].name)
+                                AddVMLink(node, vmNode, portsobj[i].vmname[j].nic)
+                            }
+                        }
+                    }
+                    return node
+                }
+                for(var i in portsobj){
+                    if(portsobj[i].name){
+                        if(portsobj[i].portpower === 'no shutdown'){
+                            if(portsobj[i].portmode === 'trunk') {
+                                var trunknode = new JTopo.CircleNode('Trunk');
+                                var trunk = PortModeCheck(trunknode)
+                                trunk.alarm = 'Tag ' + portsobj[i].tagvlan
+                                }
+                            else{
+                                if(portsobj[i].untagvlan !== 'UnusedNetwork') {
+                                    var vlannode = new JTopo.CircleNode('VLAN_' + portsobj[i].untagvlan);
+                                    PortModeCheck(vlannode)
+                                }
+                            }
+                        }
+                    }
+                }
+                JTopo.layout.layoutNode(scene, cloudNode, true);
+                scene.addEventListener('mouseup', function(e){
+                    if(e.target && e.target.layout){
+                        JTopo.layout.layoutNode(scene, e.target, true);
+                    }
+                });
+            });
+        </script>
+
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Switch Console <small>Displays the process of configuring the switch and prints it</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a></li>
+              <li><a href="#">Settings 2</a></li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!--log monitor-->
+      <div id="sw" style="height:500px; overflow:auto">
+        <div>
+          <table>
+            {% for sw_line in consoledata %}
+            <tr class="even pointer">{{ sw_line }}<br></tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--  <div class="col-md-12 col-sm-12 col-xs-12">-->
+<!--        <div class="x_panel">-->
+<!--            <div class="x_title">-->
+<!--                <h2>Operated Log <small>Displays configure result for all users</small></h2>-->
+<!--                <ul class="nav navbar-right panel_toolbox">-->
+<!--                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>-->
+<!--                    <li class="dropdown">-->
+<!--                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+<!--                        <ul class="dropdown-menu" role="menu">-->
+<!--                          <li><a href="#">Settings 1</a></li>-->
+<!--                          <li><a href="#">Settings 2</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>-->
+<!--                </ul>-->
+<!--                <div class="clearfix"></div>-->
+<!--            </div>-->
+<!--            <div class="x_content">-->
+<!--                <p>All log <code>log_point</code> will show from last Week to now.</p>-->
+<!--                <div class="table-responsive">-->
+<!--                    <table class="table table-striped jambo_table bulk_action" width="100%">-->
+<!--                        <thead>-->
+<!--                          <tr class="headings">-->
+<!--                            <th width="2%"><input type="checkbox" class="flat"></th>-->
+<!--                            <th class="column-title" width="6%">Users </th>-->
+<!--                            <th class="column-title" width="8%">Type </th>-->
+<!--                            <th class="column-title" width="13%">Device </th>-->
+<!--                            <th class="column-title">Operated </th>-->
+<!--                            <th class="column-title" width="15%">Local Time</th>-->
+<!--                          </tr>-->
+<!--                        </thead>-->
+<!--                    </table>-->
+<!--                    <div class="pre-scrollable" style="height: 490px;overflow: auto; margin-top: -22px;">-->
+<!--                    <table class="table table-striped jambo_table bulk_action table-hover">-->
+<!--                        <tbody>-->
+<!--                        {% for log in logs %}-->
+<!--                          <tr class="even pointer">-->
+<!--                            <td class="a-center ">-->
+<!--                              <input type="checkbox" class="flat" name="table_records">-->
+<!--                            </td>-->
+<!--                            <td class=" ">{{ log.svname }}</td>-->
+<!--                            <td class=" ">{{ log.type }}</td>-->
+<!--                            <td class=" ">{{ log.device }}</td>-->
+<!--                            <td class=" last">{{ log.operated }}</td>-->
+<!--                            <td class=" last">{{ log.time }}</td>-->
+<!--                          </tr>-->
+<!--                        {% endfor %}-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+</div>
+</div>
+<script>
+// function values(ID){
+//     $('#ticketid').val(ID);
+// }
+
+//气泡窗
+$(function(){
+    $("[data-toggle='popover']").popover();
+});
+
+// function showWaiting() {
+// 　 $('#waitingModal').modal({
+// 　   keyboard: false,
+// 　   backdrop: 'static',
+// 　   show: true
+// 　 });
+// }
+
+function userjoin() {
+  if(window.confirm("Are you sure you want to Join the User group？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function userleave() {
+  if(window.confirm("Are you sure you want to leave the User group？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function hideWaiting() {
+　　$('#waitingModal').modal('hide');
+}
+
+function checkempty(form)
+{
+    if(form.untagvlan.value === "")
+    {
+         alert("Untag vlan value cannot be empty !");
+         return false;
+    }
+    else if(form.stp.value === "")
+    {
+         alert("STP value cannot be empty !");
+         return false;
+    }
+    else if(form.lag.value === "")
+    {
+         alert("LAG value cannot be empty !");
+         return false;
+    }
+    else if(form.portpower.value === "")
+    {
+         alert("Switch Power value cannot be empty !");
+         return false;
+    }
+    else if(form.portmode.value === "trunk")
+    {
+        if(form.tagvlan.value === ""){
+            alert("Tag vlan value cannot be empty !");
+            return false;
+            }
+        if(form.tagvlan.value === '--') {
+            alert("Tag vlan value cannot be -- ");
+            return false;
+            }
+        }
+    return true;
+}
+
+$(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        // $('#datatable').dataTable();
+        // $('#datatable2').dataTable();
+        // $('#datatable3').dataTable();
+        $("#datatable").DataTable({
+              dom: "Bfrtip",
+              iDisplayLength: 20,
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+        });
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive').DataTable();
+
+        $('#datatable-scroller').DataTable({
+          ajax: "js/datatables/json/scroller-demo.json",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+        TableManageButtons.init();
+      });
+
+function returnset()
+{
+  if(window.confirm("Are you sure you want to RETURN this Device？ Please confirm again !"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function borrowset()
+{
+  if(window.confirm("Are you sure you want to Borrow this Device？ Please contact the current user of the device first !"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function getbackset()
+{
+  if(window.confirm("Are you sure you want to Get Back this Device？ Please contact the current user of the device first !"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+</script>
+<!-- /Datatables -->
+{% endblock %}

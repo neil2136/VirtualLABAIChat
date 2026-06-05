@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>New VLAB email</title>
+	<style type="text/css">
+		table.gridtable {
+			font-family: verdana,arial,sans-serif;
+          font-size:11px;
+          color:#333333;
+          border-width: 1px;
+          border-color: #666666;
+          border-collapse: collapse;
+      }
+      table.gridtable th {
+          border-width: 1px;
+          padding: 8px;
+          border-style: solid;
+          border-color: #666666;
+          background-color: #dedede;
+      }
+      table.gridtable td {
+          border-width: 1px;
+          padding: 8px;
+          border-style: solid;
+          border-color: #666666;
+          background-color: #ffffff;
+      }
+</style>
+</head>
+<body>
+
+<div style="color:#0000FF">Hello {{ to_user }},
+	<p>
+		&nbsp&nbsp&nbsp&nbsp Just a kindly reminder, following is the QA_READY or NEED_INFO DTS list that waiting for your feedback, please take a look and follow up ASAP. Thanks!
+	</p>
+
+</div>
+
+<p>IN TEST LIST:</p>
+<table class="gridtable">
+
+	<caption></caption>
+	<tr>
+		<th>ID</th><th>Priority</th><th>Status</th><th>Project</th><th>Delay</th><th>Beta Blocker</th><th>Required for Release</th><th>Summary</th>
+	</tr>
+	{% for info in mailcontent %}
+	{% if info.status == "In Test" %}
+	<tr>
+		<td>{{ info.ID }}</td><td>{{ info.priority }}</td><td>{{ info.status }}</td><td>{{ info.project }}</td>
+		<td style="color: red"><b>{{ info.delay }}</b> day</td><td>{{ info.batabloker }}</td><td>{{ info.reqrelease }}</td><td>{{ info.summary }}</td>
+	</tr>
+	{% endif %}
+	{% endfor %}
+</table>
+<p></p>
+<p>NEED INFO LIST:</p>
+<table class="gridtable">
+
+	<caption></caption>
+	<tr>
+		<th>ID</th><th>Priority</th><th>Status</th><th>Project</th><th>Delay</th><th>Beta Blocker</th><th>Required for Release</th><th>Summary</th>
+	</tr>
+	{% for info in mailcontent %}
+	{% if info.status == "Need Info" %}
+	<tr>
+		<td>{{ info.ID }}</td><td>{{ info.priority }}</td><td>{{ info.status }}</td><td>{{ info.project }}</td>
+		<td style="color: red"><b>{{ info.delay }}</b> day</td><td>{{ info.batabloker }}</td><td>{{ info.reqrelease }}</td><td>{{ info.summary }}</td>
+	</tr>
+	{% endif %}
+	{% endfor %}
+</table>
+
+</body>
+</html>

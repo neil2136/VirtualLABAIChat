@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>LAB tools email</title>
+</head>
+<body>
+
+<div style="color:#0000FF">Hello {{ owner_name }},
+	<p>
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ requester_name }} would like to borrow your VLAB device. Here is the device information:
+	</p>
+
+</div>
+<table width="100%">
+<table width="65%" border="3" bgcolor="#CCFFFF" align="left">
+
+	<caption></caption>
+	<tr>
+		<th>Product Item</th><th>Value</th>
+	</tr>
+	{% for dutinfo in device_info %}
+	<tr>
+		<td><b>Product:</b></td><td>{{ dutinfo.Product }}</td>
+	</tr>
+	<tr>
+		<td><b>ID:</b></td><td>{{ dutinfo.id }}</td>
+	</tr>
+	<tr>
+		<td><b>SN:</b></td><td>{{ dutinfo.SN }}</td>
+	</tr>
+	<tr>
+		<td><b>Owner:</b></td><td>{{ dutinfo.Owner }}</td>
+	</tr>
+	{% endfor %}
+	<tr>
+		<td><b>Requester:</b></td><td>{{ requester_name }}</td>
+	</tr>
+
+</table>
+
+	<table width="100%" align="left">
+		<tr></tr>
+		<tr></tr>
+		<tr>
+			&nbsp&nbsp You can from here <a href="http://10.103.2.123/" target="_blank" title="http://10.103.2.123/">Redirect to VLAB</a>
+		</tr>
+		<tr>
+				&nbsp&nbsp Copyright &copy; Sonicwall.Company QA Team.
+		</tr>
+	</table>
+</table>
+</body>
+</html>

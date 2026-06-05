@@ -1,0 +1,1 @@
+[{"ip": "10.8.2.19", "name": ["AD-bak", "Centos-Roger", "Ubuntu-20-qigu", "Ubuntu-qigu", "Win10-Roger", "qigu-centos7", "qigu-vlan480", "vlab-back-qigu", "win10-qigu", "win10-qigu-ftp"]}, {"ip": "10.8.2.107", "name": ["Firmware"]}]

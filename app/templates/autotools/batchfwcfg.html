@@ -1,0 +1,704 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+    <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Firewall Batch Configuration <small>
+                      将某些可以通用的脚本进行可视化执行，如：FW的 配置，数据抓取，指定数据流生成等  </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+
+    </div>
+    <div class="col-md-6 col-xs-12" style="width:60%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>FireWall settings on WAN <small>Input the specified parameters to the corresponding result </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form class="form-horizontal form-label-left" action="/batchfwcfg" method="post">
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Firewall Function<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="fwfunction" id="select" onChange="selectchange()" style="background:#fff;border:1px solid #ccc;">
+                                <option value="none" selected>--Selete--</option>
+                                <option value="addlocalusers">add local users</option>
+                                <option value="addlocalgroups">add local groups</option>
+                                <option value="addaddressobjects">add address objects</option>
+                                <option value="addaddressgroups">add address groups</option>
+                                <option value="addVPN">add VPN</option>
+                                <option value="addroute">add route</option>
+                                <option value="addnat">add nat</option>
+                                <option value="sslserver">Max SSL Server</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">The WAN IP <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="dutip" value="10.8.105.212">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Enable SSH&ping </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+
+                          <input type="text" class="form-control" disabled="disabled" value="Please manually enable SSH and ping in FW WAN Interface." style="color:#FF0000">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">FW Username <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="dutuser" value="admin">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">FW Password <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="dutpwd" value="password">
+                        </div>
+                      </div>
+                      <div class="form-group" id="aoname" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">AO Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="aoname" value="auto">
+                            <font color="#0000FF" size="2"><b>If auto, randomly generates the names</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="aozone" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">AO Zone Assignment</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="aozone" value="LAN">
+                            <font color="#0000FF" size="2"><b>Support LAN/DMZ/WAN/VPN</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="aotype" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">AO Type </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="aotype" value="Host">
+                            <font color="#0000FF" size="2"><b>Only support Host</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="aoip" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Start IP Address <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="aoip" value="66.77.88.1">
+                            <font color="#0000FF" size="2"><b>IP will be self-increasing to 254</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="localname" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Local User Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="localname" value="auto">
+                            <font color="#0000FF" size="2"><b>If auto, randomly generates the name</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="localpwd" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Local User Password</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="localpwd" value="password">
+                        </div>
+                      </div>
+                      <div class="form-group" id="gpname" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Local Group Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="gpname" value="auto">
+                            <font color="#0000FF" size="2"><b>If auto, randomly generates the name</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="memberof" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mumber Of</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="memberof" value="Guest\ Services">
+                            <font color="#0000FF" size="2"><b>Default mumber is Guest\ Services</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="agname" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address Group Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="agname" value="auto">
+                            <font color="#0000FF" size="2"><b>If auto, randomly generates the name</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="agmemberof" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mumber Of</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="agmemberof" value="LAN\ Subnets">
+                            <font color="#0000FF" size="2"><b>Default mumber is LAN\ Subnets</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="policytype" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Policy Type</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="policytype" value="site-to-site">
+                            <font color="#0000FF" size="2"><b>Only support Site to Site</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="vpnname" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">VPN Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="vpnname" value="auto">
+                            <font color="#0000FF" size="2"><b>If auto, randomly generates the name</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="primaryip" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Primary Gateway Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="primaryip" value="66.66.66.10">
+                        </div>
+                      </div>
+                      <div class="form-group" id="sharedsecret" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Shared Secret</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="sharedsecret" value="12345">
+                        </div>
+                      </div>
+                      <div class="form-group" id="localnetwork" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Local Networks</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="localnetwork" value="12345">
+                            <font color="#0000FF" size="2"><b>Default value is LAN\ Subnets</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="remotenetwork" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Remote Network</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="remotenetwork" value="88.88.88.10">
+                            <font color="#0000FF" size="2"><b>Only support single Host</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="keepalive" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Enable Keep Alive</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="radio" name="keepalive" value="no keep-alive" checked>No &nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="keepalive" value="keep-alive" checked>Yes
+                        </div>
+                      </div>
+                      <div class="form-group" id="routename" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Route Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="routename" value="auto">
+                            <font color="#0000FF" size="2"><b>If auto, randomly generates the name</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="natname" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">NAT Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="natname" value="auto">
+                            <font color="#0000FF" size="2"><b>If auto, randomly generates the name</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="interface" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Interface</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="interface" value="X1">
+                        </div>
+                      </div>
+                      <div class="form-group" id="metric" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Metric</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="metric" value="1">
+                        </div>
+                      </div>
+                      <div class="form-group" id="source" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Source Host</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="source" value="10.11.12.10">
+                            <font color="#0000FF" size="2"><b>Only support single Host</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="translatedsource" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Translated Source Host</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="translatedsource" value="10.11.12.10">
+                            <font color="#0000FF" size="2"><b>Only support single Host</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="destination" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Destination Host</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="destination" value="10.111.112.110">
+                            <font color="#0000FF" size="2"><b>Only support single Host</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="translateddestination" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Translated Destination Host</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="translateddestination" value="192.11.12.10">
+                            <font color="#0000FF" size="2"><b>Only support single Host</b> </font>
+                        </div>
+                      </div>
+                      <div class="form-group" id="service" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Serive Group</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="service" value="ICMP">
+                        </div>
+                      </div>
+                      <div class="form-group" id="translatedservice" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Translated Service Group</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="translatedservice" value="ICMP">
+                        </div>
+                      </div>
+                      <div class="form-group" id="inbound" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">inbound</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="inbound" value="X1">
+                        </div>
+                      </div>
+                      <div class="form-group" id="outbound" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">outbound</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="outbound" value="any">
+                        </div>
+                      </div>
+                      <div class="form-group" id="natenable" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">NAT Enable</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="radio" name="natenable" value="no enable" checked>No &nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="natenable" value="enable" checked>Yes
+                        </div>
+                      </div>
+                      <div class="form-group" id="times" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Numbers</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" name="times" value="99">
+                            <font color="#0000FF" size="2"><b>range: 1-999</b> </font>
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-primary">Cancel</button>
+                          <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+  <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Introduction of functions <small>Collect various problems in the process of use</small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <ul class="list-unstyled timeline">
+                    <li>
+                      <div class="block">
+                        <div class="tags">
+                          <a class="tag"><span>Notes</span></a>
+                        </div>
+                        <div class="block_content">
+                          <h2 class="title">
+                              <a>firewall 配置说明</a>
+                          </h2>
+                          <div class="byline">
+                            <span>18:27 2020/4/8</span> by <a>Neil Zhang</a>
+                          </div>
+                          <p class="excerpt">
+                              <div style="background:#efefef;color:#F00;width:800px">
+                                  <p>&nbsp;&nbsp;使用本工具前置条件：</p>
+                                  <p>&nbsp;&nbsp;&nbsp;&nbsp;请确保firewall已经正常注册，X1 Interface能通过https正常访问；</p>
+                                  <p>&nbsp;&nbsp;异常处理：</p>
+                                  <p>&nbsp;&nbsp;&nbsp;&nbsp;当运行过程中弹出错误页面时，请在运行一次，如果多次出现同一个错误页面，请联系管理员处理；</p>
+                                  <p>&nbsp;&nbsp;&nbsp;&nbsp;运行过程中不慎刷新了页面，不会影响后台执行，请在user log中查看结果。</p>
+                              </div>
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+
+                </div>
+              </div>
+            </div>
+  <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Users Log <small>Displays all configuration results and alerts</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <!--log monitor-->
+                  <div id="log" style="height:500px; overflow:auto">
+                  <div class="x_content">
+                    <p>All log <code>log_link</code> will show from last Week to now.</p>
+                  </div>
+                    <div>
+                      <table>
+                        {% for log_line in log_print %}
+                          <tr class="even pointer">{{ log_line }}<br></tr>
+                        {% endfor %}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                </div>
+</div>
+</div>
+<!-- /page content -->
+
+<script language="javascript">
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to occupy this PC？ If yes, Your Email account will receive an email with a wireless PC message in it "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function releaseowner()
+{
+  if(window.confirm("Are you sure you want to release current owner？ Please confirm the usage to owner first"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function selectchange(){
+if(document.getElementById("select").value=="addaddressobjects"){
+document.getElementById("aoname").style.display="";
+document.getElementById("aozone").style.display="";
+document.getElementById("aotype").style.display="";
+document.getElementById("aoip").style.display="";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addaddressgroups"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="";
+document.getElementById("agmemberof").style.display="";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addlocalusers"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="";
+document.getElementById("localpwd").style.display="";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addlocalgroups"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="";
+document.getElementById("memberof").style.display="";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addVPN"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="";
+document.getElementById("vpnname").style.display="";
+document.getElementById("primaryip").style.display="";
+document.getElementById("sharedsecret").style.display="";
+document.getElementById("localnetwork").style.display="";
+document.getElementById("remotenetwork").style.display="";
+document.getElementById("keepalive").style.display="";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addroute"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="";
+document.getElementById("metric").style.display="";
+document.getElementById("source").style.display="";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="";
+}
+else if(document.getElementById("select").value=="addnat"){
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="";
+document.getElementById("translatedsource").style.display="";
+document.getElementById("destination").style.display="";
+document.getElementById("translateddestination").style.display="";
+document.getElementById("service").style.display="";
+document.getElementById("translatedservice").style.display="";
+document.getElementById("inbound").style.display="";
+document.getElementById("outbound").style.display="";
+document.getElementById("natenable").style.display="";
+document.getElementById("times").style.display="";
+}
+else{
+document.getElementById("aoname").style.display="none";
+document.getElementById("aozone").style.display="none";
+document.getElementById("aotype").style.display="none";
+document.getElementById("aoip").style.display="none";
+document.getElementById("localname").style.display="none";
+document.getElementById("localpwd").style.display="none";
+document.getElementById("gpname").style.display="none";
+document.getElementById("memberof").style.display="none";
+document.getElementById("agname").style.display="none";
+document.getElementById("agmemberof").style.display="none";
+document.getElementById("policytype").style.display="none";
+document.getElementById("vpnname").style.display="none";
+document.getElementById("primaryip").style.display="none";
+document.getElementById("sharedsecret").style.display="none";
+document.getElementById("localnetwork").style.display="none";
+document.getElementById("remotenetwork").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("routename").style.display="none";
+document.getElementById("natname").style.display="none";
+document.getElementById("interface").style.display="none";
+document.getElementById("metric").style.display="none";
+document.getElementById("source").style.display="none";
+document.getElementById("translatedsource").style.display="none";
+document.getElementById("destination").style.display="none";
+document.getElementById("translateddestination").style.display="none";
+document.getElementById("service").style.display="none";
+document.getElementById("translatedservice").style.display="none";
+document.getElementById("inbound").style.display="none";
+document.getElementById("outbound").style.display="none";
+document.getElementById("natenable").style.display="none";
+document.getElementById("times").style.display="none";
+}
+}
+</script>
+
+{% endblock %}
+
+

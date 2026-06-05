@@ -1,0 +1,1730 @@
+<!-- top navigation -->
+<div class="top_nav">
+    <div class="nav_menu">
+      <nav>
+        <div class="nav toggle">
+          <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <!-- <li role="presentation" class="dropdown">
+            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="modal" data-target="#AISearchModal" aria-expanded="false" title="AI Chat">
+              <i class="fa fa-comments"></i> AI Chat
+            </a>
+          </li> -->
+          <li role="presentation" class="dropdown">
+            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="modal" data-target="#LocalAISearchModal" aria-expanded="false" title="Local AI Chat">
+              <i class="fa fa-comments-o"></i> Local AI Chat
+            </a>
+          </li>
+          <li role="presentation" class="dropdown">
+            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-envelope-o"></i>
+              <span class="badge bg-green">{{ transfercont }}</span>
+            </a>
+            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu" style="height: 400px; overflow: auto">
+				{% for borrow in transferlist %}
+              <li>
+				  <form action="/deltransfer" method="post">
+                <a>
+<!--                  <span class="image"><img src="static/images/user.jpg" alt="Profile Image" /></span>-->
+					<span>
+						<input type="hidden" name="deviceType" value="{{ borrow.deviceType }}">
+						<input type="hidden" name="deviceId" value="{{ borrow.deviceId }}">
+						<input type="hidden" name="ts" value="{{ borrow.ts }}">
+						<button type="submit" class="btn btn-danger btn-circle active glyphicon glyphicon-remove" name="operate" value="Delete" onclick="deltransfer()">
+						</button>
+					</span>
+                  <span>
+                    <span>{{ borrow.lender }}</span>
+                    <span class="time">{{ borrow.ts }}</span>
+                  </span>
+                  <span class="message">
+                    &nbsp;&nbsp;{{ borrow.deviceType }}: {{ borrow.deviceId }}: &nbsp;{{ borrow.borrower }} {{ borrow.status }} your device.
+                  </span>
+                </a>
+					</form>
+              </li>
+				{% endfor %}
+              <li>
+                <div class="text-center">
+                  <a>
+                    <strong>End Alerts</strong>
+                    <i class="fa fa-angle-right"></i>
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <li class="">
+            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <img src="static/images/user.jpg" alt="">{{ current_user.svname }}
+              <span class=" fa fa-angle-down"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-usermenu pull-right">
+              <li><a href="{{ url_for('.ticket') }}"> Ticket(Feedback)</a></li>
+              <li>
+<!--                <a href="javascript:;">-->
+<!--                  <span class="badge bg-red pull-right">50%</span>-->
+<!--                  <span> Settings</span>-->
+<!--                </a>-->
+				  <a href="#" data-toggle="modal" data-target="#ChangePWDModal">Change Password</a>
+              </li>
+              <li><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+            </ul>
+          </li>
+			<form method="post" action="/changepwd" class="form-horizontal form-label-left input_mask" onsubmit="return checkempty(this)">
+					<div class="modal fade" id="ChangePWDModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+										&times;
+									</button>
+									<h4 class="modal-title"> modify user password:</h4>
+								</div>
+								<div class="modal-body">
+									<div class="form-group">
+										<label class="control-label col-md-4 col-sm-4 col-xs-12">Current password <span class="required">*</span></label>
+										<div class="col-md-6 col-sm-6 col-xs-12">
+										  <input type="password" class="form-control" name="userpass">
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-4 col-sm-4 col-xs-12">New Password <span class="required">*</span></label>
+										<div class="col-md-6 col-sm-6 col-xs-12">
+										  <input type="password" class="form-control" name="newpass">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-4 col-sm-4 col-xs-12">Confirm New Password <span class="required">*</span></label>
+										<div class="col-md-6 col-sm-6 col-xs-12">
+										  <input type="password" class="form-control" name="confirmpass">
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+									<button type="submit" class="btn btn-info">Submit</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+				</form>
+
+        </ul>
+
+        <div class="x_panel">
+            <div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<a href="#/refresh"><i class="fa fa-refresh"></i></a> Refresh
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                <li><a href="/refreshdut">My Devices List (db)</a></li>
+				<li><a href="/refreshvm">My VMs List (db)</a></li>
+				<li><a href="/refreshvlan">My VLANs (db)</a></li>
+				<li><a href="/refreshdesh">Dashboard (real time)</a></li>
+				<li><a href="/refreshg7">My G7 DUT Info (real time)</a></li>
+                <li class="divider">-------</li>
+<!--				<li><a href="#" data-toggle="modal" data-target="#SyncVMModal">Sync VMs(Vcenter)</a></li>-->
+<!--					<li><a href="/syncvm"><b>Sync VMs from Vcenter</b></a></li>-->
+				<form action="/syncmyvm" method="post">
+					<button type="submit" data-toggle="modal" data-target="#waitingModal" class="btn btn-primary btn-sm">
+						<b>Sync ALL VMs Info From Vcenter(real time)</b></button>
+				</form>
+				<li class="divider">-------</li>
+                </ul>
+				<div class="modal fade" tabindex="-1" role="dialog" id="waitingModal">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">In Operation ... </h4>
+							</div>
+							<div class="modal-body">
+							  <p><b>Please do not do any thing while configure in progress, Until the current page retruns a reminder that configuration is finished.</b><p>
+								<div class="progress">
+									<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+										<span class="sr-only">100%</span>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" disabled class="btn btn-default" data-dismiss="modal">Configuration in progress. Do not repeat! </button>
+							</div>
+						</div>
+					</div>
+				  </div>
+<!--				<form method="post" action="/syncvm" class="form-horizontal form-label-left input_mask" onsubmit="return ">-->
+            	<div class="modal fade" id="SyncVMModal">
+            		<div class="modal-dialog">
+            		<div class="modal-content">
+            		<div class="modal-header">
+            			<h4 class="modal-title">Refresh VMs Information</h4>
+            				<button type="button" class="close" data-dismiss="modal">&times;</button>
+            		</div>
+            		<div class="modal-body">
+            			<form class="form-horizontal form-label-left input_mask" role="form">
+            				<div class="form-group">
+            					<label class="control-label col-md-3 col-sm-3 col-xs-12">ESXi IP: <span class="required">*</span></label>
+            						<div class="col-md-6 col-sm-6 col-xs-12">
+            							<select name="esxiip" class="form-control" required >
+            								<option value="none" selected>--Select--</option>
+											{% for esxiip in vmlists %}
+											<option value="{{ esxiip.ip }}">{{ esxiip.ip }}</option>
+											{% endfor %}
+											<option value="all">All ESXi (Slowly)</option>
+            							</select>
+            						 </div>
+            			    </div>
+
+            			  <!-- <div class="divider"></div> -->
+            			</form>
+            		</div>
+            		<div class="modal-footer">
+            			<!-- <input type="hidden" name="type" value="DUT"> -->
+            			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            			<button type="submit" class="btn btn-info">Submit</button>
+            		</div>
+            		</div>
+					</div>
+            	</div>
+				</form>
+              </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<a href="#/external-link"><i class="fa fa-external-link"></i></a> VM Mgmt.
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                <li><a href="#" data-toggle="modal" data-target="#ChangeNameModal">Change Name</a></li>
+				<li><a href="#" data-toggle="modal" data-target="#PowerCtrlModal">Power Control</a></li>
+				<!--<li><a href="#">Clone VM</a></li>-->
+                <li><a href="/vmcontrol">PortGroup Control</a></li>
+
+                <li class="divider">-------</li>
+				<!--<li><a href="#">All VM Control</a></li>-->
+                </ul>
+				<form method="post" action="/changevmname" class="form-horizontal form-label-left input_mask" onsubmit="return checkempty(this)">
+            	<div class="modal fade" id="ChangeNameModal">
+            		<div class="modal-dialog">
+            		<div class="modal-content">
+
+            		<div class="modal-header">
+            			<h4 class="modal-title">VMs Change Name</h4>
+            				<button type="button" class="close" data-dismiss="modal">&times;</button>
+            		</div>
+
+            		<div class="modal-body">
+            			<form class="form-horizontal form-label-left input_mask" role="form">
+            				<div class="form-group">
+            					<label class="control-label col-md-3 col-sm-3 col-xs-12">VM Name: <span class="required">*</span></label>
+            						<div class="col-md-6 col-sm-6 col-xs-12">
+            							<select name="vmname" class="form-control" required >
+            								<option value="none" selected>--Select--</option>
+											{% for vmnames in vmlists %}
+										  {% for vmname in vmnames.name %}
+											<option value="{{ vmname }}">{{ vmname }}</option>
+										  {% endfor %}
+										  {% endfor %}
+            							</select>
+            						 </div>
+            			    </div>
+							<div class="form-group">
+							   <label class="control-label col-md-3 col-sm-3 col-xs-12">Change to: <span class="required">*</span>
+							   </label>
+							   <div class="col-md-6 col-sm-6 col-xs-12">
+								 <input type="text" class="form-control" id="newname" name="newname" placeholder="not Empty" required>
+							   </div>	
+							</div>
+            			  <!-- <div class="divider"></div> -->
+            			</form>
+            		</div>
+
+            		<div class="modal-footer">
+            			<!-- <input type="hidden" name="type" value="DUT"> -->
+            			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            			<button type="submit" class="btn btn-info">Submit</button>
+            		</div>
+            		</div>
+					</div>
+            	</div>
+				</form>
+				<form method="post" action="/vmpowerctrl" class="form-horizontal form-label-left input_mask" onsubmit="return ">
+            	<div class="modal fade" id="PowerCtrlModal">
+            		<div class="modal-dialog">
+            		<div class="modal-content">
+
+            		<div class="modal-header">
+            			<h4 class="modal-title">VM Power Control</h4>
+            				<button type="button" class="close" data-dismiss="modal">&times;</button>
+            		</div>
+
+            		<div class="modal-body">
+            			<form class="form-horizontal form-label-left input_mask" role="form">
+							<input type="hidden" name="frompage" value="topnav">
+            				<div class="form-group">
+            					<label class="control-label col-md-3 col-sm-3 col-xs-12">VM Name: <span class="required">*</span></label>
+            						<div class="col-md-6 col-sm-6 col-xs-12">
+            							<select name="vmname" class="form-control" required >
+            								<option value="none" selected>--Select--</option>
+            								{% for vmnames in vmlists %}
+										  {% for vmname in vmnames.name %}
+											<option value="{{ vmname }}">{{ vmname }}</option>
+										  {% endfor %}
+										  {% endfor %}
+            							</select>
+            						 </div>
+            			    </div>
+							<div class="form-group">
+							   <label class="control-label col-md-3 col-sm-3 col-xs-12">Operate: <span class="required">*</span>
+							   </label>
+							   <div class="col-md-6 col-sm-6 col-xs-12">
+								 <select name="operate" class="form-control" required >
+									 <option value="none" selected>--Select--</option>
+									 <option value="poweredOn">Power On</option>
+									 <option value="poweredOff">Power Off</option>
+									 <option value="reboot">Reboot</option>
+								 </select>
+							   </div>
+							</div>
+            			  <!-- <div class="divider"></div> -->
+            			</form>
+            		</div>
+
+            		<div class="modal-footer">
+            			<!-- <input type="hidden" name="type" value="DUT"> -->
+            			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            			<button type="submit" class="btn btn-info">Submit</button>
+            		</div>
+            		</div>
+					</div>
+            	</div>
+				</form>
+            </div>
+			<div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<a href="#/external-link"><i class="fa fa-tasks"></i></a> DUT Mgmt.
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                <li><a href="#" data-toggle="modal" data-target="#FWModal">FireWall MGMT</a></li>
+				<li><a href="#" data-toggle="modal" data-target="#SPModal">SonicPoint MGMT</a></li>
+				<li><a href="#" data-toggle="modal" data-target="#NDPPModal">FireWall NDPP</a></li>
+                <li class="divider">-------</li>
+				<!--<li><a href="#">All VM Control</a></li>-->
+                </ul>
+
+				<form method="post" action="/dutreboot" class="form-horizontal form-label-left input_mask" role="form" id="FWForm" onsubmit="return ">
+			<div class="modal fade" id="FWModal" tabindex="-1" role="dialog" aria-labelledby="FWModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="FWModal1">FW Managment</h4>
+			      </div>
+			      <div class="modal-body">
+			        <form class="form-horizontal form-label-left input_mask" role="form">
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12">Reboot FW: <span class="required">*</span></label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<select  name="id" class="form-control" required >
+										<option value="none" selected>--Select--</option>
+										{% for userdevice in fwfilters %}
+											{% if userdevice.DeviceType == "DUT" %}
+												<option value="{{ userdevice.id }}">({{ userdevice.id }}) {{ userdevice.Product }}</option>
+											{% endif %}
+										{% endfor %}
+									</select>
+								 </div>
+			            </div>
+					  <!-- <div class="divider"></div> -->
+			        </form>
+			      </div>
+			      <div class="modal-footer">
+					<input type="hidden" name="type" value="DUT">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			        <button type="submit" class="btn btn-info">Submit</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+				</form>
+            	<form method="post" action="/dutreboot" class="form-horizontal form-label-left input_mask" role="form" id="SPForm" onsubmit="return ">
+            <div class="modal fade" id="SPModal" tabindex="-1" role="dialog" aria-labelledby="SPModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="SPModalLabel">SonicPonit Managment</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form class="form-horizontal form-label-left input_mask" role="form">
+            			<div class="form-group">
+            				<label class="control-label col-md-3 col-sm-3 col-xs-12">Reboot SP: <span class="required">*</span></label>
+            					<div class="col-md-6 col-sm-6 col-xs-12">
+            						<select id="heard2" name="id" class="form-control" required >
+            							<option value="none" selected>--Select--</option>
+            							{% for userdevice in spfilters %}
+											{% if userdevice.DeviceType == "SonicPoint" %}
+												<option value="{{ userdevice.id }}">({{ userdevice.id }}) {{ userdevice.Product }}</option>
+											{% endif %}
+            							{% endfor %}
+            						</select>
+            					 </div>
+                        </div>
+            		  <!-- <div class="divider"></div> -->
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+            		<input type="hidden" id="type" name="type" value="SonicPoint">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            	</form>
+			<form method="post" action="/ndppcfg" class="form-horizontal form-label-left input_mask" role="form" onsubmit="return checkndppempty(this)">
+			<div class="modal fade" id="NDPPModal" tabindex="-1" role="dialog" aria-labelledby="NDPPModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="NDPPModal1">NDPP Configure: (Only Support G7 DUT)</h4>
+			      </div>
+			      <div class="modal-body">
+			        <form class="form-horizontal form-label-left input_mask" role="form">
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12">FW List: <span class="required">*</span></label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<select  name="id" class="form-control" required >
+										<option value="none" selected>--Select--</option>
+										{% for userdevice in fwfilters %}
+											{% if userdevice.DeviceType == "DUT" %}
+												<option value="{{ userdevice.id }}">({{ userdevice.id }}) {{ userdevice.Product }}</option>
+											{% endif %}
+										{% endfor %}
+									</select>
+								 </div>
+			            </div>
+						<div class="form-group">
+						   <label class="control-label col-md-3 col-sm-3 col-xs-12">DUT IP: <span class="required">*</span></label>
+						   <div class="col-md-6 col-sm-6 col-xs-12">
+							 <input type="text" class="form-control" name="dutip" placeholder="input DUT WAN IP" required>
+						   </div>
+						</div>
+						<div class="form-group">
+						   <label class="control-label col-md-3 col-sm-3 col-xs-12">DUT User: <span class="required">*</span></label>
+						   <div class="col-md-6 col-sm-6 col-xs-12">
+							 <input type="text" class="form-control" name="dutuser" placeholder="input DUT Login User Name" required>
+						   </div>
+						</div>
+						<div class="form-group">
+						   <label class="control-label col-md-3 col-sm-3 col-xs-12">DUT Password: <span class="required">*</span></label>
+						   <div class="col-md-6 col-sm-6 col-xs-12">
+							 <input type="text" class="form-control" name="dutpwd" placeholder="input dut Login Password" required>
+						   </div>
+						</div>
+						<p style="color: red">* Note: Please check ndpp script processing in long tasks log page,
+							if show the 'Run ndpp script finished, Please manual enable your ndpp', the running end.</p>
+					   <div class="divider"></div>
+			        </form>
+			      </div>
+			      <div class="modal-footer">
+					<input type="hidden" name="type" value="DUT">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			        <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#waitingndppModal">Submit</button>
+<!--					<button type="submit" class="btn btn-info">Submit</button>-->
+			      </div>
+			    </div>
+			  </div>
+			</div>
+				</form>
+			<!-- waiting page for ndpp-->
+              <div class="modal fade" tabindex="-1" role="dialog" id="waitingndppModal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">NDPP Configure In Operation ... </h4>
+                            </div>
+                            <div class="modal-body">
+                              <p><b>Conifg Admin or Users password can not be less than 15 characters...</b><p>
+								<p><b>Conifg Minimum length of Admin or User password can not be less than 15....</b><p>
+								<p><b>Conifg Enforced password complexity must contain letters, numbers and symbols....</b><p>
+								<p><b>Conifg Admin password life time is required...</b><p>
+								<p><b>Conifg Require users to relogin after password change...</b><p>
+								<p><b>Conifg Must set session quota for each IPv6 management IP...</b><p>
+								<p><b>Conifg HTTPS Certificate is self signed...</b><p>
+								<p><b>Conifg IKEv2 Dynamic Client Proposal in VPN advanced settings requires SHA-256...</b><p>
+								<p><b>Conifg Required to enable NDPP enforcement for Syslog Server...</b><p>
+								<p><b>Conifg SonicOS API digest MD5 can not be enabled in NDPP mode...</b><p>
+								<p><b>... ...</b><p>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                        <span class="sr-only">100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" disabled class="btn btn-default" data-dismiss="modal">Configuration in progress. Do not repeat do it！</button>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+			</div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<a href="#/desktop"><i class="fa fa-desktop"></i></a> PC Mgmt.
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/phywpc">Wireless PC</a>
+                </li>
+                <li><a href="/ixia">Ixia</a>
+                </li>
+                <li class="divider">-------</li>
+<!--                <li><a href="#" hidden>All PC Control</a>-->
+<!--                </li>-->
+                </ul>
+              </div>
+			<div class="btn-group">
+			    <button class="btn btn-success" data-toggle="modal" data-target="#myModal">
+					<a href="#/external-link"><i class="fa fa-search"></i></a>
+					Devices Search</button>
+				<form method="post" action="/devicesearch" class="form-horizontal form-label-left input_mask" role="form" id="myForm" onsubmit="return ">
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+										&times;
+									</button>
+									<h4 class="modal-title" id="myModalLabel"> Devices Search</h4>
+								</div>
+								<div class="modal-body">
+									<form class="form-horizontal form-label-left input_mask" role="form">
+										<div class="form-group">
+										  <label class="control-label col-md-3 col-sm-3 col-xs-12">Device Type: <span class="required">*</span>
+										  </label>
+										  <div class="col-md-6 col-sm-6 col-xs-12">
+											<select name="type" class="form-control" required >
+<!--												<option value="none" selected>&#45;&#45;Select&#45;&#45;</option>-->
+												<option value="DUT" selected>Firewall</option>
+												<option value="SonicPoint">SonicPoint</option>
+												<option value="VM">VMs</option>
+											</select>
+										   </div>
+										  </div>
+										<div class="form-group">
+										   <label class="control-label col-md-3 col-sm-3 col-xs-12">Search By: <span class="required">*</span>
+										   </label>
+										   <div class="col-md-6 col-sm-6 col-xs-12">
+											 <select name="searchby" class="form-control" required >
+<!--												<option value="none" selected>&#45;&#45;Select&#45;&#45;</option>-->
+												<option value="id">Device ID</option>
+												<option value="User">Device User</option>
+												<option value="Owner">Device Owner</option>
+												<option value="Product" selected>Device Model</option>
+												<option value="SN">Device Serial</option>
+												<option value="vmname">VM Name</option>
+												<option value="owner">VM Owner</option>
+												<option value=mac>VM MAC</option>
+												<option value="all">ALL</option>
+												</select>
+											</div>
+										  </div>
+										<div class="form-group">		
+										   <label class="control-label col-md-3 col-sm-3 col-xs-12">Keyword: <span class="required">*</span>
+										   </label>
+										   <div class="col-md-6 col-sm-6 col-xs-12">
+											 <input type="text" class="form-control" name="keyword" placeholder="part or full name" required>
+										   </div>	
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+									<button type="submit" class="btn btn-info">Submit</button>
+								</div>
+							</div>	
+						</div>
+					</div>
+				</form>
+			</div>
+            <div class="btn-group">
+			<button type="button" class="btn btn-success" data-toggle="modal" data-target="#FWModalvlan" data-whatever="inputtovalue">
+				<a href="#/wifi"><i class="fa fa-search-plus"></i></a>  VLAN Search.</button>
+			<form method="post" action="/vlansearch" class="form-horizontal form-label-left input_mask" role="form" id="vlansearch" onsubmit="return ">
+			<div class="modal fade" id="FWModalvlan" tabindex="-1" role="dialog" aria-labelledby="FWModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">VLAN Search.</h4>
+			      </div>
+			      <div class="modal-body">
+			        <form class="form-horizontal form-label-left input_mask" role="form">
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12">VLAN Type: <span class="required">*</span></label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<select name="searchtype" class="form-control" required >
+<!--										<option value="none" selected>&#45;&#45;Select&#45;&#45;</option>-->
+										<option value="vm">VMs</option>
+										<option value="device" selected>Device</option>
+										<option value="searchall">Search ALL</option>
+                                    </select>
+								 </div>
+			            </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">VLAN ID: <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+								<input type="text" class="form-control" name="searchvlan" placeholder="731,105,107" required>
+<!--                                <input type="number" class="form-control" name="searchvlan" placeholder="2-4095" min="2" max="4095">-->
+                            </div>
+                        </div>
+			        </form>
+			      </div>
+			      <div class="modal-footer">
+					<input type="hidden" name="type" value="DUT">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			        <button type="submit" class="btn btn-info">Submit</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+				</form>
+			</div>
+			<div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<a href="#/desktop"><i class="fa fa-chevron-down"></i></a> Public Testbed
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/connectiontool">Connection Tool</a>
+                </li>
+
+                <li class="divider">-------</li>
+<!--                <li><a href="#" hidden>All PC Control</a>-->
+<!--                </li>-->
+                </ul>
+              </div>
+			<div class="btn-group">
+			    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<a href="#/external-link-square"><i class="fa fa-gears"></i></a> Enhancement
+			      <span class="caret"></span>
+			      <span class="sr-only">Toggle Dropdown</span>
+			    </button>
+			    <ul class="dropdown-menu" role="menu">
+			      <li><a href="http://10.8.255.104/" target="_blank">QA Scripts</a>
+			    </li>
+					<li><a href="https://engineering.eng.sonicwall.com/display/SQ/IP+to+US+Network+Reservation" target="_blank">IP to US Network</a>
+					</li>
+					<li><a href="https://engineering.eng.sonicwall.com/display/SQ/VLAN+-+IP+Allocation+Summary" target="_blank">VLAN IP Allocation</a>
+					</li>
+					<li><a href="http://10.8.255.101/" target="_blank">Shanghai Jenkins</a>
+				<li><a href="http://10.103.244.181:8888/" target="_blank">Web GDB Coredump</a>
+				<li><a href="http://bentley.eng.sonicwall.com/soniccore/" target="_blank">US Builds Image</a></li>
+				<li><a href="http://10.8.255.103/firmware/new-SonicCore/master/" target="_blank">Shanghai Builds Image</a></li>
+				<li><a href="https://10.208.1.8/index.mpl?suite=firmware_sonicos" target="_blank">Aptest Link</a></li>
+				<li><a href="https://vcenter-sh.sv.us.sonicwall.com/" target="_blank">Shanghai Vcenter </a></li>
+				<li><a href="{{ url_for('.ticket') }}" target="_blank">Ticket(Feedback)</a></li>
+				<li><a href="https://engineering.eng.sonicwall.com/display/SQ/Shanghai+QA+Virtual+Lab+User+Guide" target="_blank">User Guide</a></li>
+				<li class="divider"></li>
+<!--			    <li><a href="#">Else</a>-->
+<!--			    </li>-->
+			    </ul>
+			</div>
+		</div>
+      </nav>
+    </div>
+</div>
+<!-- /top navigation -->
+<!-- jQuery -->
+<!--<script src="{{ url_for('static', filename='vendors/jquery/dist/jquery.min.js') }}"></script>-->
+<!-- Bootstrap -->
+<!--<script src="{{ url_for('static', filename='vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>-->
+<script>
+function checkndppempty(form)
+{
+    if(form.dutip.value === "")
+    {
+         alert("DUT IP cannot be empty !");
+         return false;
+    }
+    else if(form.dutuser.value === "")
+    {
+         alert("DUT User cannot be empty !");
+         return false;
+    }
+    else if(form.dutpwd.value === "")
+    {
+         alert("DUT password cannot be empty !");
+         return false;
+    }
+    return true;
+}
+
+function checkempty(form)
+{
+    if(form.untagvlan.value === "")
+    {
+         alert("Untag vlan value cannot be empty !");
+         return false;
+    }
+    else if(form.stp.value === "")
+    {
+         alert("STP value cannot be empty !");
+         return false;
+    }
+    return true;
+}
+
+	function deltransfer()
+	{
+	  if(window.confirm("Are you sure you want to Delete the device? "))
+	  {
+	   return true;
+	  }
+	  else
+	  {
+		return false;
+	  }
+	}
+</script>
+
+<!-- AI Search Modal - WeChat Style -->
+<div class="modal fade" id="AISearchModal" tabindex="-1" role="dialog" aria-labelledby="AISearchModalLabel">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: 800px;">
+        <div class="modal-content" style="border-radius: 10px; overflow: hidden;">
+            <div class="modal-header" style="background-color: #f5f5f5; border-bottom: 1px solid #e5e5e5; padding: 15px 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="AISearchModalLabel" style="margin: 0; font-size: 18px; font-weight: 500;">
+                    <i class="fa fa-robot" style="color: #07c160; margin-right: 8px;"></i> AI Assistant
+                </h4>
+            </div>
+            <div class="modal-body" style="padding: 0; background-color: #f5f5f5; height: 500px; display: flex; flex-direction: column;">
+                <!-- Chat messages area -->
+                <div id="aiSearchMessages" style="flex: 1; overflow-y: auto; padding: 20px; background-color: #f5f5f5;">
+                    <!-- Welcome message -->
+                    <div class="chat-message ai-message">
+                        <div class="chat-avatar">
+                            <i class="fa fa-robot"></i>
+                        </div>
+                        <div class="chat-bubble">
+                            <div class="chat-content">
+                                你好！我是AI助手，可以帮你查询设备信息、借用设备等。请问有什么可以帮助你的？
+                            </div>
+                            <div class="chat-time">刚刚</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Suggestions area -->
+                <div id="aiSuggestions" style="padding: 10px 20px; background-color: #f5f5f5; display: none;">
+                    <div class="suggestion-box">
+                        <small style="color: #999; font-size: 12px;">建议提问：</small>
+                        <div id="suggestionList" style="margin-top: 8px;"></div>
+                    </div>
+                </div>
+                
+                <!-- Input area -->
+                <div style="padding: 15px 20px; background-color: #fff; border-top: 1px solid #e5e5e5;">
+                    <div class="input-group" style="display: flex; gap: 10px;">
+                        <input type="text" class="form-control" id="aiSearchInput" placeholder="输入问题..." style="border-radius: 20px; border: 1px solid #e5e5e5; padding: 10px 20px;">
+                        <button class="btn btn-primary" type="button" onclick="performAISearch()" style="border-radius: 20px; padding: 10px 25px; background-color: #07c160; border-color: #07c160;">
+                            <i class="fa fa-paper-plane"></i> 发送
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* AI Search WeChat Style */
+.chat-message {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.chat-message.user {
+    flex-direction: row-reverse;
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: #07c160;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.chat-message.user .chat-avatar {
+    background-color: #ff9800;
+}
+
+.chat-bubble {
+    max-width: 70%;
+    margin: 0 12px;
+}
+
+.chat-content {
+    background-color: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chat-message.user .chat-content {
+    background-color: #95ec69;
+    color: #000;
+}
+
+.chat-time {
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.chat-message.user .chat-time {
+    text-align: right;
+}
+
+#aiSuggestions .ai-suggestion {
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 15px;
+    padding: 8px 16px;
+    margin: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 13px;
+    color: #333;
+    transition: all 0.2s;
+}
+
+#aiSuggestions .ai-suggestion:hover {
+    background-color: #07c160;
+    color: #fff;
+    border-color: #07c160;
+}
+
+#aiSearchMessages.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Scrollbar styling */
+#aiSearchMessages::-webkit-scrollbar {
+    width: 6px;
+}
+
+#aiSearchMessages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#aiSearchMessages::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+#aiSearchMessages::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+</style>
+
+<script>
+// AI Search JavaScript Functions
+// 当前登录用户名
+const currentUsername = '{{ current_user.svname }}';
+
+function addMessage(message, isUser = false) {
+    const messagesContainer = document.getElementById('aiSearchMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'chat-message ' + (isUser ? 'user' : '');
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'chat-avatar';
+    avatar.innerHTML = isUser ? '<i class="fa fa-user"></i>' : '<i class="fa fa-robot"></i>';
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    
+    const content = document.createElement('div');
+    content.className = 'chat-content';
+    content.innerHTML = message;
+    
+    const time = document.createElement('div');
+    time.className = 'chat-time';
+    const now = new Date();
+    time.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    
+    bubble.appendChild(content);
+    bubble.appendChild(time);
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(bubble);
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function showSuggestions(suggestions) {
+    const suggestionsContainer = document.getElementById('aiSuggestions');
+    const suggestionList = document.getElementById('suggestionList');
+    
+    if (suggestions && suggestions.length > 0) {
+        suggestionList.innerHTML = '';
+        suggestions.forEach(suggestion => {
+            const suggestionDiv = document.createElement('div');
+            suggestionDiv.className = 'ai-suggestion';
+            suggestionDiv.textContent = suggestion;
+            suggestionDiv.onclick = () => {
+                document.getElementById('aiSearchInput').value = suggestion;
+                performAISearch();
+            };
+            suggestionList.appendChild(suggestionDiv);
+        });
+        suggestionsContainer.style.display = 'block';
+    } else {
+        suggestionsContainer.style.display = 'none';
+    }
+}
+
+function setLoading(loading) {
+    const button = document.querySelector('#AISearchModal .btn-primary');
+    const input = document.getElementById('aiSearchInput');
+    const messagesContainer = document.getElementById('aiSearchMessages');
+    
+    if (loading) {
+        button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 发送中...';
+        button.disabled = true;
+        input.disabled = true;
+        messagesContainer.classList.add('loading');
+    } else {
+        button.innerHTML = '<i class="fa fa-paper-plane"></i> 发送';
+        button.disabled = false;
+        input.disabled = false;
+        messagesContainer.classList.remove('loading');
+    }
+}
+
+// 会话状态管理
+let conversationState = {
+    lastIdleDevices: null,
+    lastProduct: null,
+    username: null
+};
+
+async function performAISearch() {
+    console.log('[JS] ===== AI Search Started =====');
+    const input = document.getElementById('aiSearchInput');
+    const query = input.value.trim();
+    
+    console.log(`[JS] User query: "${query}"`);
+    console.log(`[JS] Current username: "${currentUsername}"`);
+    
+    if (!query) {
+        console.log('[JS] Empty query, returning');
+        return;
+    }
+    
+    // Add user message
+    console.log('[JS] Adding user message to chat');
+    addMessage(query, true);
+    
+    // Clear input
+    input.value = '';
+    
+    // Set loading state
+    console.log('[JS] Setting loading state');
+    setLoading(true);
+    
+    try {
+        console.log('[JS] Sending API request...');
+        const response = await fetch('/api/ai-search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrf_token')
+            },
+            body: JSON.stringify({ 
+                query: query,
+                username: currentUsername
+            })
+        });
+        
+        console.log(`[JS] API response status: ${response.status}`);
+        const result = await response.json();
+        console.log(`[JS] API response result:`, result);
+        
+        if (response.ok) {
+            console.log(`[JS] Handling response type: ${result.type}`);
+            // Handle different response types
+            if (result.type === 'suggestion') {
+                console.log('[JS] Showing suggestions');
+                addMessage(result.message);
+                showSuggestions(result.suggestions);
+            } else if (result.type === 'borrow_status') {
+                console.log('[JS] Showing borrow status');
+                addMessage(result.message);
+                showSuggestions(null);
+            } else if (result.type === 'device_info') {
+                console.log('[JS] Showing device info');
+                // Display detailed device information
+                let info = result.device_info;
+                let infoHtml = `<strong>${result.message}</strong><br><br>
+                    <table style="border: 1px solid #ddd; border-collapse: collapse; width: 100%;">
+                        <tr style="background-color: #f2f2f2;">
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Name</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">ID</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">SN</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Owner</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">User</th>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${info.name}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${info.id}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${info.sn}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${info.owner}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${info.user}</td>
+                        </tr>
+                    </table>`;
+                addMessage(infoHtml);
+                showSuggestions(null);
+            } else if (result.type === 'idle_devices') {
+                console.log('[JS] Showing idle devices');
+                // 保存空闲设备列表到会话状态
+                conversationState.lastIdleDevices = result.devices;
+                conversationState.lastProduct = result.devices[0]?.product;
+                
+                // 显示设备列表并提供借用选项
+                let message = result.message + '\n\n' + result.formatted_list + '\n\n点击设备ID进行借用：';
+                addMessage(result.message);
+                addDeviceList(result.devices);
+                showSuggestions(null);
+            } else if (result.type === 'borrow_success') {
+                console.log('[JS] Borrow successful');
+                addMessage('✅ ' + result.message);
+                showSuggestions(null);
+                // 清空会话状态
+                conversationState.lastIdleDevices = null;
+                conversationState.lastProduct = null;
+            } else if (result.type === 'borrow_failed') {
+                console.log('[JS] Borrow failed');
+                addMessage('❌ ' + result.message);
+                showSuggestions(null);
+            } else if (result.type === 'return_device') {
+                // Call the return device API
+                await returnDevice(result.device_id, result.username);
+            } else if (result.type === 'not_found') {
+                console.log('[JS] Device not found');
+                addMessage('❌ ' + result.message);
+                showSuggestions(null);
+            } else if (result.type === 'error') {
+                console.log('[JS] Error occurred');
+                addMessage('Error: ' + (result.message || 'Unknown error occurred'));
+                showSuggestions(null);
+            } else {
+                console.log('[JS] Unknown response type, showing message');
+                addMessage(result.message || 'Search completed');
+                showSuggestions(null);
+            }
+        } else {
+            console.log('[JS] API request failed');
+            addMessage('Error: ' + (result.error || 'Request failed'));
+        }
+    } catch (error) {
+        console.error('[JS] AI Search Error:', error);
+        addMessage('Network error: Unable to connect to search service');
+    } finally {
+        console.log('[JS] Clearing loading state');
+        setLoading(false);
+    }
+}
+
+function addDeviceList(devices) {
+    const messagesContainer = document.getElementById('aiSearchMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'chat-message';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'chat-avatar';
+    avatar.innerHTML = '<i class="fa fa-robot"></i>';
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    
+    const content = document.createElement('div');
+    content.className = 'chat-content';
+    
+    // 过滤掉当前用户拥有的设备（owner格式为"username (Full Name)"）
+    const filteredDevices = devices.filter(device => {
+        const ownerUsername = device.owner.split(' ')[0]; // 提取owner字段中的用户名部分
+        return ownerUsername !== currentUsername;
+    });
+    
+    if (filteredDevices.length === 0) {
+        content.innerHTML = '<strong>没有可用的设备（已过滤掉您拥有的设备）</strong>';
+    } else {
+        let html = '<strong>可用设备列表：</strong><br><br>';
+        filteredDevices.forEach(device => {
+            html += `<div style="margin: 5px 0;">
+                <button class="btn btn-sm btn-success" style="margin-right: 5px; border-radius: 15px;" onclick="borrowDevice('${device.id}')">借用 ${device.id}</button>
+                <button class="btn btn-sm btn-info" style="border-radius: 15px;" onclick="sendBorrowRequestEmail('${device.id}', '${device.product}', '${device.owner}')">
+                    <i class="fa fa-envelope"></i> 发送邮件
+                </button>
+                <small style="margin-left: 5px; color: #666;">owner: ${device.owner}</small>
+            </div>`;
+        });
+        content.innerHTML = html;
+    }
+    
+    const time = document.createElement('div');
+    time.className = 'chat-time';
+    const now = new Date();
+    time.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    
+    bubble.appendChild(content);
+    bubble.appendChild(time);
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(bubble);
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+async function borrowDevice(deviceId) {
+    console.log(`[JS] Borrowing device ${deviceId}`);
+    
+    // 使用当前登录用户名
+    const username = currentUsername;
+    if (!username) {
+        addMessage('❌ 需要提供用户名才能借用设备');
+        return;
+    }
+    
+    // 发送借用请求
+    addMessage(`正在借用设备 ${deviceId}...`, true);
+    setLoading(true);
+    
+    try {
+        const response = await fetch(`/api/borrow-device/${deviceId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrf_token')
+            },
+            body: JSON.stringify({
+                requester_name: username
+            })
+        });
+        
+        const result = await response.json();
+        console.log(`[JS] Borrow result:`, result);
+        
+        if (response.ok && result.status === 'success') {
+            addMessage('✅ ' + result.message);
+            // 清空会话状态
+            conversationState.lastIdleDevices = null;
+            conversationState.lastProduct = null;
+        } else {
+            addMessage('❌ ' + (result.error || result.message || '借用请求失败'));
+        }
+    } catch (error) {
+        console.error('[JS] Borrow Error:', error);
+        addMessage('❌ 网络错误：无法连接到服务');
+    } finally {
+        setLoading(false);
+    }
+}
+
+async function sendBorrowRequestEmail(deviceId, deviceProduct, deviceOwner) {
+    console.log(`[JS] Sending borrow request email for device ${deviceId}`);
+    
+    addMessage(`正在向设备 ${deviceId} 的 owner (${deviceOwner}) 发送借用请求邮件...`, true);
+    
+    try {
+        const response = await fetch(`/api/send-device-borrow-request/${deviceId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrf_token')
+            },
+            body: JSON.stringify({
+                device_type: deviceProduct,
+                requester_name: currentUsername
+            })
+        });
+        
+        const result = await response.json();
+        console.log(`[JS] Email send result:`, result);
+        
+        if (response.ok && result.status === 'success') {
+            addMessage(`✅ ${result.message}`);
+        } else {
+            addMessage(`❌ 发送邮件失败: ${result.error || result.message}`);
+        }
+    } catch (error) {
+        console.error('[JS] Send email error:', error);
+        addMessage('❌ 网络错误：无法发送邮件');
+    }
+}
+
+async function returnDevice(deviceId, username) {
+    console.log(`[JS] Returning device ${deviceId}`);
+    
+    addMessage(`正在归还设备 ${deviceId}...`, true);
+    setLoading(true);
+    
+    try {
+        const response = await fetch(`/api/return-device/${deviceId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrf_token')
+            },
+            body: JSON.stringify({
+                requester_name: username
+            })
+        });
+        
+        const result = await response.json();
+        console.log(`[JS] Return result:`, result);
+        
+        if (response.ok && result.status === 'success') {
+            addMessage('✅ ' + result.message);
+            // 清空会话状态
+            conversationState.lastIdleDevices = null;
+            conversationState.lastProduct = null;
+        } else {
+            addMessage('❌ ' + (result.error || result.message || '归还请求失败'));
+        }
+    } catch (error) {
+        console.error('[JS] Return Error:', error);
+        addMessage('❌ 网络错误：无法连接到服务');
+    } finally {
+        setLoading(false);
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Handle Enter key in search input
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('aiSearchInput');
+    if (input) {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performAISearch();
+            }
+        });
+    }
+});
+
+// Focus input when modal is shown
+$('#AISearchModal').on('shown.bs.modal', function() {
+    $('#aiSearchInput').focus();
+});
+</script>
+
+<!-- Local AI Search Modal - WeChat Style -->
+<div class="modal fade" id="LocalAISearchModal" tabindex="-1" role="dialog" aria-labelledby="LocalAISearchModalLabel">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: 800px;">
+        <div class="modal-content" style="border-radius: 10px; overflow: hidden;">
+            <div class="modal-header" style="background-color: #337ab7; border-bottom: 1px solid #e5e5e5; padding: 15px 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 24px;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="LocalAISearchModalLabel" style="margin: 0; font-size: 18px; font-weight: 500; color: #fff;">
+                    <i class="fa fa-server" style="color: #fff; margin-right: 8px;"></i> Local AI Assistant
+                </h4>
+            </div>
+            <div class="modal-body" style="padding: 0; background-color: #f5f5f5; height: 500px; display: flex; flex-direction: column;">
+                <div id="localAiSearchMessages" style="flex: 1; overflow-y: auto; padding: 20px; background-color: #f5f5f5;">
+                    <div class="chat-message ai-message">
+                        <div class="chat-avatar" style="background-color: #337ab7;">
+                            <i class="fa fa-server"></i>
+                        </div>
+                        <div class="chat-bubble">
+                            <div class="chat-content">
+                                你好！我是本地AI助手，支持以下功能：<br>
+                                1. <strong>查找空闲设备</strong> - 输入如"查找空闲设备，型号TZ570"<br>
+                                2. <strong>借用设备</strong> - 在设备列表中点击"借用"按钮或直接输入设备ID<br>
+                                3. <strong>归还设备</strong> - 在设备列表中点击"归还"按钮或直接输入设备ID
+                            </div>
+                            <div class="chat-time">刚刚</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Quick Actions Area -->
+                <div style="padding: 10px 20px; background-color: #fff; border-top: 1px solid #e5e5e5;">
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+                        <button class="btn btn-sm btn-info" onclick="setLocalInput('查找空闲设备，型号tz570p')">
+                            <i class="fa fa-search"></i> 查找空闲tz570p
+                        </button>
+                        <button class="btn btn-sm btn-info" onclick="setLocalInput('查找空闲设备，型号NSA5700')">
+                            <i class="fa fa-search"></i> 查找空闲NSA5700
+                        </button>
+                        <button class="btn btn-sm btn-info" onclick="setLocalInput('查找空闲设备，型号SonicWave231c')">
+                            <i class="fa fa-search"></i> 查找空闲SonicWave231c
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                        <div style="flex: 1; display: flex; gap: 8px;">
+                            <input type="text" id="quickDeviceId" placeholder="输入设备ID" style="flex: 1; border-radius: 15px; border: 1px solid #ddd; padding: 6px 12px; font-size: 13px;">
+                            <button class="btn btn-sm btn-success" onclick="quickBorrowDevice()">
+                                <i class="fa fa-hand-grab-o"></i> 借用
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="quickReturnDevice()">
+                                <i class="fa fa-undo"></i> 归还
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="padding: 15px 20px; background-color: #fff; border-top: 1px solid #e5e5e5;">
+                    <div class="input-group" style="display: flex; gap: 10px;">
+                        <input type="text" class="form-control" id="localAiSearchInput" placeholder="输入问题，如：查找空闲设备..." style="border-radius: 20px; border: 1px solid #e5e5e5; padding: 10px 20px;">
+                        <button class="btn btn-primary" type="button" onclick="performLocalAISearch()" style="border-radius: 20px; padding: 10px 25px; background-color: #337ab7; border-color: #337ab7;">
+                            <i class="fa fa-paper-plane"></i> 发送
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Local AI Search Configuration - Use backend proxy to avoid mixed content issues
+const LOCAL_AI_API_BASE = '/api/local-ai';
+let localConversationId = null;
+
+function addLocalMessage(message, isUser = false) {
+    const messagesContainer = document.getElementById('localAiSearchMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'chat-message ' + (isUser ? 'user' : '');
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'chat-avatar';
+    avatar.style.backgroundColor = isUser ? '#ff9800' : '#337ab7';
+    avatar.innerHTML = isUser ? '<i class="fa fa-user"></i>' : '<i class="fa fa-server"></i>';
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    
+    const content = document.createElement('div');
+    content.className = 'chat-content';
+    content.innerHTML = message;
+    
+    const time = document.createElement('div');
+    time.className = 'chat-time';
+    const now = new Date();
+    time.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    
+    bubble.appendChild(content);
+    bubble.appendChild(time);
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(bubble);
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function setLocalLoading(loading) {
+    const button = document.querySelector('#LocalAISearchModal .btn-primary');
+    const input = document.getElementById('localAiSearchInput');
+    
+    if (loading) {
+        button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 发送中...';
+        button.disabled = true;
+        input.disabled = true;
+    } else {
+        button.innerHTML = '<i class="fa fa-paper-plane"></i> 发送';
+        button.disabled = false;
+        input.disabled = false;
+    }
+}
+
+async function createLocalConversation() {
+    try {
+        const response = await fetch(`${LOCAL_AI_API_BASE}/conversations`, {
+            method: 'POST',
+            headers: {
+                'X-User-Id': currentUsername
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to create conversation: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        localConversationId = data.conversation_id;
+        console.log('[Local AI] Created conversation:', localConversationId);
+        return localConversationId;
+    } catch (error) {
+        console.error('[Local AI] Create conversation error:', error);
+        throw error;
+    }
+}
+
+async function performLocalAISearch() {
+    const input = document.getElementById('localAiSearchInput');
+    const query = input.value.trim();
+    
+    if (!query) return;
+    
+    addLocalMessage(query, true);
+    input.value = '';
+    setLocalLoading(true);
+    
+    try {
+        if (!localConversationId) {
+            await createLocalConversation();
+        }
+        
+        const response = await fetch(`${LOCAL_AI_API_BASE}/conversations/${localConversationId}/messages/stream`, {
+            method: 'POST',
+            headers: {
+                'X-User-Id': currentUsername,
+                'Accept': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                'Content-Type': 'application/json',
+                'Connection': 'keep-alive'
+            },
+            body: JSON.stringify({ message: query })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Request failed: ${response.status}`);
+        }
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let fullResponse = null;
+        
+        let hasError = false;
+        let errorMessage = '';
+        
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop();
+
+            let currentEvent = '';
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                if (trimmedLine.startsWith('event:')) {
+                    currentEvent = trimmedLine.substring(6).trim();
+                } else if (trimmedLine.startsWith('data:')) {
+                    try {
+                        const jsonData = trimmedLine.substring(5).trim();
+                        if (jsonData && jsonData !== '[DONE]') {
+                            const parsed = JSON.parse(jsonData);
+                            if (currentEvent === 'error') {
+                                hasError = true;
+                                errorMessage = parsed.message || parsed.error || 'AI Agent error';
+                                console.error('[Local AI] SSE error event:', parsed);
+                            } else {
+                                fullResponse = parsed;
+                            }
+                        }
+                    } catch (e) {}
+                }
+            }
+        }
+
+        if (hasError) {
+            addLocalMessage('❌ AI服务错误: ' + errorMessage + '<br><small>请检查AI Agent服务状态</small>');
+        } else if (fullResponse) {
+            displayLocalAIResponse(fullResponse);
+        } else {
+            addLocalMessage('抱歉，未能获取到有效响应。');
+        }
+        
+    } catch (error) {
+        console.error('[Local AI] Search error:', error);
+        addLocalMessage('❌ 请求失败: ' + error.message);
+    } finally {
+        setLocalLoading(false);
+    }
+}
+
+function displayLocalAIResponse(response) {
+    let htmlContent = response.message ? response.message.replace(/\n/g, '<br>') : '暂无回复';
+    
+    if (response.structured_data && response.structured_data.length > 0) {
+        const data = response.structured_data[0];
+        
+        if (data.type === 'idle_dut_device_list' && data.items && data.items.length > 0) {
+            htmlContent += '<br><br><strong>找到 ' + data.count + ' 台设备（点击借用按钮借用设备）：</strong>';
+            htmlContent += '<table style="border: 1px solid #ddd; border-collapse: collapse; width: 100%; margin-top: 10px; font-size: 13px;">';
+            htmlContent += '<tr style="background-color: #f2f2f2;">';
+            htmlContent += '<th style="border: 1px solid #ddd; padding: 6px;">ID</th>';
+            htmlContent += '<th style="border: 1px solid #ddd; padding: 6px;">序列号</th>';
+            htmlContent += '<th style="border: 1px solid #ddd; padding: 6px;">型号</th>';
+            htmlContent += '<th style="border: 1px solid #ddd; padding: 6px;">类型</th>';
+            htmlContent += '<th style="border: 1px solid #ddd; padding: 6px;">所属者</th>';
+            htmlContent += '<th style="border: 1px solid #ddd; padding: 6px;">操作</th>';
+            htmlContent += '</tr>';
+            
+            data.items.forEach(item => {
+                htmlContent += '<tr>';
+                htmlContent += `<td style="border: 1px solid #ddd; padding: 6px;">${item.id}</td>`;
+                htmlContent += `<td style="border: 1px solid #ddd; padding: 6px;">${item.sn}</td>`;
+                htmlContent += `<td style="border: 1px solid #ddd; padding: 6px;">${item.product}</td>`;
+                htmlContent += `<td style="border: 1px solid #ddd; padding: 6px;">${item.product_type}</td>`;
+                htmlContent += `<td style="border: 1px solid #ddd; padding: 6px;">${item.owner_label || item.owner_display_name}</td>`;
+                htmlContent += `<td style="border: 1px solid #ddd; padding: 6px; text-align: center;">
+                    <button class="btn btn-xs btn-success" onclick="borrowDeviceLocal('${item.id}')" style="border-radius: 12px; padding: 3px 10px; margin: 2px;">
+                        <i class="fa fa-hand-grab-o"></i> 借用
+                    </button>
+                    <button class="btn btn-xs btn-warning" onclick="returnDeviceLocal('${item.id}')" style="border-radius: 12px; padding: 3px 10px; margin: 2px;">
+                        <i class="fa fa-undo"></i> 归还
+                    </button>
+                </td>`;
+                htmlContent += '</tr>';
+            });
+            
+            htmlContent += '</table>';
+        } else if (data.type === 'borrow_device_result' && data.result) {
+            // Display borrow result
+            const result = data.result;
+            if (result.status === 'success') {
+                htmlContent += `<br><br><div style="padding: 10px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; color: #155724;">
+                    <i class="fa fa-check-circle"></i> <strong>借用成功</strong><br>
+                    设备ID: ${result.device_id}<br>
+                    请求者: ${result.requester}<br>
+                    消息: ${result.message}
+                </div>`;
+            } else {
+                htmlContent += `<br><br><div style="padding: 10px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; color: #721c24;">
+                    <i class="fa fa-times-circle"></i> <strong>借用失败</strong><br>
+                    设备ID: ${result.device_id}<br>
+                    消息: ${result.message}
+                </div>`;
+            }
+        } else if (data.type === 'return_device_result' && data.result) {
+            // Display return result
+            const result = data.result;
+            if (result.status === 'success') {
+                htmlContent += `<br><br><div style="padding: 10px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; color: #155724;">
+                    <i class="fa fa-check-circle"></i> <strong>归还成功</strong><br>
+                    设备ID: ${result.device_id}<br>
+                    所有者: ${result.owner}<br>
+                    消息: ${result.message}
+                </div>`;
+            } else {
+                htmlContent += `<br><br><div style="padding: 10px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; color: #721c24;">
+                    <i class="fa fa-times-circle"></i> <strong>归还失败</strong><br>
+                    设备ID: ${result.device_id}<br>
+                    消息: ${result.message}
+                </div>`;
+            }
+        }
+    }
+    
+    addLocalMessage(htmlContent);
+}
+
+// Borrow device directly via Flask API (not through AI Agent)
+async function borrowDeviceLocal(deviceId) {
+    console.log(`[Local AI] Direct borrowing device ${deviceId}`);
+    
+    // Add user message showing the borrow intent
+    addLocalMessage(`借用设备${deviceId}`, true);
+    setLocalLoading(true);
+    
+    try {
+        // Direct call to Flask API
+        const response = await fetch(`/api/borrow-device/${deviceId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrf_token'),
+                'X-User-Id': currentUsername
+            },
+            body: JSON.stringify({ requester_name: currentUsername })
+        });
+        
+        const result = await response.json();
+        console.log(`[Local AI] Borrow result:`, result);
+        
+        // Display result directly
+        let htmlContent = '';
+        if (response.ok && result.status === 'success') {
+            htmlContent = `<div style="padding: 10px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; color: #155724;">
+                <i class="fa fa-check-circle"></i> <strong>借用成功</strong><br>
+                设备ID: ${result.device_id}<br>
+                请求者: ${result.requester}<br>
+                消息: ${result.message}
+            </div>`;
+        } else {
+            htmlContent = `<div style="padding: 10px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; color: #721c24;">
+                <i class="fa fa-times-circle"></i> <strong>借用失败</strong><br>
+                设备ID: ${deviceId}<br>
+                消息: ${result.error || result.message || '借用请求失败'}
+            </div>`;
+        }
+        
+        addLocalMessage(htmlContent);
+        
+    } catch (error) {
+        console.error('[Local AI] Borrow device error:', error);
+        addLocalMessage('❌ 借用设备失败: ' + error.message);
+    } finally {
+        setLocalLoading(false);
+    }
+}
+
+// Return device directly via Flask API (not through AI Agent)
+async function returnDeviceLocal(deviceId) {
+    console.log(`[Local AI] Direct returning device ${deviceId}`);
+    
+    // Add user message showing the return intent
+    addLocalMessage(`归还设备${deviceId}`, true);
+    setLocalLoading(true);
+    
+    try {
+        // Direct call to Flask API
+        const response = await fetch(`/api/return-device/${deviceId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrf_token'),
+                'X-User-Id': currentUsername
+            },
+            body: JSON.stringify({ requester_name: currentUsername })
+        });
+        
+        const result = await response.json();
+        console.log(`[Local AI] Return result:`, result);
+        
+        // Display result directly
+        let htmlContent = '';
+        if (response.ok && result.status === 'success') {
+            htmlContent = `<div style="padding: 10px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; color: #155724;">
+                <i class="fa fa-check-circle"></i> <strong>归还成功</strong><br>
+                设备ID: ${result.device_id}<br>
+                所有者: ${result.owner}<br>
+                消息: ${result.message}
+            </div>`;
+        } else {
+            htmlContent = `<div style="padding: 10px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; color: #721c24;">
+                <i class="fa fa-times-circle"></i> <strong>归还失败</strong><br>
+                设备ID: ${deviceId}<br>
+                消息: ${result.error || result.message || '归还请求失败'}
+            </div>`;
+        }
+        
+        addLocalMessage(htmlContent);
+        
+    } catch (error) {
+        console.error('[Local AI] Return device error:', error);
+        addLocalMessage('❌ 归还设备失败: ' + error.message);
+    } finally {
+        setLocalLoading(false);
+    }
+}
+
+// Quick action helper functions
+function setLocalInput(text) {
+    document.getElementById('localAiSearchInput').value = text;
+    performLocalAISearch();
+}
+
+function quickBorrowDevice() {
+    const deviceId = document.getElementById('quickDeviceId').value.trim();
+    if (!deviceId) {
+        addLocalMessage('❌ 请输入设备ID', false);
+        return;
+    }
+    borrowDeviceLocal(deviceId);
+    document.getElementById('quickDeviceId').value = '';
+}
+
+function quickReturnDevice() {
+    const deviceId = document.getElementById('quickDeviceId').value.trim();
+    if (!deviceId) {
+        addLocalMessage('❌ 请输入设备ID', false);
+        return;
+    }
+    returnDeviceLocal(deviceId);
+    document.getElementById('quickDeviceId').value = '';
+}
+
+$('#LocalAISearchModal').on('shown.bs.modal', function() {
+    $('#localAiSearchInput').focus();
+});
+
+document.getElementById('localAiSearchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        performLocalAISearch();
+    }
+});
+
+document.getElementById('quickDeviceId').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        quickBorrowDevice();
+    }
+});
+
+$('#LocalAISearchModal').on('hidden.bs.modal', function() {
+    localConversationId = null;
+    document.getElementById('localAiSearchMessages').innerHTML = `
+        <div class="chat-message ai-message">
+            <div class="chat-avatar" style="background-color: #337ab7;">
+                <i class="fa fa-server"></i>
+            </div>
+            <div class="chat-bubble">
+                <div class="chat-content">
+                    你好！我是本地AI助手，支持以下功能：<br>
+                    1. <strong>查找空闲设备</strong> - 输入如"查找空闲设备，型号TZ570"<br>
+                    2. <strong>借用设备</strong> - 在设备列表中点击"借用"按钮或直接输入设备ID<br>
+                    3. <strong>归还设备</strong> - 在设备列表中点击"归还"按钮或直接输入设备ID
+                </div>
+                <div class="chat-time">刚刚</div>
+            </div>
+        </div>
+    `;
+});
+</script>

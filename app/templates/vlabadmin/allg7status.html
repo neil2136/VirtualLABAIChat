@@ -1,0 +1,246 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+{% block content %}<!--自定义模板区域-->
+
+<div class="row" style="width:100%">
+            <div class="right_col" role="main">
+              <div class="col-md-12 col-sm-12 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>ALL G7 DUT Summary </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                      <div role="tabpanel" data-example-id="togglable-tabs">
+                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">G7 FW</a>
+                        </li>
+                      </ul>
+                      <div id="myTabContent" class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                          <table id="datatable" class="table table-striped table-bordered jambo_table bulk_action" style="width: 100%;">
+                          <thead>
+                             <tr class="headings">
+                                 <th></th>
+                                 <th scope="col" >Device</th>
+                                 <th scope="col" >SN</th>
+                                 <th scope="col" >User</th>
+                                 <th scope="col" >Firmware Version</th>
+                                 <th scope="col" >UP Time</th>
+                                 <th scope="col" >Crash In 7 Days</th>
+                             </tr>
+                          </thead>
+                          <tbody>
+                             {% for g7list in newg7list %}
+                                  <tr class="even pointer">
+                                  <td class="a-center ">
+                                      <input type="checkbox" class="flat" name="table_records">
+                                    </td>
+                                  <td style="background-color:honeydew;">
+                                  <a href="/mydeviceinfo?id={{ g7list.id }}&type={{ g7list.DeviceType }}">
+                                      <span style="color: #0000C6; "><change>{{ g7list.Product }}_{{ g7list.classify }}({{ g7list.id }})</change></span>
+                                      </a>
+                                  </td>
+                                  <td >{{ g7list.SN }}</td>
+                                  <td >{{ g7list.User }}</td>
+                                 {% if g7list.FWStatus.errormsg %}
+                              <td style="background-color:aliceblue; color: red; font-weight: bolder">
+                              {{ g7list.FWStatus.errormsg }}</td>
+                              {% else %}
+                              <td style="background-color:aliceblue; font-weight: bolder">
+                                   {{ g7list.FWStatus.version }}</td>
+                              {% endif %}
+                              {% if g7list.FWStatus.errormsg %}
+                              <td style="background-color:aliceblue; color: red; font-weight: bolder">
+                              {{ g7list.FWStatus.errormsg }}</td>
+                              {% else %}
+                              <td style="background-color:aliceblue; font-weight: bolder">
+                                   {{ g7list.FWStatus.uptime }}</td>
+                              {% endif %}
+                              <td style="background-color:aliceblue; color: red; font-weight: bolder">
+                                  {% if g7list.FWStatus.coredump == [] %}
+                                  No Coredump
+                                  {% else %}
+                                      {% for coredump in g7list.FWStatus.coredump %}
+                                      {{ coredump }} <br>
+                                      {% endfor %}
+                                  {% endif %}
+                              </td>
+                                  </tr>
+                                  {% endfor %}
+                          </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+</div>
+
+<script>
+
+
+function selectchange(){
+    if(document.getElementById("fwtype").value=="G6"){
+        document.getElementById("classify").style.display="none";
+        document.getElementById("maintenancekey").style.display="none";
+    }
+    else if(document.getElementById("fwtype").value=="SP"){
+        document.getElementById("classify").style.display="none";
+        document.getElementById("registrationcode").style.display="none";
+        document.getElementById("maintenancekey").style.display="none";
+    }
+    else{
+        document.getElementById("classify").style.display="";
+        document.getElementById("registrationcode").style.display="";
+        document.getElementById("maintenancekey").style.display="";
+    }
+
+}
+
+
+$(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        // $('#datatable').dataTable();
+        // $('#datatable2').dataTable();
+        // $('#datatable3').dataTable();
+        $("#datatable").DataTable({
+              dom: "Bfrtip",
+              iDisplayLength: 20,
+              bProcessing: true,
+              bAutoWidth: true,
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+        });
+        $("#datatable2").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+        });
+        $("#datatable3").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+        });
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive').DataTable();
+
+        $('#datatable-scroller').DataTable({
+          ajax: "js/datatables/json/scroller-demo.json",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+        TableManageButtons.init();
+      });
+
+</script>
+<!-- /Datatables -->
+{% endblock %}

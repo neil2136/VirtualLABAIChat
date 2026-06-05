@@ -1,0 +1,336 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+    <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Administrator Managment (Only Admin) <small>
+                      add/edit/delete the device for Mongodb  </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+
+    </div>
+    <div class="col-md-6 col-xs-12" style="width:60%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Device Settings <small>There are will create/edit/delete device information in VLAB DB </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form class="form-horizontal form-label-left" action="/devicesetting" method="post">
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Device Operate<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="select" id="select" onChange="selectchange()" style="background:#fff;border:1px solid #ccc;">
+                                <option value="none" selected>--Selete--</option>
+                                <option value="searchdevice">search device</option>
+                                <option value="adddevice">add device</option>
+                                <option value="editdevice">modify device</option>
+                                <option value="deldevice">delete device</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="form-group" id="dutid">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">DUT ID <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="dutid" value="{{ devicedata.id }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="product">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Product <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="product" value="{{ devicedata.Product }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="sn">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">SN <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="sn" value="{{ devicedata.SN }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="column" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Device Operate<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="column" style="background:#fff;border:1px solid #ccc;">
+                              <option value="none" selected>--Selete--</option>
+                              <option value="id">id</option>
+                              <option value="Product">Product</option>
+                              <option value="RegistrationCode">RegistrationCode</option>
+                              <option value="Description">Description</option>
+                              <option value="Group">Group</option>
+                              <option value="Owner">Owner</option>
+                              <option value="User">User</option>
+                              <option value="Operator">Operator</option>
+                              <option value="keepAlive">keepAlive</option>
+                              <option value="InterfaceInfo">InterfaceInfo</option>
+                              <option value="ConsoleInfo">ConsoleInfo</option>
+                              <option value="PowerInfo">PowerInfo</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="form-group" id="columnvalue" style="display:none">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Value <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="columnvalue" placeholder="Please enter the correct value">
+                        </div>
+                      </div>
+                      <div class="form-group" id="regcode">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">RegistrationCode <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="regcode" value="{{ devicedata.RegistrationCode }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="devicetype">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">DeviceType(DUT/SonicPoint) <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="devicetype" value="{{ devicedata.DeviceType }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="description">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="description" value="{{ devicedata.Description }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Group <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="group" value="{{ devicedata.Group }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="owner">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Owner <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="owner" value="{{ devicedata.Owner }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="user">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">User <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="user" value="{{ devicedata.User }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="operator">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Operator <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="operator" value="{{ devicedata.Operator }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="keepalive">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">keepAlive <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="keepalive" value="{{ devicedata.keepAlive }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="interfaceinfo">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">InterfaceInfo <span class="required">*</span></label>
+						<div class="col-md-9 col-sm-9 col-xs-12">
+                          <textarea class="form-control" name="interfaceinfo" rows="3">{{ devicedata.InterfaceInfo }}</textarea>
+<!--                          <input type="text" class="form-control" name="interfaceinfo" value="x0:Core_Switch-12:gi1/6:dell,x1:Core_Switch-12:gi1/6:dell,x2:Core_Switch-12:gi1/6:dell,x3:Core_Switch-12:gi1/6:dell,x4:Core_Switch-12:gi1/6:dell">-->
+                        </div>
+                      </div>
+                      <div class="form-group" id="consoleinfo">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">ConsoleInfo <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="consoleinfo" value="{{ devicedata.ConsoleInfo }}">
+                        </div>
+                      </div>
+                      <div class="form-group" id="powerinfo">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">PowerInfo <span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input type="text" class="form-control" name="powerinfo" value="{{ devicedata.PowerInfo }}">
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-primary">Cancel</button>
+                          <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2> Console Result<small>Displays the process of configuring the DB and prints it</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a></li>
+              <li><a href="#">Settings 2</a></li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!--log monitor-->
+      <div id="sw" style="height:500px; overflow:auto">
+        <div>
+          <table>
+            {% for sw_line in consoledata %}
+            <tr class="even pointer">{{ sw_line }}<br></tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- /page content -->
+
+<script language="javascript">
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to occupy this PC？ If yes, Your Email account will receive an email with a wireless PC message in it "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function selectchange(){
+if(document.getElementById("select").value=="adddevice"){
+document.getElementById("dutid").style.display="";
+document.getElementById("product").style.display="";
+document.getElementById("sn").style.display="";
+document.getElementById("column").style.display="none";
+document.getElementById("columnvalue").style.display="none";
+document.getElementById("regcode").style.display="";
+document.getElementById("devicetype").style.display="";
+document.getElementById("description").style.display="";
+document.getElementById("group").style.display="";
+document.getElementById("owner").style.display="";
+document.getElementById("user").style.display="";
+document.getElementById("operator").style.display="";
+document.getElementById("keepalive").style.display="";
+document.getElementById("interfaceinfo").style.display="";
+document.getElementById("consoleinfo").style.display="";
+document.getElementById("powerinfo").style.display="";
+}
+else if(document.getElementById("select").value=="searchdevice"){
+document.getElementById("dutid").style.display="none";
+document.getElementById("product").style.display="none";
+document.getElementById("sn").style.display="";
+document.getElementById("column").style.display="none";
+document.getElementById("columnvalue").style.display="none";
+document.getElementById("regcode").style.display="none";
+document.getElementById("devicetype").style.display="";
+document.getElementById("description").style.display="none";
+document.getElementById("group").style.display="none";
+document.getElementById("owner").style.display="none";
+document.getElementById("user").style.display="none";
+document.getElementById("operator").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("interfaceinfo").style.display="none";
+document.getElementById("consoleinfo").style.display="none";
+document.getElementById("powerinfo").style.display="none";
+}
+else if(document.getElementById("select").value=="deldevice"){
+document.getElementById("dutid").style.display="none";
+document.getElementById("product").style.display="none";
+document.getElementById("sn").style.display="";
+document.getElementById("column").style.display="none";
+document.getElementById("columnvalue").style.display="none";
+document.getElementById("regcode").style.display="none";
+document.getElementById("devicetype").style.display="";
+document.getElementById("description").style.display="none";
+document.getElementById("group").style.display="none";
+document.getElementById("owner").style.display="none";
+document.getElementById("user").style.display="none";
+document.getElementById("operator").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("interfaceinfo").style.display="none";
+document.getElementById("consoleinfo").style.display="none";
+document.getElementById("powerinfo").style.display="none";
+}
+else if(document.getElementById("select").value=="editdevice"){
+document.getElementById("dutid").style.display="none";
+document.getElementById("product").style.display="none";
+document.getElementById("sn").style.display="";
+document.getElementById("column").style.display="";
+document.getElementById("columnvalue").style.display="";
+document.getElementById("regcode").style.display="none";
+document.getElementById("devicetype").style.display="none";
+document.getElementById("description").style.display="none";
+document.getElementById("group").style.display="none";
+document.getElementById("owner").style.display="none";
+document.getElementById("user").style.display="none";
+document.getElementById("operator").style.display="none";
+document.getElementById("keepalive").style.display="none";
+document.getElementById("interfaceinfo").style.display="none";
+document.getElementById("consoleinfo").style.display="none";
+document.getElementById("powerinfo").style.display="none";
+}
+else{
+document.getElementById("dutid").style.display="";
+document.getElementById("product").style.display="";
+document.getElementById("sn").style.display="";
+document.getElementById("column").style.display="none";
+document.getElementById("columnvalue").style.display="none";
+document.getElementById("regcode").style.display="";
+document.getElementById("devicetype").style.display="";
+document.getElementById("description").style.display="";
+document.getElementById("group").style.display="";
+document.getElementById("owner").style.display="";
+document.getElementById("user").style.display="";
+document.getElementById("operator").style.display="";
+document.getElementById("keepalive").style.display="";
+document.getElementById("interfaceinfo").style.display="";
+document.getElementById("consoleinfo").style.display="";
+document.getElementById("powerinfo").style.display="";
+}
+}
+</script>
+
+{% endblock %}
+
+

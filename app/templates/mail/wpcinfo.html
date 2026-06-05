@@ -1,0 +1,59 @@
+<!-- CSS goes in the document HEAD or added to your external stylesheet -->
+<style type="text/css">
+table.hovertable {
+    font-family: verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse: collapse;
+}
+table.hovertable th {
+    background-color:#c3dde0;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+}
+table.hovertable tr {
+    background-color:#d4e3e5;
+}
+table.hovertable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+}
+</style>
+<p>
+	Dear {{ current_user.fullname }},
+</p>
+<b>
+You have successfully occupied a wireless PC, the following is the login information:
+</b>
+<br>
+<!-- Table goes in the document BODY -->
+<table class="hovertable">
+<tr>
+    <th>Items</th><th>Values</th>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+    <td>PC IP:</td><td>{{ pc_id.wpc_ip }}</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+    <td>Operating System:</td><td>{{ pc_id.wpc_os }}</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+    <td>Wireless Card:</td><td>{{ pc_id.wpc_nic }}</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+    <td>Username:</td><td>qa</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+    <td>Password:(only valid in 5 days)</td><td>{{ pc_id.wpc_pwd }}</td>
+</tr>
+</table>
+<p>
+	How to RDP the VM ?--> Use above parameters to operate the Remote Desktop Connection on your office computer.
+</p>
+

@@ -1,0 +1,2 @@
+class AgentConfigurationError(Exception):
+    pass

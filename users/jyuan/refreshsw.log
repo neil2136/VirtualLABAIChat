@@ -1,0 +1,58 @@
+Start check dell Switch configure
+==================================================
+************************************************************
+show running-config interface te3/1
+!
+interface TenGigabitEthernet 3/1
+ description vlabVlan
+ no ip address
+ mtu 9216
+ portmode hybrid
+ switchport
+ spanning-tree mstp edge-port bpduguard shutdown-on-violation 
+ spanning-tree rstp edge-port bpduguard shutdown-on-violation 
+!
+ protocol lldp 
+  disable 
+ no shutdown
+QA_SWITCH_7
+************************************************************
+show interfaces te3/1 status
+Port                 Description  Status Speed        Duplex Vlan  
+Te 3/1               vlabVlan     Up     10000 Mbit   Full   185
+QA_SWITCH_7
+************************************************************
+show interfaces te3/1 | grep protocol
+TenGigabitEthernet 3/1 is up, line protocol is up
+QA_SWITCH_7
+************************************************************
+show interfaces port-channel | grep 3/1
+QA_SWITCH_7
+************************************************************
+show running-config interface te3/1
+!
+interface TenGigabitEthernet 3/1
+ description vlabVlan
+ no ip address
+ mtu 9216
+ portmode hybrid
+ switchport
+ spanning-tree mstp edge-port bpduguard shutdown-on-violation 
+ spanning-tree rstp edge-port bpduguard shutdown-on-violation 
+!
+ protocol lldp 
+  disable 
+ no shutdown
+QA_SWITCH_7
+************************************************************
+show interfaces te3/1 status
+Port                 Description  Status Speed        Duplex Vlan  
+Te 3/1               vlabVlan     Up     10000 Mbit   Full   185
+QA_SWITCH_7
+************************************************************
+show interfaces te3/1 | grep protocol
+TenGigabitEthernet 3/1 is up, line protocol is up
+QA_SWITCH_7
+************************************************************
+show interfaces port-channel | grep 3/1
+QA_SWITCH_7

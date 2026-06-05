@@ -1,0 +1,27 @@
+configure terminal
+configure terminal
+QA_SWITCH_22(conf)#interface vlan 542
+interface vlan 542
+QA_SWITCH_22(conf-if-vl-542)#untagged Gi0/15
+untagged Gi0/15
+QA_SWITCH_22(conf-if-vl-542)#interface Gi0/15
+interface Gi0/15
+QA_SWITCH_22(conf-if-gi-0/15)#description vlabVlan
+description vlabVlan
+QA_SWITCH_22(conf-if-gi-0/15)#spanning-tree mstp edge-port bpduguard shutdown-on-violation
+spanning-tree mstp edge-port bpduguard shutdow[46D                                                 [49D$-tree mstp edge-port bpduguard shutdown-on-vio[47D                                                 [49D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_22(conf-if-gi-0/15)#spanning-tree rstp edge-port bpduguard shutdown-on-violation
+spanning-tree rstp edge-port bpduguard shutdow[46D                                                 [49D$-tree rstp edge-port bpduguard shutdown-on-vio[47D                                                 [49D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_22(conf-if-gi-0/15)#spanning-tree
+spanning-tree
+QA_SWITCH_22(conf-if-gi-0/15)#protocol lldp
+protocol lldp
+QA_SWITCH_22(conf-if-gi-0/15-lldp)#disable
+disable
+QA_SWITCH_22(conf-if-gi-0/15-lldp)#exit
+exit
+QA_SWITCH_22(conf-if-gi-0/15)#no shutdown
+no shutdown
+QA_SWITCH_22(conf-if-gi-0/15)#end
+end
+QA_SWITCH_22#

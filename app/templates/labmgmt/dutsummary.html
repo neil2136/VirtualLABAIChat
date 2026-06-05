@@ -1,0 +1,328 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+  <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LAB Devices Summary <small>
+                      Note: It will show all devices information include old VLAB and L2L3 VLAB. </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <table class="table table-bordered">
+                      <thead align="center">
+                        <tr>
+                            <th scope="col" width="3%">ID.</th>
+                            <th scope="col" width="7%">
+                            <form class="form-inline" id="productfilter" method="get" action="/productfilter" >
+								<div class="form-group ">
+                                <input type="hidden" name="duttype" value="{{ duttype }}">
+                                <select class="form-control" onchange="submitForm1();" name="kind">
+                                    <option value="none" selected>--Product--</option>
+                                    {% for product in productinfo %}
+                                    {% if product.product != "NA" %}
+                                    <option value="{{ product.product}}">{{ product.product }}</option>
+                                    {%else %}
+                                    {%endif %}
+                                    {% endfor %}
+                                </select>
+								</div>
+                            </form>
+                             </th>
+                            <th scope="col"  width="12%">Serial Number</th>
+                            <th scope="col" width="12%">
+							<form class="form-inline" id="ownerfilter" method="get" action="/ownerfilter" >
+								<div class="form-group ">
+							    <input type="hidden" name="duttype" value="{{ duttype }}">
+							    <select class="form-control" onchange="submitForm2();" name="kind">
+							        <option value="none" selected >--DUT Owner--</option>
+							        {% for owner in userfilter %}
+							        {% if owner.id != "NA" %}
+							        <option value="{{ owner.username}}">{{ owner.username }}</option>
+							        {%else %}
+							        {%endif %}
+							        {% endfor %}
+							    </select>
+								</div>
+							</form>
+                            </th>
+                            <th scope="col" width="10%">
+							<form class="form-inline" id="userfilter" method="get" action="/userfilter" >
+								<div class="form-group ">
+							    <input type="hidden" name="duttype" value="{{ duttype }}">
+							    <select class="form-control" onchange="submitForm3();" name="kind">
+							        <option value="none" selected>--DUT User--</option>
+							        {% for user in userfilter %}
+							        {% if user.id != "NA" %}
+							        <option value="{{ user.id}}">{{ user.id }}</option>
+							        {%else %}
+							        {%endif %}
+							        {% endfor %}
+							    </select>
+								</div>
+							</form>
+                            </th>
+                            <th scope="col" width="16%">Power Operator</th>
+                            <th scope="col"><b>Keep alive Power in next week?</b></th>
+                            <th scope="col" width="10%">Interface</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                         {% for dutnum in dutinfo %}
+                          <tr align="center">
+                            <td>{{ dutnum['id'] }}</td>
+                            <td>{% if dutnum['classify'] %}
+                                    {{ dutnum['Product'] }}_{{ dutnum['classify'] }}
+                                {% else %}
+                                    {{ dutnum['Product'] }}
+                                {% endif %}
+                            </td>
+                            <td>{{ dutnum['SN'] }}</td>
+                            <td>{{ dutnum['Owner'] }}</td>
+                            <td align="center">
+                               <div title="Please ask user's permission first">
+                                {{ dutnum['User'] }}
+                                    <form action="/dutborrow" method="post">
+                                        <input type="hidden" name="duttype" value="{{ duttype }}">
+                                        <input type="hidden" name="dut_id" value="{{ dutnum['id'] }}">
+                                        {% if dutnum['User'] == current_user.svname %}
+                                        {% else %}
+                                            <button class="btn btn-warning" type="submit" value="Submit" onclick="return borrowset()"><b>borrow</b></button>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </td>
+                             <td>
+                             <div title="It's not displayed in real time, please press the refresh button to refresh the status first">
+                                <form action="/powerrefresh" method="post">
+                                    {% if dutnum['keepAlive'] == "1" %}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<img src="static/green_led.png"> <b>ON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                                    {% else %}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<img src="static/red_led.png"> <b>OFF&nbsp;&nbsp;&nbsp;</b>
+                                    {% endif %}
+                                    <input type="hidden" name="duttype" value="{{ duttype }}">
+                                    <input type="hidden" name="cdu_id" value="{{ dutnum['id'] }}">
+                                    <input type="hidden" name="key" value="refresh">
+                                    <button type="submit" value="Submit"><img src="static/refrash.png"></button>
+                                </form>
+                             </div>
+                              <div title="press the power apply button will put the config into CDU">
+                              <form id="powercontrol" method="post" action="/powercontrol">
+                                        <input type="hidden" name="type" value="{{ duttype }}">
+                                        <input type="hidden" name="id" value="{{ dutnum.id }}">
+                                        <input type="hidden" name="cductrlby" value="dutlist">
+                                        <select name="kind" style="background:#fff;border:1px solid #ccc;">
+                                            <option value="none" selected>-Selete-</option>
+                                            <option value="Up">on</option>
+                                            <option value="Down">off</option>
+                                            <option value="reboot">reboot</option>
+                                        </select>
+                                        <button type="submit" name="submit" value="dutsummary" onclick="return cduset()"><img src="static/powerapply.png"></button>
+                               </form>
+                              </div>
+                            </td>
+                            <td ><div title=" If you need continued to keep the device power on in next week, yes it !">
+                                <form action="/keeppoweron" method="post">
+                                        <input type="hidden" name="duttype" value="{{ duttype }}">
+                                        <input type="hidden" name="dutid" value="{{ dutnum.id }}">
+                                        {% if dutnum['Operator'] == "NA" %}
+										<p></p>
+                                        <input type="hidden" name="cduoperator" value="yes">
+                                        <button class="btn btn-primary" type="submit" value="Submit" onclick="return dutkeeponline()"><b>Keep On It</b></button>
+                                        {% else %}
+                                            <input type="hidden" name="cduoperator" value="no">
+                                            <button type="submit" class="btn btn-danger" value="Submit" onclick="return dutkeeponline()"><b>Cancel It</b></button>
+                                            <br> <font size="2" color="ForestGreen">Mark by {{ dutnum.Operator }}</font>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </td>
+                            <td>
+                                <div title="press the config button will redirect to FW Configure page">
+									<p></p>
+                                    <form method="get" action="/mydeviceid">
+                                        <input type="hidden" name="type" value="{{ duttype }}">
+                                        <input type="hidden" name="id" value="{{ dutnum.id }}">
+<!--                                        <input type="hidden" name="pagemark" value="dutlist">-->
+                                        {% if users == dutnum['User'] %}
+                                           <button type="submit" class="btn btn-primary fa fa-edit" name="operateauth" value="configure"> Configure</button>
+                                        {% else %}
+										
+                                            <button type="submit" class="btn btn-info fa fa-bars" name="operateauth" value="check"> Check Info.</button>
+                                        {% endif %}
+                                    </form>
+
+                                </div>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+  </div>
+  <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Operated Log <small>Displays configure result for all users</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a></li>
+                          <li><a href="#">Settings 2</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <p>All log <code>log_point</code> will show from last Week to now.</p>
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th width="2%"><input type="checkbox" id="check-all" class="flat"></th>
+                            <th class="column-title" width="6%">Users </th>
+                            <th class="column-title" width="8%">Type </th>
+                            <th class="column-title" width="13%">Device </th>
+                            <th class="column-title">Operated </th>
+                            <th class="column-title" width="15%">Local Time</th>
+                          </tr>
+                        </thead>
+                    </table>
+                    <div class="pre-scrollable" style="height: 490px;overflow: auto; margin-top: -22px;">
+                    <table class="table table-striped jambo_table bulk_action table-hover">
+                        <tbody>
+                        {% for log in logs %}
+                          <tr class="even pointer">
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" ">{{ log.svname }}</td>
+                            <td class=" ">{{ log.type }}</td>
+                            <td class=" ">{{ log.device }}</td>
+                            <td class=" last">{{ log.operated }}</td>
+                            <td class=" last">{{ log.time }}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /page content -->
+<script language="javascript">
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to renewal this DUT？ If yes, Your will receive an email that include DUT information "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function dutkeeponline()
+{
+  if(window.confirm("Are you sure you want to keep alive/cancel keep alive this DUT in the following week？ Note: Power will be forced to be turned off at 8 pm every Friday night."))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function cduset()
+{
+  if(window.confirm("Are you sure you want to power on/off/reboot this DUT？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function borrowset()
+{
+  if(window.confirm("Are you sure you want to borrow this Device？ Please confirm that you have communicated with the current user!"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function submitForm0(){
+    var form = document.getElementById("cdufilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm1(){
+    var form = document.getElementById("productfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm2(){
+    var form = document.getElementById("ownerfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm3(){
+    var form = document.getElementById("userfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+
+function save()
+{
+  if(window.confirm("Are you sure you want to save？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+$("#editModal").modal("hide");
+function values(ID,swinfo){
+    $("#id").val(ID);
+    $("#swinfo").val(swinfo);
+    }
+
+</script>
+{% endblock %}
+
+

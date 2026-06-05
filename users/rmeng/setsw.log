@@ -1,0 +1,26 @@
+configure terminal
+configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+QA_SWITCH_4(config)#interface Gi6/10
+interface Gi6/10
+QA_SWITCH_4(config-if)#switchport mode access
+switchport mode access
+QA_SWITCH_4(config-if)#switchport access vlan 654
+switchport access vlan 654
+QA_SWITCH_4(config-if)#description vlab-Vlan654
+description vlab-Vlan654
+QA_SWITCH_4(config-if)#switchport nonegotiate
+switchport nonegotiate
+QA_SWITCH_4(config-if)#spanning-tree portfast
+spanning-tree portfast
+QA_SWITCH_4(config-if)#spanning-tree bpdufilter disable
+spanning-tree bpdufilter disable
+QA_SWITCH_4(config-if)#no cdp enable
+no cdp enable
+QA_SWITCH_4(config-if)#shutdown
+shutdown
+QA_SWITCH_4(config-if)#no shutdown
+no shutdown
+QA_SWITCH_4(config-if)#end
+end
+QA_SWITCH_4#

@@ -1,0 +1,247 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+    <div class="col-md-6 col-sm-6 col-xs-12" style="width:90%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>IXIA Chasis and VM Control <small>
+                      Note: Owner will be reset every Saturday, please re-engage the device again. </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                            <th scope="col" >No.</th>
+                            <th scope="col" >IXIA Chasis IP</th>
+                            <th scope="col" >IXIA Card</th>
+                            <th scope="col" >IXIA Port</th>
+                            <th scope="col" >IXIA Port Rate </th>
+                            <th scope="col" >Take Up It?</th>
+                            <th scope="col" >Current Owner</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                         {% for ixia in ixiainfo %}
+                          <tr>
+                          <td >{{ ixia.ixia_id }}</td>
+                          <td >{{ ixia.ixia_ip }}</td>
+                          <td >{{ ixia.ixia_card }}</td>
+                          <td >{{ ixia.ixia_port }}</td>
+                          <td >{{ ixia.ixia_port_rate }}</td>
+                          <td ><div title=" If you want occupy the device, yes it ! ">
+                              <script language="javascript">
+                                function dutoccupy()
+                                {
+                                  if(window.confirm("Are you sure you want to occupy/release this device？"))
+                                  {
+                                   return true;
+                                  }
+                                  else
+                                  {
+                                    return false;
+                                  }
+                                }
+                              </script>
+                              <form action="/ixia" method="post">
+                                  <input type="hidden" name="ixiatype" value="ixiaport">
+                                  <input type="hidden" name="ixiaid" value="{{ ixia.ixia_id }}">
+                                      {% if ixia.ixia_owner == "released" %}
+                                        <input type="hidden" name="ixiaowner" value="occupied">
+                                        <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Occupy</b></button>
+                                      {% else %}
+                                          <input type="hidden" name="ixiaowner" value="released">
+                                          <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Release</b></button>
+                                      {% endif %}
+                                  </form>
+                              </div>
+                          </td>
+                          <td ><font size="2" color="ForestGreen">{{ ixia.ixia_user }}</font></td>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                            <th scope="col" >No.</th>
+                            <th scope="col" >IXIA VM IP</th>
+                            <th scope="col" >User/PWD</th>
+                            <th scope="col" >Login Way</th>
+                            <th scope="col" >Take Up It?</th>
+                            <th scope="col" >Current Owner</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                         {% for vm in vminfo %}
+                          <tr>
+                          <td >{{ vm.ixia_vmid }}</td>
+                          <td >{{ vm.ixia_vmip }}</td>
+                          <td >{{ vm.ixia_userpwd }}</td>
+                          <td >RDP</td>
+                          <td ><div title=" If you want occupy the device, yes it ! Password will be reset every Saturday.">
+                              <script language="javascript">
+                                function dutoccupy()
+                                {
+                                  if(window.confirm("Are you sure you want to occupy/release this device？"))
+                                  {
+                                   return true;
+                                  }
+                                  else
+                                  {
+                                    return false;
+                                  }
+                                }
+                              </script>
+                              <form action="/ixia" method="post">
+                                  <input type="hidden" name="ixiatype" value="ixiavm">
+                                  <input type="hidden" name="ixiaid" value="{{ vm.ixia_vmid }}">
+                                      {% if vm.ixia_owner == "released" %}
+                                        <input type="hidden" name="ixiaowner" value="occupied">
+                                        <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Occupy</b></button>
+                                      {% else %}
+                                          <input type="hidden" name="ixiaowner" value="released">
+                                          <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Release</b></button>
+                                      {% endif %}
+                                  </form>
+                              </div>
+                          </td>
+                          <td ><font size="2" color="ForestGreen">{{ vm.ixia_user }}</font></td>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+  </div>
+    <div class="col-md-6 col-sm-6 col-xs-12" style="width:90%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>IXIA Switch And VLAN Planning <small>
+                      Note: Only display correspondence about Switch port and VLAN for VLAB. </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                            <th scope="col" >No.</th>
+                            <th scope="col" >IXIA Port</th>
+                            <th scope="col" >QA Switch</th>
+                            <th scope="col" >Switch Port</th>
+                            <th scope="col" >VLAN ID</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                         {% for vlan in vlaninfo %}
+                          <tr>
+                          <td >{{ vlan.vlanid }}</td>
+                          <td >{{ vlan.ixia_port }}</td>
+                          <td >{{ vlan.switch }}</td>
+                          <td >{{ vlan.switchport }}</td>
+                          <td ><font size="2" color="ForestGreen">{{ vlan.vlan }}</font></td>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+
+  </div>
+<!--    <div class="col-md-12 col-sm-12 col-xs-12">-->
+<!--        <div class="x_panel">-->
+<!--            <div class="x_title">-->
+<!--                <h2>Operated Log <small>Displays configure result for all users</small></h2>-->
+<!--                <ul class="nav navbar-right panel_toolbox">-->
+<!--                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>-->
+<!--                    <li class="dropdown">-->
+<!--                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+<!--                        <ul class="dropdown-menu" role="menu">-->
+<!--                          <li><a href="#">Settings 1</a></li>-->
+<!--                          <li><a href="#">Settings 2</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>-->
+<!--                </ul>-->
+<!--                <div class="clearfix"></div>-->
+<!--            </div>-->
+<!--            <div class="x_content">-->
+<!--                <p>All log <code>log_point</code> will show from last Week to now.</p>-->
+<!--                <div class="table-responsive">-->
+<!--                    <table class="table table-striped jambo_table bulk_action" width="100%">-->
+<!--                        <thead>-->
+<!--                          <tr class="headings">-->
+<!--                            <th width="2%"><input type="checkbox" id="check-all" class="flat"></th>-->
+<!--                            <th class="column-title" width="6%">Users </th>-->
+<!--                            <th class="column-title" width="8%">Type </th>-->
+<!--                            <th class="column-title" width="13%">Device </th>-->
+<!--                            <th class="column-title">Operated </th>-->
+<!--                            <th class="column-title" width="15%">Local Time</th>-->
+<!--                          </tr>-->
+<!--                        </thead>-->
+<!--                    </table>-->
+<!--                    <div class="pre-scrollable" style="height: 490px;overflow: auto; margin-top: -22px;">-->
+<!--                    <table class="table table-striped jambo_table bulk_action table-hover">-->
+<!--                        <tbody>-->
+<!--                        {% for log in logs %}-->
+<!--                          <tr class="even pointer">-->
+<!--                            <td class="a-center ">-->
+<!--                              <input type="checkbox" class="flat" name="table_records">-->
+<!--                            </td>-->
+<!--                            <td class=" ">{{ log.svname }}</td>-->
+<!--                            <td class=" ">{{ log.type }}</td>-->
+<!--                            <td class=" ">{{ log.device }}</td>-->
+<!--                            <td class=" last">{{ log.operated }}</td>-->
+<!--                            <td class=" last">{{ log.time }}</td>-->
+<!--                          </tr>-->
+<!--                        {% endfor %}-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+</div>
+
+<!-- /page content -->
+
+{% endblock %}
+
+

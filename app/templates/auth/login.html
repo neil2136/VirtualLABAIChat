@@ -1,0 +1,31 @@
+{% extends "bootstrap/loginbase.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div>
+      <div class="login_wrapper">
+        <div class="animate form login_form">
+          <section class="login_content">
+              <h1>VLAB Login</h1>
+              <div align="center">
+                {{ wtf.quick_form(form) }}
+                <a class="reset_pass" href="#">Lost your password?</a>
+              </div>
+              <div class="clearfix"></div>
+              <div class="separator">
+                <!--
+                <p class="change_link">New to site?
+                  <a href="#signup" class="to_register"> Create Account </a>
+                </p>-->
+
+                <div class="clearfix"></div>
+                <div>
+                  <p>©2020 All Rights Reserved for SoincWall. Created by VLAB Teams</p>
+                </div>
+              </div>
+
+          </section>
+        </div>
+
+      </div>
+    </div>
+{% endblock %}

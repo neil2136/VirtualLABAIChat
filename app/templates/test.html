@@ -1,0 +1,339 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+  <div class="col-md-10 col-sm-10 col-xs-12">
+
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>LAB Devices topo <small>
+          Note: It will show all Devices VLAN in LAB. </small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a>
+              </li>
+              <li><a href="#">Settings 2</a>
+              </li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a>
+          </li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+          <input id="dutsinfo" value="{{ dutsinfo }}" disabled hidden>
+<!--          <input id="vmsinfo" value="{{ vmsinfo }}" disabled hidden>-->
+         <canvas id="canvas" width="852" height="527"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8 col-sm-8 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>LAB Devices Summary <small>
+                      Note: It will show all Devices VLAN in LAB. </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr align="center" >
+                            <th scope="col" style='vertical-align: middle;text-align: center;'>Device</th>
+                            <th scope="col" style='vertical-align: middle;text-align: center;'>Device Port</th>
+                            <th scope="col" style='vertical-align: middle;text-align: center;'>Port Mode</th>
+                            <th scope="col" style='vertical-align: middle;text-align: center;'>Untag VLAN</th>
+                            <th scope="col" style='vertical-align: middle;text-align: center;'>Tag VLAN</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                         {% for dut in dutinfo %}
+                         <tr align="left" style="background-color:ghostwhite">
+                            <td>
+                                <a href="/mydeviceinfo?id={{ dut.id }}&type={{ dut.DeviceType }}"><font color="#0000C6">({{ dut.id }}) {{ dut.Product }}</font></a>
+                            </td>
+                            <td>{{ dut.SN }}</td>
+                             <td></td>
+                             <td></td>
+                             <td></td>
+                         </tr>
+                         {% for port in dut.InterfaceInfo.Interface %}
+                         {% if port.untagvlan == 'UnusedNetwork' %}
+                            {% if port.portmode == 'trunk' %}
+                                <tr align="center">
+                                    <td></td>
+                                    <td style="background-color:lavenderblush">{{ port.name }}</td>
+                                    <td style="background-color:lavenderblush">{{ port.portmode }}</td>
+                                    <td style="background-color:lavenderblush">{{ port.untagvlan }}</td>
+                                    <td style="background-color:lavenderblush">{{ port.tagvlan }}</td>
+                                  </tr>
+                            {% endif %}
+                         {% elif port.untagvlan == '1' %}
+                         {% else %}
+                              <tr align="center">
+                                <td></td>
+                                <td style="background-color:lavenderblush">{{ port.name }}</td>
+                                <td style="background-color:lavenderblush">{{ port.portmode }}</td>
+                                <td style="background-color:lavenderblush">{{ port.untagvlan }}</td>
+                                <td style="background-color:lavenderblush">{{ port.tagvlan }}</td>
+                              </tr>
+
+                         {% endif %}
+                         {% endfor %}
+                         {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+  </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Operated Log <small>Displays configure result for all users</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a></li>
+                          <li><a href="#">Settings 2</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <p>All log <code>log_point</code> will show from last Week to now.</p>
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th width="2%"><input type="checkbox" id="check-all" class="flat"></th>
+                            <th class="column-title" width="6%">Users </th>
+                            <th class="column-title" width="8%">Type </th>
+                            <th class="column-title" width="13%">Device </th>
+                            <th class="column-title">Operated </th>
+                            <th class="column-title" width="15%">Local Time</th>
+                          </tr>
+                        </thead>
+                    </table>
+                    <div class="pre-scrollable" style="height: 490px;overflow: auto; margin-top: -22px;">
+                    <table class="table table-striped jambo_table bulk_action table-hover">
+                        <tbody>
+                        {% for log in logs %}
+                          <tr class="even pointer">
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" ">{{ log.svname }}</td>
+                            <td class=" ">{{ log.type }}</td>
+                            <td class=" ">{{ log.device }}</td>
+                            <td class=" last">{{ log.operated }}</td>
+                            <td class=" last">{{ log.time }}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+<!-- /page content -->
+<script>
+$(document).ready(function(){
+   var dutsinfo = document.getElementById('dutsinfo');
+   var dutinfo = dutsinfo.value.replace(/'/g, "\"");
+   console.log(dutinfo)
+   var dutobj = JSON.parse("["+dutinfo+"]");
+   console.log(dutobj[0].User)
+   var portsobj = dutobj[0].InterfaceInfo.Interface
+   // console.log(portsobj)
+
+    var canvas = document.getElementById('canvas');
+    var stage = new JTopo.Stage(canvas);
+    //显示工具栏
+    showJTopoToobar(stage);
+    var scene = new JTopo.Scene();
+    stage.add(scene);
+    scene.background = 'static/images/bg.jpg';
+
+    var dutname
+    var dutpartname = '(' + dutobj[0].id + ')' + dutobj[0].Product
+    if (dutobj[0].classify){
+        dutname =dutpartname + '_' + dutobj[0].classify
+    }
+    else{
+        dutname = dutpartname
+    }
+    var cloudNode = new JTopo.Node(dutname);
+    cloudNode.setImage('static/images/topo/firewall.png');
+    cloudNode.setSize(100, 50);
+    // cloudNode.setSize(30, 26);
+    cloudNode.setLocation(360,230);
+    cloudNode.layout = {type: 'circle', radius: 150};
+
+    scene.add(cloudNode);
+
+    for(var i in portsobj){
+        if(portsobj[i].name){
+            if(portsobj[i].portpower === 'no shutdown'){
+                if(portsobj[i].untagvlan !== 'UnusedNetwork') {
+                    var node = new JTopo.CircleNode(portsobj[i].name);
+                    node.fillStyle = '200,255,0';
+                    node.radius = 10;
+                    node.fontColor = '255,255,0'
+                    node.setLocation(scene.width * Math.random(), scene.height * Math.random());
+                    node.layout = {type: 'circle', radius: 80};
+                    scene.add(node);
+                    // node.alarm = '2m'
+
+                    var link = new JTopo.Link(cloudNode, node, 'VLAN-' + portsobj[i].untagvlan);
+                    link.strokeColor = '0,250,0';
+                    link.fontColor = '255,255,0'
+                    scene.add(link);
+
+                    for (var j in portsobj[i].vmname) {
+                        if (portsobj[i].vmname[j].name) {
+                            if (portsobj[i].vmname[j].power === 'poweredOn') {
+                                // var vmNode = new JTopo.CircleNode(portsobj[i].vmname[j].name + portsobj[i].vmname[j].nic);
+                                // vmNode.radius = 10;
+                                // vmNode.fillStyle = '255,255,0';
+                                var vmNode = new JTopo.Node(portsobj[i].vmname[j].name + portsobj[i].vmname[j].nic);
+                                vmNode.setImage('static/images/topo/pc.png');
+                                vmNode.setSize(40, 40);
+                                vmNode.setLocation(scene.width * Math.random(), scene.height * Math.random());
+                                scene.add(vmNode);
+                                var vmLink = new JTopo.Link(node, vmNode);
+                                vmLink.strokeColor = '0,250,0';
+                                scene.add(vmLink);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    JTopo.layout.layoutNode(scene, cloudNode, true);
+
+    scene.addEventListener('mouseup', function(e){
+        if(e.target && e.target.layout){
+            JTopo.layout.layoutNode(scene, e.target, true);
+        }
+    });
+});
+
+
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to renewal this DUT？ If yes, Your will receive an email that include DUT information "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function dutkeeponline()
+{
+  if(window.confirm("Are you sure you want to keep alive/cancel keep alive this DUT in the following week？ Note: Power will be forced to be turned off at 8 pm every Friday night."))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function cduset()
+{
+  if(window.confirm("Are you sure you want to power on/off/reboot this DUT？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function borrowset()
+{
+  if(window.confirm("Are you sure you want to borrow this DUT？ Please confirm that you have communicated with the current user!"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function submitForm0(){
+    var form = document.getElementById("cdufilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm1(){
+    var form = document.getElementById("productfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm2(){
+    var form = document.getElementById("ownerfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+function submitForm3(){
+    var form = document.getElementById("userfilter");//获取form表单对象
+    form.submit();//form表单提交
+}
+
+function save()
+{
+  if(window.confirm("Are you sure you want to save？"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+$("#editModal").modal("hide");
+function values(ID,swinfo){
+    $("#id").val(ID);
+    $("#swinfo").val(swinfo);
+    }
+
+</script>
+{% endblock %}
+
+

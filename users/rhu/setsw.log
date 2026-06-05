@@ -1,0 +1,49 @@
+configure terminal
+configure terminal
+TB10_Switch(conf)#interface range vlan 900
+interface range vlan 900
+TB10_Switch(conf-if-range-vl-900)#no untagged Gi0/12
+no untagged Gi0/12
+TB10_Switch(conf-if-range-vl-900)#no tagged Gi0/12
+no tagged Gi0/12
+% Error: No such port in Vlan, config ignored Gi 0/12.
+TB10_Switch(conf-if-range-vl-900)#exit
+exit
+TB10_Switch(conf)#interface range vlan 951
+interface range vlan 951
+TB10_Switch(conf-if-range-vl-951)#no untagged Gi0/12
+no untagged Gi0/12
+% Error: Tagged flag mis-match Gi 0/12.
+TB10_Switch(conf-if-range-vl-951)#no tagged Gi0/12
+no tagged Gi0/12
+TB10_Switch(conf-if-range-vl-951)#exit
+exit
+TB10_Switch(conf)#interface range vlan951,vlan839
+interface range vlan951,vlan839
+TB10_Switch(conf-if-range-vl-951,vl-839)#tagged Gi0/12
+tagged Gi0/12
+TB10_Switch(conf-if-range-vl-951,vl-839)#interface vlan 900
+interface vlan 900
+TB10_Switch(conf-if-vl-900)#untagged Gi0/12
+untagged Gi0/12
+TB10_Switch(conf-if-vl-900)#interface Gi0/12
+interface Gi0/12
+TB10_Switch(conf-if-gi-0/12)#description vlab-Trunk
+description vlab-Trunk
+TB10_Switch(conf-if-gi-0/12)#spanning-tree mstp edge-port bpduguard shutdown-on-violation
+spanning-tree mstp edge-port bpduguard shutdown[47D                                                  [50D$-tree mstp edge-port bpduguard shutdown-on-viol[48D                                                  [50D$tp edge-port bpduguard shutdown-on-violation
+TB10_Switch(conf-if-gi-0/12)#spanning-tree rstp edge-port bpduguard shutdown-on-violation
+spanning-tree rstp edge-port bpduguard shutdown[47D                                                  [50D$-tree rstp edge-port bpduguard shutdown-on-viol[48D                                                  [50D$tp edge-port bpduguard shutdown-on-violation
+TB10_Switch(conf-if-gi-0/12)#spanning-tree
+spanning-tree
+TB10_Switch(conf-if-gi-0/12)#protocol lldp
+protocol lldp
+TB10_Switch(conf-if-gi-0/12-lldp)#disable
+disable
+TB10_Switch(conf-if-gi-0/12-lldp)#exit
+exit
+TB10_Switch(conf-if-gi-0/12)#no shutdown
+no shutdown
+TB10_Switch(conf-if-gi-0/12)#end
+end
+TB10_Switch#

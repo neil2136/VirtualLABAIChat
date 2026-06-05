@@ -1,0 +1,106 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+
+ <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Long Tasks Log <small>Displays configure result for all users</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a></li>
+                          <li><a href="#">Settings 2</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <p>Show All Long Tasks logs. Include:  <code>Sync All ESXI VMS</code>, <code>Borrow/return DUT</code></p>
+                <div style="margin-top:10px" align="right">
+                            <form action="/asynctasklog" method="get">
+                                <button type="submit" class="freshbutton" value="Submit"><b>
+                                <style>
+                                .freshbutton {
+                                     width:100px;
+                                     height:30px;
+                                     text-align:center;
+                                     line-height:100%;
+                                     padding:0.3em;
+                                     font:16px Arial,sans-serif bold;
+                                     font-style:normal;
+                                     text-decoration:none;
+                                     margin:2px;
+                                     vertical-align:text-bottom;
+                                     zoom:1;
+                                     outline:none;
+                                     font-size-adjust:none;
+                                     font-stretch:normal;
+                                     border-radius:50px;
+                                     box-shadow:0px 1px 2px rgba(0,0,0,0.2);
+                                     text-shadow:0px 1px 1px rgba(0,0,0,0.3);
+                                     color:#fefee9;
+                                     border:0.2px solid #2299ff;
+                                     background-repeat:repeat;
+                                     background-size:auto;
+                                     background-origin:padding-box;
+                                     background-clip:padding-box;
+                                     background-color:#3399ff;
+                                     background: linear-gradient(to bottom, #eeeff9 0%,#3399ff 100%);
+                                }
+
+                                .freshbutton:hover {
+                                    background: #268DFF;
+                                }
+                                </style>
+                                Refresh</b></button>
+                            </form>
+                        </div>
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th width="2%"><input type="checkbox" id="check-all" class="flat"></th>
+                            <th class="column-title" width="10%">&nbsp;&nbsp;Users </th>
+                            <th class="column-title" width="8%">&nbsp;&nbsp;Type </th>
+                            <th class="column-title" width="13%">&nbsp;&nbsp;Device </th>
+                            <th class="column-title">&nbsp;&nbsp;Perform process </th>
+                            <th class="column-title" width="15%">Local Time</th>
+                          </tr>
+                        </thead>
+                    </table>
+                    <div class="pre-scrollable">
+                    <table class="table table-striped jambo_table bulk_action table-hover">
+                        <tbody>
+                        {% for log in logs %}
+                          <tr class="even pointer">
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" " width="10%">{{ log.svname }}</td>
+                            <td class=" " width="8%">{{ log.type }}</td>
+                            <td class=" " width="13%">{{ log.device }}</td>
+                            <td class=" last">{{ log.operated }}</td>
+                            <td class=" last" width="15%">{{ log.time }}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /page content -->
+{% endblock %}
+
+

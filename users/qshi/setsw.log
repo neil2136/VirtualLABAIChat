@@ -1,0 +1,39 @@
+configure terminal
+configure terminal
+QA_SWITCH_TB2(conf)#interface range vlan 26
+interface range vlan 26
+QA_SWITCH_TB2(conf-if-range-vl-26)#no untagged Gi0/29
+no untagged Gi0/29
+QA_SWITCH_TB2(conf-if-range-vl-26)#no tagged Gi0/29
+no tagged Gi0/29
+% Error: No such port in Vlan, config ignored Gi 0/29.
+QA_SWITCH_TB2(conf-if-range-vl-26)#exit
+exit
+QA_SWITCH_TB2(conf)#interface vlan 
+interface vlan 
+% Error: Incomplete command.
+QA_SWITCH_TB2(conf)#untagged Gi0/29
+untagged Gi0/29
+                    ^
+% Error: Invalid input at "^" marker.
+QA_SWITCH_TB2(conf)#interface Gi0/29
+interface Gi0/29
+QA_SWITCH_TB2(conf-if-gi-0/29)#description vlabVlan
+description vlabVlan
+QA_SWITCH_TB2(conf-if-gi-0/29)#spanning-tree mstp edge-port bpduguard shutdown-on-violation
+spanning-tree mstp edge-port bpduguard shutdo[45D                                                [48D$-tree mstp edge-port bpduguard shutdown-on-vi[46D                                                [48D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_TB2(conf-if-gi-0/29)#spanning-tree rstp edge-port bpduguard shutdown-on-violation
+spanning-tree rstp edge-port bpduguard shutdo[45D                                                [48D$-tree rstp edge-port bpduguard shutdown-on-vi[46D                                                [48D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_TB2(conf-if-gi-0/29)#spanning-tree
+spanning-tree
+QA_SWITCH_TB2(conf-if-gi-0/29)#protocol lldp
+protocol lldp
+QA_SWITCH_TB2(conf-if-gi-0/29-lldp)#disable
+disable
+QA_SWITCH_TB2(conf-if-gi-0/29-lldp)#exit
+exit
+QA_SWITCH_TB2(conf-if-gi-0/29)#shutdown
+shutdown
+QA_SWITCH_TB2(conf-if-gi-0/29)#end
+end
+QA_SWITCH_TB2#

@@ -1,0 +1,1 @@
+[{"ip": "10.8.2.107", "name": ["SonicWALL_NSv_270", "SonicWALL_NSv_870", "txu_ubuntu20_01", "txu_win10_01", "txu_win10_02", "txu_win10_03", "txu_win10_04", "txu_win10_05", "txu_win10_06", "txu_win10_07", "txu_win10_08", "txu_win10_09", "txu_win10_10", "txu_win2019_01"]}]

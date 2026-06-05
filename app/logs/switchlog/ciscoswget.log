@@ -1,0 +1,26 @@
+show etherchannel summary | include 4/13
+show etherchannel summary | include 4/13
+QA_CORE_SWITCH_4#show interfaces gi4/13 status | include 0
+show interfaces gi4/13 status | include 0
+Gi4/13    vlab-Trunk         connected    trunk      a-full  a-100 10/100/1000-TX
+QA_CORE_SWITCH_4#show running-config interface gi4/13
+show running-config interface gi4/13
+Building configuration...
+
+Current configuration : 377 bytes
+!
+interface GigabitEthernet4/13
+ description vlab-Trunk
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 912
+ switchport trunk allowed vlan 912,914-916,918,919
+ switchport mode trunk
+ switchport nonegotiate
+ storm-control broadcast level 1.00
+ no cdp enable
+ spanning-tree portfast trunk
+ spanning-tree bpdufilter enable
+ spanning-tree bpduguard enable
+end
+
+QA_CORE_SWITCH_4#

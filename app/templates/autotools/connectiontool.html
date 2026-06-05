@@ -1,0 +1,240 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+<div class="row" style="width:100%">
+    <div class="right_col" role="main">
+    <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                    <div class="x_panel">
+                      <div class="x_title">
+                        <h2>VMs installed Connection Maker Tool---        User Guide:
+                            <small>Note: It's VM information that can run the connection maker tool.   </small>
+                             <a href="https://engineering.eng.sonicwall.com/display/SQ/Tool+For+Connection+Maker"
+                                target="_black" style="color: #0000ff">Confulence Link click here</a>
+                        </h2>
+                          <ul class="nav navbar-right panel_toolbox">
+                          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                          </li>
+                          <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                              <li><a href="#">Settings 1</a>
+                              </li>
+                              <li><a href="#">Settings 2</a>
+                              </li>
+                            </ul>
+                          </li>
+                          <li><a class="close-link"><i class="fa fa-close"></i></a>
+                          </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="x_content">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                                <th scope="col" >No.</th>
+                                <th scope="col" >ESXi</th>
+                                <th scope="col" >Pool</th>
+                                <th scope="col" >VMName</th>
+                                <th scope="col" >VM NIC</th>
+                                <th scope="col" >SSH IP</th>
+                                <th scope="col" >Take Up It?</th>
+                                <th scope="col" >Current User</th>
+                                <th scope="col" >Change the VLAN Same as your FW interface</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                             {% for vm in vminfo %}
+                              <tr>
+                              <td >{{ vm.id }}</td>
+                              <td >{{ vm.ESXi }}</td>
+                              <td >{{ vm.pool }}</td>
+                              <td >{{ vm.vmname }}</td>
+                              <td >{{ vm.vmnic }}</td>
+                              <td >{{ vm.ssh }}</td>
+                              <td ><div title=" If you want occupy the device, yes it ! Password will be reset every Saturday.">
+                                  <script language="javascript">
+                                    function dutoccupy()
+                                    {
+                                      if(window.confirm("Are you sure you want to occupy/release this device？"))
+                                      {
+                                       return true;
+                                      }
+                                      else
+                                      {
+                                        return false;
+                                      }
+                                    }
+                                  </script>
+                                  <form action="/connectiontool" method="post">
+                                      <input type="hidden" name="vmid" value="{{ vm.id }}">
+                                      <input type="hidden" name="contype" value="tackup">
+                                          {% if vm.tackup == "released" %}
+                                            <input type="hidden" name="vmowner" value="occupied">
+                                            <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Occupy</b></button>
+                                          {% else %}
+                                              <input type="hidden" name="vmowner" value="released">
+                                              <button type="submit" value="Submit" onclick="return dutoccupy()"><b>Release</b></button>
+                                          {% endif %}
+                                      </form>
+                                  </div>
+                              </td>
+                              <td>{{ vm.user }}</td>
+                              <td style="background-color:lavenderblush">
+                                <form data-parsley-validate class="form-horizontal form-label-left" action="/connectiontool" method="post" >
+                                    <input type="hidden" name="vmid" value="{{ vm.id }}">
+                                    <input type="hidden" name="contype" value="changevlan">
+                                    <div class="col-md-8 col-sm-8 col-xs-12">
+                                        <select name="vmvlan" class="form-control" required >
+                                            <option value="{{ vm.vlan }}" selected>{{ vm.vlan }}</option>
+                                            {% for vlan in vlanranges %}
+                                            <option value="{{ vlan }}">{{ vlan }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <button type="submit" class="btn btn-success" name="submit" onclick="this.form.operate.value='submit';">Apply</button>
+                                    </div>
+                                </form>
+                            </td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+      </div>
+    <!-- Start to do list -->
+<!--            <div class="col-md-10 col-sm-10 col-xs-12">-->
+<!--              <div class="x_panel">-->
+<!--                <div class="x_title">-->
+<!--                    <h2>User Guide <small><a href="https://engineering.eng.sonicwall.com/display/SQ/An+auto+generated+traffic+testbed" style="color: #0000ff">Confulence Link click here</a></small></h2>-->
+<!--                  <ul class="nav navbar-right panel_toolbox">-->
+<!--                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>-->
+<!--                    </li>-->
+<!--                    <li class="dropdown">-->
+<!--                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+<!--                      <ul class="dropdown-menu" role="menu">-->
+<!--                        <li><a href="#">Settings 1</a>-->
+<!--                        </li>-->
+<!--                        <li><a href="#">Settings 2</a>-->
+<!--                        </li>-->
+<!--                      </ul>-->
+<!--                    </li>-->
+<!--                    <li><a class="close-link"><i class="fa fa-close"></i></a>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                  <div class="clearfix"></div>-->
+<!--                </div>-->
+<!--                <div class="x_content">-->
+
+<!--                  <div class="">-->
+<!--                    <ul class="to_do">-->
+<!--                        <li>-->
+<!--                            <b>此工具为真实背景流生成器，支持http/https/ftp/ftps，IPv4 and IPv6-->
+<!--                            可达接口线速（VM NIC受限为1G），详细命令请用 -h 查询</b>-->
+<!--                        </li>-->
+<!--                      <li>-->
+<!--                        <p>-->
+<!--                          <input type="checkbox" class="flat"> Step 1, Take Up this VM on top, Change the VLAN Same as your FW interface that you want test. </p>-->
+<!--                      </li>-->
+<!--                      <li>-->
+<!--                        <p>-->
+<!--                          <input type="checkbox" class="flat"> Step 2, login the vm using ssh 10.8.2.116, qa/password.-->
+<!--                            <br>note: the VM's login Only support network (10.103.50.0/24,10.8.2.0/24).-->
+<!--                            Please configure your FW interface, LAN IP 192.168.168.168, WAN network to internet.</p>-->
+<!--                      </li>-->
+<!--                      <li>-->
+<!--                        <p>-->
+<!--                          <input type="checkbox" class="flat"> Step 3, go to Connection tool's directory, excute the corresponding CMD you want,-->
+<!--                            check the data in your device-->
+<!--                            <br> note: only ftp/ftps download tasks have queue function, It can be queried in the Flower page.-->
+<!--                            http/https result will directly show in command line.-->
+<!--                        </p>-->
+<!--                      </li>-->
+<!--                      <li>-->
+<!--                        <p>-->
+<!--                            <b style="color:#aa0000;size: auto">console cmd: qa@connect01:/$ python3 /opt/bgftool/run -h</b>-->
+<!--&lt;!&ndash;                          <input type="checkbox" class="flat"><img src="static/images/asyncruntool.gif"> </p>&ndash;&gt;-->
+<!--                      </li>-->
+<!--                      <li>-->
+<!--                        <p>-->
+<!--                          <input type="checkbox" class="flat"><img src="static/images/flowerpage.gif"></p>-->
+<!--                      </li>-->
+<!--                      <li>-->
+<!--                        <p>-->
+<!--                          <input type="checkbox" class="flat"> Step 4, Check Session data in your device.</p>-->
+<!--                      </li>-->
+<!--                      <li>-->
+<!--                        <p>-->
+<!--                          <input type="checkbox" class="flat"><img src="static/images/asyncfwgui.gif" ></p>-->
+<!--                      </li>-->
+<!--                    </ul>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+            <!-- End to do list -->
+<!--    <div class="col-md-12 col-sm-12 col-xs-12">-->
+<!--        <div class="x_panel">-->
+<!--            <div class="x_title">-->
+<!--                <h2>Operated Log <small>Displays configure result for all users</small></h2>-->
+<!--                <ul class="nav navbar-right panel_toolbox">-->
+<!--                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>-->
+<!--                    <li class="dropdown">-->
+<!--                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>-->
+<!--                        <ul class="dropdown-menu" role="menu">-->
+<!--                          <li><a href="#">Settings 1</a></li>-->
+<!--                          <li><a href="#">Settings 2</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>-->
+<!--                </ul>-->
+<!--                <div class="clearfix"></div>-->
+<!--            </div>-->
+<!--            <div class="x_content">-->
+<!--                <p>All log <code>log_point</code> will show from last Week to now.</p>-->
+<!--                <div class="table-responsive">-->
+<!--                    <table class="table table-striped jambo_table bulk_action" width="100%">-->
+<!--                        <thead>-->
+<!--                          <tr class="headings">-->
+<!--                            <th width="2%"><input type="checkbox" id="check-all" class="flat"></th>-->
+<!--                            <th class="column-title" width="6%">Users </th>-->
+<!--                            <th class="column-title" width="8%">Type </th>-->
+<!--                            <th class="column-title" width="13%">Device </th>-->
+<!--                            <th class="column-title">Operated </th>-->
+<!--                            <th class="column-title" width="15%">Local Time</th>-->
+<!--                          </tr>-->
+<!--                        </thead>-->
+<!--                    </table>-->
+<!--                    <div class="pre-scrollable" style="height: 490px;overflow: auto; margin-top: -22px;">-->
+<!--                    <table class="table table-striped jambo_table bulk_action table-hover">-->
+<!--                        <tbody>-->
+<!--                        {% for log in logs %}-->
+<!--                          <tr class="even pointer">-->
+<!--                            <td class="a-center ">-->
+<!--                              <input type="checkbox" class="flat" name="table_records">-->
+<!--                            </td>-->
+<!--                            <td class=" ">{{ log.svname }}</td>-->
+<!--                            <td class=" ">{{ log.type }}</td>-->
+<!--                            <td class=" ">{{ log.device }}</td>-->
+<!--                            <td class=" last">{{ log.operated }}</td>-->
+<!--                            <td class=" last">{{ log.time }}</td>-->
+<!--                          </tr>-->
+<!--                        {% endfor %}-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    </div>
+</div>
+
+<!-- /page content -->
+
+{% endblock %}
+
+

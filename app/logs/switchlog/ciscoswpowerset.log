@@ -1,0 +1,15 @@
+show interfaces gi4/28 status | include 0
+show interfaces gi4/28 status | include 0
+Gi4/28    vlab-Vlan463       disabled     1            auto   auto 10/100/1000-TX
+QA_CORE_SWITCH_3#configure terminal
+configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+QA_CORE_SWITCH_3(config)#interface gi4/28
+interface gi4/28
+QA_CORE_SWITCH_3(config-if)#shutdown
+shutdown
+QA_CORE_SWITCH_3(config-if)#no shutdown
+no shutdown
+QA_CORE_SWITCH_3(config-if)#end
+end
+QA_CORE_SWITCH_3#

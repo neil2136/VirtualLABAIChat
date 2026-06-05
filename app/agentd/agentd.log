@@ -1,0 +1,16 @@
+nohup: ignoring input
+INFO:     Started server process [355882]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on https://0.0.0.0:10443 (Press CTRL+C to quit)
+INFO:     10.103.2.128:59048 - "GET /health HTTP/1.1" 200 OK
+INFO:     10.103.2.128:58260 - "POST /conversations HTTP/1.1" 201 Created
+INFO:     10.103.2.128:58274 - "POST /conversations/f2bb8320-20ce-40ff-9972-2dd281456195/messages/stream HTTP/1.1" 200 OK
+INFO:     10.103.2.128:48122 - "POST /conversations/f2bb8320-20ce-40ff-9972-2dd281456195/messages/stream HTTP/1.1" 200 OK
+INFO:     10.103.2.128:35968 - "POST /conversations HTTP/1.1" 201 Created
+INFO:     10.103.2.128:35972 - "POST /conversations/cda45f1f-300b-418a-af77-93ab4bb87517/messages/stream HTTP/1.1" 200 OK
+INFO:     10.103.2.128:32880 - "POST /conversations/cda45f1f-300b-418a-af77-93ab4bb87517/messages/stream HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [355882]

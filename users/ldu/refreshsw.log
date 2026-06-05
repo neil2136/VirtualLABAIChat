@@ -1,0 +1,32 @@
+Start check cisco Switch configure
+==================================================
+************************************************************
+show etherchannel summary | include 2/21
+QA_SWITCH_1
+************************************************************
+show interfaces gi2/21 status | include 0
+Gi2/21        vlab-VlanUnusedNet disabled     1            auto   auto 10/100/1000BaseT
+QA_SWITCH_1
+************************************************************
+show running-config interface gi2/21
+Building configuration...
+
+Current configuration : 253 bytes
+!
+interface GigabitEthernet2/21
+ description vlab-VlanUnusedNetwork
+ switchport
+ switchport mode access
+ switchport nonegotiate
+ shutdown
+ no cdp enable
+ spanning-tree portfast edge
+ spanning-tree bpdufilter disable
+ spanning-tree bpduguard enable
+end
+
+QA_SWITCH_1
+************************************************************
+show interfaces gi2/21 | include protocol
+GigabitEthernet2/21 is administratively down, line protocol is down (disabled)
+QA_SWITCH_1

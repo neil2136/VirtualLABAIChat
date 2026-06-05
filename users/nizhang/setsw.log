@@ -1,0 +1,38 @@
+configure terminal
+configure terminal
+QA_SWITCH_9(conf)#interface range vlan 374
+interface range vlan 374
+QA_SWITCH_9(conf-if-range-vl-374)#no untagged Gi9/0
+no untagged Gi9/0
+QA_SWITCH_9(conf-if-range-vl-374)#no tagged Gi9/0
+no tagged Gi9/0
+% Error: No such port in Vlan, config ignored Gi 9/0.
+QA_SWITCH_9(conf-if-range-vl-374)#exit
+exit
+QA_SWITCH_9(conf)#interface vlan 1
+interface vlan 1
+QA_SWITCH_9(conf-if-vl-1)#untagged Gi9/0
+untagged Gi9/0
+                          ^
+% Error: Invalid input at "^" marker.
+QA_SWITCH_9(conf-if-vl-1)#interface Gi9/0
+interface Gi9/0
+QA_SWITCH_9(conf-if-gi-9/0)#description vlabVlan
+description vlabVlan
+QA_SWITCH_9(conf-if-gi-9/0)#spanning-tree mstp edge-port bpduguard shutdown-on-violation
+spanning-tree mstp edge-port bpduguard shutdown-[48D                                                   [51D$-tree mstp edge-port bpduguard shutdown-on-viola[49D                                                   [51D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_9(conf-if-gi-9/0)#spanning-tree rstp edge-port bpduguard shutdown-on-violation
+spanning-tree rstp edge-port bpduguard shutdown-[48D                                                   [51D$-tree rstp edge-port bpduguard shutdown-on-viola[49D                                                   [51D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_9(conf-if-gi-9/0)#spanning-tree
+spanning-tree
+QA_SWITCH_9(conf-if-gi-9/0)#protocol lldp
+protocol lldp
+QA_SWITCH_9(conf-if-gi-9/0-lldp)#disable
+disable
+QA_SWITCH_9(conf-if-gi-9/0-lldp)#exit
+exit
+QA_SWITCH_9(conf-if-gi-9/0)#shutdown
+shutdown
+QA_SWITCH_9(conf-if-gi-9/0)#end
+end
+QA_SWITCH_9#

@@ -1,0 +1,29 @@
+Start check dell Switch configure
+==================================================
+************************************************************
+show running-config interface Gi0/13
+!
+interface GigabitEthernet 0/13
+ description vlabVlan
+ no ip address
+ portmode hybrid
+ switchport
+ spanning-tree mstp edge-port bpduguard shutdown-on-violation 
+ spanning-tree rstp edge-port bpduguard shutdown-on-violation 
+!
+ protocol lldp 
+  disable 
+ no shutdown
+TB10_Switch
+************************************************************
+show interfaces Gi0/13 status
+Port     Description  Status Speed     Duplex Vlan  
+Gi 0/13  vlabVlan     Up     1000 Mbit Full   170,839
+TB10_Switch
+************************************************************
+show interfaces Gi0/13 | grep protocol
+GigabitEthernet 0/13 is up, line protocol is up
+TB10_Switch
+************************************************************
+show interfaces port-channel | grep 0/13
+TB10_Switch

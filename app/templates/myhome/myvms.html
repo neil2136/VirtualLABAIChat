@@ -1,0 +1,474 @@
+{% extends "bootstrap/base.html" %}<!--继承基础模板-->
+
+{% block content %}<!--自定义模板区域-->
+<!-- page content -->
+
+<div class="row" style="width:100%">
+<div class="right_col" role="main">
+  <div class="col-md-7 col-sm-7 col-xs-12">
+      <div class="x_panel tile fixed_height_325">
+        <div class="x_title">
+          <h2>VM Basic Information<small>
+          It will show the VM information in ESXI. </small></h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+              </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content collapse out">
+          <table class="table table-striped">
+            <thead>
+            </thead>
+            <tbody>
+            <tr>
+              <td style="width: 15%"><b>ESXIHost</b></td>
+              <td style="width: 35%">{{ vminfo.esxihost }}</td>
+              <td style="width: 15%"><b>NIC Number</b></td>
+              <td style="width: 35%">{{ vminfo.numethernetcards }}</td>
+            </tr>
+            <tr>
+              <td><b>VMName</b></td>
+              <td>{{ vminfo.vmname }}</td>
+              <td><b>CPU Number</b></td>
+              <td>{{ vminfo.numcpu }}</td>
+            </tr>
+            <tr>
+              <td><b>UUID</b></td>
+              <td>{{ vminfo.uuid }}</td>
+              <td><b>Owner</b></td>
+              <td>{{ vminfo.owner }}</td>
+            </tr>
+            <tr>
+              <td><b>MemorySize</b></td>
+              <td>{{ vminfo.memorysize }} MB</td>
+              <td><b>User</b></td>
+              <td>{{ vminfo.user }}</td>
+            </tr>
+            <tr>
+              <td><b>DiskSize</b></td>
+              <td>{{ vminfo.disksize }}</td>
+              <td><b>VM Power</b></td>
+              <td>{{ vminfo.vmpower }}</td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>VM NIC Summary <small>
+          Note: It will show the VM NIC information in ESXI. </small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Settings 1</a>
+              </li>
+              <li><a href="#">Settings 2</a>
+              </li>
+            </ul>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a>
+          </li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <div id="myTabContent" class="tab-content">
+            <div class="form-group pull-left">
+              <form role="form" class="form-inline" method="get" action="/myvms">
+                  <input type="hidden" name="vmname" value="{{ vminfo.vmname }}">
+                  <input type="hidden" name="operate" value="refreshvmnics">
+                  <input type="hidden" name="esxihost" value="{{ vminfo.esxihost }}">
+                  <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#waitingModal">Refresh All NICs</button>
+                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#VMPowerControlModal"
+                         data-vmname="{{ vmname }}" >
+                      {% if vminfo.vmpower == "poweredOn" %}
+                      <img src="static/images/green_led.png" >
+                      {% else %}
+                      <img src="static/images/red_led.png">
+                      {% endif %}
+                      VM Power Control</button>
+              </form>
+            </div>
+            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+              <table id="datatable" class="table table-striped table-bordered jambo_table bulk_action" style="width: 100%">
+              <thead>
+                 <tr class="headings">
+                     <th><input type="checkbox" class="flat"></th>
+                    <th scope="col">Esxi host</th>
+                    <th scope="col">VMname</th>
+                    <th scope="col">Adapter</th>
+                    <th scope="col">MAC</th>
+                    <th scope="col">VLAN</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">User</th>
+                    <th scope="col">NIC Status</th>
+                    <th scope="col">Operate</th>
+                 </tr>
+              </thead>
+              <tbody>
+              {% for vmnic in vminfo.nicsinfo %}
+                <tr class="even pointer">
+                    <td class="a-center"><br>
+                        <input type="checkbox" class="flat" name="table_records">
+                    </td>
+                    <td><br>{{ vminfo.esxihost }}</td>
+                    <td><br>{{ vminfo.vmname }}</td>
+                    <td><br><b>{{ vmnic.adapter }}</b></td>
+                    <td><br><b>{{ vmnic.mac }}</b></td>
+                    <td style='color: #0000ff'><br>{{ vmnic.vlan }}</td>
+                    <td><br>{{ vminfo.owner }}</td>
+                    <td><br>{{ vminfo.user }} </td>
+                    <td><br>
+                         <div title="It's not displayed in real time, please press the refresh button to refresh the status first">
+                            {% if vmnic['nicpower'] == 'On' %}
+                                <b><img src="static/images/green_led.png" > Connect</b>
+                            {% else %}
+                                <b><img src="static/images/red_led.png"> Not Connect</b>
+                            {% endif %}
+                         </div>
+                    </td>
+                    <td><br>
+                    <form action="/rmnicrefresh" method="post">
+                        <input type="hidden" name="vmname" value="{{ vmname }}">
+                        <div title="Refresh and Configure the Switch Port." style="color:#0000ff">
+<!--                        <button type="submit" class="btn-xs active glyphicon glyphicon-refresh" data-toggle="modal" data-target="#waitingModal" name="operate" value="refresh" onclick="showWaiting()"></button>-->
+                        <button type="button" class="btn-xs active glyphicon glyphicon-cog" data-toggle="modal" data-target="#VMEditModal"
+                         data-esxihost="{{ vminfo.esxihost }}" data-vmname="{{ vminfo.vmname }}" data-adapter="{{ vmnic.adapter }}" data-mac="{{ vmnic.mac }}" data-vlan="{{ vmnic.vlan }}" data-owner="{{ vminfo.owner }}" data-user="{{ vminfo.user }}" data-nicpower="{{ vmnic.nicpower }}">Configure</button>
+                        </div>
+                    </form>
+                    </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+              </table>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<!--<table id="test001">-->
+<!--    <tr>dfwef</tr>-->
+<!--</table>-->
+</div>
+</div>
+<!-- refresh all 模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="waitingModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">In Operation ... </h4>
+            </div>
+            <div class="modal-body">
+              <p><b>Note, you can refresh the current page manually to see the Console Log in progressing.</b><p>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        <span class="sr-only">100%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" disabled class="btn btn-default" data-dismiss="modal">Configuration in progress. Do not repeat！</button>
+            </div>
+        </div>
+    </div>
+  </div>
+<!--VM edit 模态框 -->
+<form method="post" action="/vmcfg" class="form-horizontal form-label-left input_mask" onsubmit="return checkempty(this)">
+    <input type="hidden" name="from" value="{{ frompage }}">
+<div class="modal fade" id="VMEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Device Edit</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group" id="esxihost">
+                <label class="control-label col-md-4 col-sm-4 col-xs-12">ESXI Host</label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input type="text" class="form-control" name="esxihost" readonly>
+                </div>
+              </div>
+              <div class="form-group" id="vmname">
+                <label class="control-label col-md-4 col-sm-4 col-xs-12">VM Name</label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input type="text" class="form-control" name="vmname" readonly>
+                </div>
+              </div>
+              <div class="form-group" id="adapter">
+                <label class="control-label col-md-4 col-sm-4 col-xs-12">Adapter</label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input type="text" class="form-control" name="adapter" readonly>
+                </div>
+              </div>
+              <div class="form-group" id="mac">
+                <label class="control-label col-md-4 col-sm-4 col-xs-12">MAC</label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input type="text" class="form-control" name="mac" readonly>
+                </div>
+              </div>
+              <div class="form-group" id="vlan">
+                <label class="control-label col-md-4 col-sm-4 col-xs-12">VM VLAN<span class="required">*</span></label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select class="form-control" name="vlan" style="background:#fff;border:1px solid #ccc;">
+                        <option value="" selected></option>
+                        {% for vlan in vlanranges %}
+                            <option value="{{ vlan }}">{{ vlan }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+              </div>
+              <div class="form-group" id="nicpower">
+                <label class="control-label col-md-4 col-sm-4 col-xs-12">NIC Status<span class="required">*</span></label>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <select class="form-control" name="nicpower" style="background:#fff;border:1px solid #ccc;">
+                        <option value="" selected></option>
+                        <option value='On'>On</option>
+                        <option value='Off'>Off</option>
+                    </select>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-info">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<!--power control 模态框 -->
+<form method="post" action="/vmpowerctrl" class="form-horizontal form-label-left input_mask" role="form" onsubmit="return ">
+<div class="modal fade" id="VMPowerControlModal" tabindex="-1" role="dialog" aria-labelledby="VMPowerControlModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="FWModal1">VM Power Control:</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal form-label-left input_mask" role="form">
+            <input type="hidden" name="vmname" value="{{ vmname }}">
+            <input type="hidden" name="frompage" value="myvms">
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Opteate: <span class="required">*</span></label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select  name="operate" class="form-control" required >
+                            <option value="poweredOn">Power On</option>
+                            <option value="poweredOff">Power Off</option>
+                            <option value="reboot">Reboot</option>
+                        </select>
+                     </div>
+            </div>
+          <!-- <div class="divider"></div> -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-info">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+<!-- /page content -->
+
+<script>
+// $(document).ready(function() {
+//     console.log('11111111111111111')
+//     $('#test001').DataTable( {
+//         dom: 'Bfrtip',
+//         "buttons": [
+//             {
+//                 'extend': 'excelHtml5',
+//                 'text': 'export excel',
+//                 'exportOptions': {
+//                     'modifier': {
+//                         'page': 'current'
+//                     }
+//                 }
+//             }
+//         ]
+//     });
+// });
+
+$('#VMEditModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var esxihost = button.data('esxihost')
+  var vmname = button.data('vmname')
+  var adapter = button.data('adapter')
+  var mac = button.data('mac')
+  var vlan = button.data('vlan')
+  var owner = button.data('owner')
+  var user = button.data('user')
+  var nicpower = button.data('nicpower')
+  console.log(nicpower)
+
+  //console.log(owner)
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('VM Edit：')
+  modal.find('.modal-body input[name=esxihost]').val(esxihost)
+  modal.find('.modal-body input[name=vmname]').val(vmname)
+  modal.find('.modal-body input[name=adapter]').val(adapter)
+  modal.find('.modal-body input[name=mac]').val(mac)
+  modal.find('.modal-body select[name=vlan]').val(vlan)
+  modal.find('.modal-body input[name=owner]').val(owner)
+  modal.find('.modal-body input[name=user]').val(user)
+  modal.find('.modal-body select[name=nicpower]').val(nicpower)
+
+  // if (duttype == "G6"){
+  //   var maintenancekey = ""
+  // }
+  // else if (duttype == "SP"){
+  //   var registrationcode = ""
+  //   var maintenancekey = ""
+  // }
+  // modal.find('.modal-body select[name=owner]').val(owner)
+  //modal.find('.modal-body textarea').val(contents)
+})
+
+$('#VMPowerControlModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  // var vm = button.data('vm')
+  var vmname = button.data('vmname')
+  // console.log(vmname)
+  var modal = $(this)
+  // modal.find('.modal-title').text('Edit VM ：' + vm)
+  // modal.find('.modal-body input[name=vmname]').val(vmname)
+
+})
+
+$("#editModal").modal("hide");
+function values(ID,swinfo){
+    $("#id").val(ID);
+    $("#swinfo").val(swinfo);
+    }
+
+$(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        // $('#datatable').dataTable();
+        // $('#datatable2').dataTable();
+        // $('#datatable3').dataTable();
+        $("#datatable").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+              ],
+            autoWidth: true,
+              responsive: true,
+              // bProcessing: true,
+              // bAutoWidth: true,
+              // dropdownAutoWidth: true,
+              // bScrollInfinite: true,
+              // bScrollCollapse: true,
+              // scrollX: 820,
+        });
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive').DataTable();
+
+        $('#datatable-scroller').DataTable({
+          ajax: "js/datatables/json/scroller-demo.json",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+        TableManageButtons.init();
+      });
+</script>
+{% endblock %}
+
+

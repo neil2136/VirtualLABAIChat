@@ -1,0 +1,35 @@
+configure
+configure
+QA_SWITCH_12(conf)#interface gi1/8
+interface gi1/8
+QA_SWITCH_12(conf-if-gi-1/8)#switchport
+switchport
+QA_SWITCH_12(conf-if-gi-1/8)#portmode hybrid
+portmode hybrid
+QA_SWITCH_12(conf-if-gi-1/8)#spanning-tree mstp edge-port bpduguard shutdown-on-violation
+spanning-tree mstp edge-port bpduguard shutdown[47D                                                  [50D$-tree mstp edge-port bpduguard shutdown-on-viol[48D                                                  [50D$tp edge-port bpduguard shutdown-on-violation
+QA_SWITCH_12(conf-if-gi-1/8)#spanning-tree rstp edge-port bpduguard shutdown-on-violation 
+spanning-tree rstp edge-port bpduguard shutdown[47D                                                  [50D$-tree rstp edge-port bpduguard shutdown-on-viol[48D                                                  [50D$tp edge-port bpduguard shutdown-on-violation 
+QA_SWITCH_12(conf-if-gi-1/8)#no spanning-tree
+no spanning-tree
+QA_SWITCH_12(conf-if-gi-1/8)#shutdown
+shutdown
+QA_SWITCH_12(conf-if-gi-1/8)#end
+end
+QA_SWITCH_12#show running-config interface gi1/8
+show running-config interface gi1/8
+!
+interface GigabitEthernet 1/8
+ description vlabVlan736
+ no ip address
+ mtu 9216
+ portmode hybrid
+ switchport
+ no spanning-tree 
+ spanning-tree mstp edge-port bpduguard shutdown-on-violation 
+ spanning-tree rstp edge-port bpduguard shutdown-on-violation 
+!
+ protocol lldp 
+  disable 
+ shutdown
+QA_SWITCH_12#

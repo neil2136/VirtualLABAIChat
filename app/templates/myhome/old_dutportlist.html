@@ -1,0 +1,163 @@
+<table id="table-batabase" class="table table-striped table-bordered jambo_table bulk_action" width="100%" style="margin:auto">
+          <thead>
+          <tr class="headings">
+            <th scope="col" width="10%" style='vertical-align: middle;text-align: center;'>Interface</th>
+            <th scope="col" width="12%" style='vertical-align: middle;text-align: center;'>port Mode</th>
+            <th scope="col" width="25%" style='vertical-align: middle;text-align: center;'>VLAN Tags</th>
+            <th scope="col" width="8%" style='vertical-align: middle;text-align: center;'>Spanning Tree</th>
+            <th scope="col" width="8%" style='vertical-align: middle;text-align: center;'>LAG(Read only)</th>
+            <th scope="col" width="9%" style='vertical-align: middle;text-align: center;'>Configure</th>
+            <th scope="col" width="9%" style='vertical-align: middle;text-align: center;'>Power Status</th>
+            <th scope="col" style='vertical-align: middle;text-align: center;'>VM Name and NIC</th>
+          </tr>
+          </thead>
+          <tbody>
+        {% if deviceinfo.User == current_user.svname %}
+        {% for dutport in deviceinfo.InterfaceInfo.Interface %}
+        <form data-parsley-validate class="form-horizontal form-label-left" action="/dutportset" method="post" >
+            <input type="hidden" name="id" value="{{ deviceinfo.id }}">
+            <input type="hidden" name="type" value="{{ deviceinfo.DeviceType }}">
+            <input type="hidden" name="portname" value="{{ dutport.name }}">
+
+            <table class="table table-bordered" width="100%" style="margin:auto; text-align:left; vertical-align: auto;">
+          <tr class="even pointer" style="background-color:window">
+            <td width="10%"><br />
+                        <b>Name: <font color="#0000FF" size="2">{{ dutport.name }}</font></b><br>({{ dutport.SwitchID }}: {{ dutport.SwitchPort }})</td>
+              <td width="12%"><br />
+                                <label class="radio-inline">
+                  {% if dutport.lag == 'on' %}
+                    <input name="portmode" type="radio" class="flat" value="access" readonly checked> access <img src="static/checkmark.png"><br />
+                    <input name="portmode" type="radio" class="flat" value="trunk" readonly> trunk
+                  {% else %}
+                    {% if dutport.portmode == 'access' %}
+                    <input name="portmode" type="radio" class="flat" value="access" checked> access <img src="static/checkmark.png"><br />
+                    <input name="portmode" type="radio" class="flat" value="trunk" > trunk
+                    {% else %}
+                    <input name="portmode" type="radio" value="access" > access <br />
+                    <input name="portmode" type="radio" value="trunk" checked> trunk <img src="static/checkmark.png">
+                    {% endif %}
+                  {% endif %}
+                </label>
+              </td>
+              <td width="25%"><br />
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Untag<span class="required">*</span></label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+<!--                   <input type="text" class="form-control" name="untagvlan" value="{{ dutport.untagvlan }}" oninput="value=value.replace(/[^\d]/g,'')">
+                 -->
+                    {% if dutport.lag == 'on' %}
+                    <input type="text" class="form-control" name="untagvlan" value="{{ dutport.untagvlan }}"  readonly>
+                    {% else %}
+                                          <select id="untag2" name="untagvlan" class="form-control" required >
+                                                <option value="{{ dutport.untagvlan }}" selected>{{ dutport.untagvlan }}</option>
+                                                {% for vlan in vlanranges %}
+                                                  <option value="{{ vlan }}">{{ vlan }}</option>
+                                                {% endfor %}
+                                                </select>
+                    {% endif %}
+                                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Tag<span class="required">*</span></label>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+                                          <!-- {% if dutport.portmode == 'access' %}
+                                                <input type="text" class="form-control" name="tagvlan" value="{{ dutport.tagvlan }}" oninput="value=value.replace(/[^\d\,\-]/g,'')" disabled="disabled">
+                                          {% else %}
+                                                <input type="text" class="form-control" name="tagvlan" value="{{ dutport.tagvlan }}" oninput="value=value.replace(/[^\d\,\-]/g,'')">
+                                          {% endif %} -->
+                    {% if dutport.lag == 'on' %}
+                      <input type="text" class="form-control" name="tagvlan" value="{{ dutport.tagvlan }}" oninput="value=value.replace(/[^\d\,\-]/g,'')" readonly>
+                    {% else %}
+                                          <input type="text" class="form-control" name="tagvlan" value="{{ dutport.tagvlan }}" oninput="value=value.replace(/[^\d\,\-]/g,'')">
+                                        {% endif %}
+                                  </div>
+                </div>
+              </td>
+              <td align="left" width="8%"><br /><br />
+                <input type="text" name="stp" hidden>
+                {% if dutport.lag == 'on' %}
+                  <label><input  type="checkbox" class="js-switch" onclick="this.form.stp.value='off';" checked readonly></label>
+                {% else %}
+                  {% if dutport.stp == 'on' %}
+                  <label><input  type="checkbox" class="js-switch" onclick="this.form.stp.value='off';" checked ></label>
+                  {% else %}
+                  <label><input  type="checkbox" class="js-switch" onclick="this.form.stp.value='on';" ></label>
+                  {% endif %}
+                {% endif %}
+              </td>
+              <td align="left" width="8%"><br /><br />
+                {% if dutport.lag == 'on' %}
+                <input type="hidden" name="lag" value="on">
+                <label><input type="checkbox" class="js-switch" checked disabled></label>
+                {% else %}
+                <input type="hidden" name="lag" value="off">
+                <label><input type="checkbox" class="js-switch" readonly></label>
+                {% endif %}
+              </td>
+                          <td width="9%" align="center"><br />
+<!--                    <button type="submit" class="btn btn-warning" onclick="this.form.operate.value='refresh';">Refresh</button>-->
+<!--            <button type="submit" class="btn btn-success" onclick="this.form.operate.value='submit';">Submit .</button>-->
+                <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#waitingModal" name="operate" value="refresh" onclick="showWaiting()" >Refresh</button>
+                <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#waitingModal" name="operate" value="submit" onclick="showWaiting()" >Submit .</button>
+
+              <div class="modal fade" tabindex="-1" role="dialog" id="waitingModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">In Operation ... </h4>
+                        </div>
+                        <div class="modal-body">
+                          <p><b>Note, you can refresh the current page manually to see the Console Log in progressing.</b><p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">100%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" disabled class="btn btn-default" data-dismiss="modal">Configuration in progress. Do not repeat！</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+
+              </td>
+                          <td width="9%" style="background-color:antiquewhite" align="center"><br />
+                {% if dutport.portpower == "no shutdown" %}
+                <nobr><img src="static/images/green_led.png">Link Up</nobr>
+<!--                    <button type="submit" class="btn btn-info" onclick="this.form.operate.value='shutdown';">Disable</button>-->
+                <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#waitingModal" name="operate" value="shutdown" onclick="showWaiting()" >Disable </button>
+                {% else %}
+                <nobr><img src="static/images/red_led.png">Link Down</nobr>
+<!--                     <button type="submit" class="btn btn-info" onclick="this.form.operate.value='no shutdown';">Enable</button>-->
+                <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#waitingModal" name="operate" value="no shutdown" onclick="showWaiting()" >Enable </button>
+                {% endif %}
+                          </td>
+              <td style="background-color:lavenderblush" align="center">
+                <!-- <div class="form-group">
+                  <textarea class="form-control" rows="3" readonly>{% for vms in dutport.vmname %}{{ vms.name }}{{ vms.nic }};                                                             {% endfor %}</textarea>
+                </div> -->
+                                <select name="vmname" class="form-control" required >
+                                        {% for vms in dutport.vmname %}
+                                                <option value="{{ vms.name }}{{ vms.nic }}">{{ vms.name }}{{ vms.nic }}</option>
+                                                {% endfor %}
+                                </select>
+                                <select name="vmvlan" class="form-control" required >
+                                        <option value="none" selected>--Select--</option>
+                                                {% for vlan in vlanranges %}
+                                                        <option value="{{ vlan }}">{{ vlan }}</option>
+                                                {% endfor %}
+                                        <option value="trunk">Trunk</option>
+                                </select>
+<!--                            <button type="submit" class="btn btn-primary" onclick="this.form.operate.value='vmvlanchange';" >VM VLAN Change</button>-->
+                                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#waitingModal" name="operate" value="vmvlanchange" onclick="showWaiting()" >VM VLAN Change </button>
+              </td>
+          </tr>
+            </table>
+        </form>
+        {% endfor %}
+
+        {% else %}
+        {% endif %}
+          </tbody>
+</table>

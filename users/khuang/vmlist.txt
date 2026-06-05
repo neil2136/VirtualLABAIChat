@@ -1,0 +1,1 @@
+[{"ip": "10.8.2.107", "name": ["SMA-500v(ESXi)-ENG-10.8.161.10", "SMA-500v(ESXi)-JPN-10.8.161.11", "SMA-500v(ESXi)-JPN-10.8.161.12", "Ubuntu-20.04.1 LTS-10.8.161.191", "Win 10-Localization-ENG-10.8.161.20", "Win 10-Localization-JPN-10.8.161.21", "Win 10-Localization-JPN-10.8.161.22", "WinServer 2019-Standard-ENG-10.8.161.30", "WinServer 2019-Standard-JPN-10.8.161.31"]}]

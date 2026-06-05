@@ -1,0 +1,32 @@
+Start check cisco Switch configure
+==================================================
+************************************************************
+show etherchannel summary | include 4/28
+QA_SWITCH_1
+************************************************************
+show interfaces gi4/28 status | include 0
+Gi4/28        vlab-Vlan150       connected    150        a-full a-1000 10/100/1000BaseT
+QA_SWITCH_1
+************************************************************
+show running-config interface gi4/28
+Building configuration...
+
+Current configuration : 261 bytes
+!
+interface GigabitEthernet4/28
+ description vlab-Vlan150
+ switchport
+ switchport access vlan 150
+ switchport mode access
+ switchport nonegotiate
+ no cdp enable
+ spanning-tree portfast edge
+ spanning-tree bpdufilter disable
+ spanning-tree bpduguard enable
+end
+
+QA_SWITCH_1
+************************************************************
+show interfaces gi4/28 | include protocol
+GigabitEthernet4/28 is up, line protocol is up (connected)
+QA_SWITCH_1

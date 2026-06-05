@@ -1,0 +1,1 @@
+[{"ip": "10.8.2.27", "name": ["12s", "13s", "VMWare_Nick_7s", "cyuan-GVC", "cyuan-WIN2016(test%25236_)-531", "cyuan-Win7-535", "cyuan-Win7-536", "cyuan-dnsserver(10.8.84.231qa%2fpassword)", "cyuan-win7-530", "cyuan-win7-531", "cyuan-win7-532", "cyuan-win7-533", "cyuan-win7-534", "nizhang_ubuntu_1604"]}]

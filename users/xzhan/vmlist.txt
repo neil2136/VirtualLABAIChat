@@ -1,0 +1,1 @@
+[{"ip": "10.8.2.19", "name": ["Celia-Static-server", "Celia-Ubuntu18-1", "Celia-Ubuntu18-2-Server", "Celia-upgrade", "Celia-win10-1-l2tp-smtp", "Celia-win10-2", "Celia-win10-3", "Celia-win10-4", "Celia-win2019-DNS-LDAP", "Celia-win7-1-l2tp-smtp", "Celia-winxp-x64", "Celia_NSv_270", "Celia_NSv_400", "Celia_NSv_470", "Celia_NSv_800_1", "dns-filter-4299"]}]

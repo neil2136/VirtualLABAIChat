@@ -1,0 +1,379 @@
+{% extends "bootstrap/base.html" %}<!--è¿ç»­åºç¡¡æ¬¿æ¨¡æ¿-->
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}<!--æå®ä¹æ¨¡æ¿åºå-->
+<!-- page content -->
+<div class="right_col" role="main">
+          <!-- top tiles -->
+          <div class="row tile_count">
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-th-large"></i>  DUT&SP Totals</span>
+              <div class="count blue">{{ totals['dut'] }}</div>
+              <span class="count_bottom"><i class="blue">Used </i>From Last Refresh</span>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-qrcode"></i>  VM Totals</span>
+              <div class="count blue">{{ totals['vm'] }}</div>
+              <span class="count_bottom"><i class="blue"><i class="fa fa-sort-asc"></i>Used </i>From Last Refresh</span>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-reorder"></i>  Switch Totals</span>
+              <div class="count blue">{{ totals['switch'] }}</div>
+              <span class="count_bottom"><i class="blue"><i class="fa fa-sort-asc"></i>Used </i>From Last Refresh</span>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-check-square"></i>  Effective configuration</span>
+              <div class="count green">{{ totals['effective'] }}</div>
+              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>Successful </i>From ALL User</span>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-ambulance"></i>  invalid configuration</span>
+              <div class="count red">{{ totals['invalid'] }}</div>
+              <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>Failed </i>From ALL User</span>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Visits Totals</span>
+              <div class="count purple">{{ totals['visits'] }}</div>
+              <span class="count_bottom"><i class="purple"><i class="fa fa-sort-asc"></i>Login </i>From ALL users</span>
+            </div>
+          </div>
+          <!-- /top tiles -->
+
+          <div class="row" style="width:100%">
+              <!-- bar chart -->
+              <div class="col-md-6 col-sm-6 col-xs-12" style="width:100%">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>User configuration frequency(QA2 Team)<small>Total From last Week</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content" >
+                    <input id="userlistcounts" value="{{ userconfcounts }}" hidden>
+                    <div id="graph_bar" style="width:100%; height:320px"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- /bar charts -->
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-12">
+              <div class="x_panel tile fixed_height_320">
+                <div class="x_title">
+                  <h2>Top Devices usage</h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <h4>total Devices usage last week</h4>
+                  {% for topdevice in topdevice %}
+                  <div class="widget_summary">
+                    <div class="w_left w_25">
+                      <span>{{ topdevice.name }}</span>
+                    </div>
+                    <div class="w_center w_55">
+                      <div class="progress">
+                        <div class="progress-bar bg-orange" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ topdevice.rate }}%;">
+<!--                          <span class="sr-only">100% Complete</span>-->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w_right w_20">
+                      <span>{{ topdevice.count }}</span>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+              <div class="x_panel tile fixed_height_320">
+                <div class="x_title">
+                  <h2>Top Users usage</h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <h4>total Users usage last week</h4>
+                  {% for topuser in topuser %}
+                  <div class="widget_summary">
+                    <div class="w_left w_25">
+                      <span>{{ topuser.name }}</span>
+                    </div>
+                    <div class="w_center w_55">
+                      <div class="progress">
+                        <div class="progress-bar bg-blue-sky" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ topuser.rate }}%;">
+<!--                          <span class="sr-only">100% Complete</span>-->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w_right w_20">
+                      <span>{{ topuser.count }}</span>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+              <div class="x_panel tile fixed_height_320 overflow_hidden">
+                <div class="x_title">
+                  <h2>Users Failure rate</h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <table class="" style="width:100%">
+                    <tr>
+                      <th style="width:37%;">
+                        <p>Percentage view</p>
+                      </th>
+                      <th>
+                        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                          <p class="">projects</p>
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                          <p class="">Progress</p>
+                        </div>
+                      </th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <canvas id="canvas1" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
+                      </td>
+                      <td>
+                        <table class="tile_info">
+                          <tr>
+                            <td>
+                              <p><i class="fa fa-square blue"></i>VLAB </p>
+                            </td>
+                            <td>30%</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p><i class="fa fa-square green"></i>SonicWall </p>
+                            </td>
+                            <td>10%</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p><i class="fa fa-square purple"></i>Sonicpoint </p>
+                            </td>
+                            <td>20%</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p><i class="fa fa-square aero"></i>VMs </p>
+                            </td>
+                            <td>15%</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p><i class="fa fa-square red"></i>Others </p>
+                            </td>
+                            <td>30%</td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Users Log <small>Displays all login users information</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a></li>
+                          <li><a href="#">Settings 2</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <p>All Login Users <code>login_point</code> will show from last Week to now.</p>
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action" width="100%">
+                        <thead>
+                          <tr class="headings">
+                            <th width="2%"><input type="checkbox" id="check-all" class="flat"></th>
+                            <th class="column-title" width="11%">Users </th>
+                            <th class="column-title" width="8%">Action (host ip) </th>
+                            <th class="column-title" width="13%">Message </th>
+                            <th class="column-title" width="15%">Local Time</th>
+                          </tr>
+                        </thead>
+                    </table>
+                    <div class="pre-scrollable" style="height: 490px;overflow: auto; margin-top: -22px;">
+                    <table class="table table-striped jambo_table bulk_action table-hover">
+                        <tbody>
+                        {% for log in userlogs %}
+                          <tr class="even pointer">
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" ">{{ log.user }}</td>
+                            <td class=" ">
+                                {% if log.hostip %}
+                                    {{ log.action }}  ({{ log.hostip }})
+                                {% else %}
+                                    {{ log.action }}
+                                {% endif %}
+                            </td>
+                            <td class=" ">{{ log.massage }}</td>
+                            <td class=" last">{{ log.time }}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+          </div>
+        </div>
+<!-- /page content -->
+<!-- Doughnut Chart -->
+<script>
+$(document).ready(function() {
+  //convent string to object
+  var userlistcounts = document.getElementById('userlistcounts');
+  var userlist = userlistcounts.value.slice(1, -1).replace(/'/g, "\"");
+  // var userlist = '{"user":"lezhang", "Count":88},{"user": "wmao", "Count": 65}';
+  var obj = JSON.parse("["+userlist+"]");
+  // console.log(typeof(obj))
+  // console.log(Object.entries(obj))
+  // console.log(Object.keys(obj))
+  Morris.Bar({
+    element: 'graph_bar',
+    data:  obj,
+    xkey: 'User',
+    ykeys: ['Count'],
+    labels: ['Count'],
+    barRatio: 0.4,
+    barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+    xLabelAngle: 35,
+    hideHover: 'auto',
+    resize: true
+  });
+});
+      $(document).ready(function(){
+        var options = {
+          legend: false,
+          responsive: false
+        };
+
+        new Chart(document.getElementById("canvas1"), {
+          type: 'doughnut',
+          tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+          data: {
+            labels: [
+              "Symbian",
+              "Blackberry",
+              "Other",
+              "Android",
+              "IOS"
+            ],
+            datasets: [{
+              data: [15, 20, 30, 10, 30],
+              backgroundColor: [
+                "#BDC3C7",
+                "#9B59B6",
+                "#E74C3C",
+                "#26B99A",
+                "#3498DB"
+              ],
+              hoverBackgroundColor: [
+                "#CFD4D8",
+                "#B370CF",
+                "#E95E4F",
+                "#36CAAB",
+                "#49A9EA"
+              ]
+            }]
+          },
+          options: options
+        });
+      });
+</script>
+<!-- /Doughnut Chart -->
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+{% endblock %}
+
+
+
+

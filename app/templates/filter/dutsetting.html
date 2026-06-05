@@ -1,0 +1,375 @@
+
+
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}LAB Tools{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h3>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h3>
+    <b>{% if current_user.is_authenticated %}{{ user.email }}{% else %}Stranger{% endif %}!</b>
+</div>
+<div>
+    {% if current_user.can(Permission.WRITE) %}
+    {{ wtf.quick_form(form) }}
+    {% endif %}
+</div>
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#nav {
+    line-height:30px;
+    background-color:#eeeeee;
+    height:600px;
+    width:150px;
+    float:left;
+    padding:5px;
+}
+#section {
+    width:950px;
+    float:left;
+    padding:10px;
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+   padding:5px;
+}
+
+.menu_list {
+width: auto;
+margin: 0;
+}
+.menu_head {
+height: auto;
+line-height: 47px;
+padding-left: 4px;
+font-size: 17px;
+color: #F5F5DC;
+cursor: pointer;
+border: 1px solid #f1f1f1;
+position: relative;
+margin: 0px;
+font-weight: bold;
+background: #51a9f18c;
+}
+
+.menu_list .current {
+background: #51a9f18c;
+}
+.menu_nva {
+line-height: 38px;
+border-left: 1px solid #51a9f18c;
+backguound: #fff;
+border-right: 1px solid #51a9f18c;
+}
+.menu_nva a {
+display: block;
+height: auto;
+line-height: 38px;
+padding-left: 10px;
+color: #777777;
+background: #fff;
+text-decoration: none;
+border-bottom: 1px solid #51a9f18c;
+}
+
+.menu_nva a:hover {
+text-decoration: none;
+}
+
+table.gridtable {
+font-family: verdana,arial,sans-serif;
+font-size:11px;
+color:#333333;
+border-width: 1px;
+border-color: #666666;
+border-collapse: collapse;
+}
+table.gridtable th {
+border-width: 1px;
+padding: 8px;
+border-style: solid;
+border-color: #666666;
+background-color: #dedede;
+}
+table.gridtable td {
+border-width: 1px;
+padding: 8px;
+border-style: solid;
+border-color: #666666;
+background-color: #ffffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="nav" class="menu_list" style="width:16%; overflow:auto">
+
+    <div style="display:block" class="menu_nva">
+        <div style="display:block" class="menu_nva">
+            <h5 class="menu_head current">Device MGMT</h5>
+            <a href="{{ url_for('.dutlist') }}"><font face="verdana" color="green">├─FW Summary</font></a>
+            <a href="{{ url_for('.splist') }}"><font face="verdana" color="green">├─SP Summary</font></a>
+            <a href="{{ url_for('.mydevicelist') }}"><font face="verdana" color="green">├─My Devices</font></a>
+            <a href="{{ url_for('.dutsetting') }}"><font face="verdana" color="green">├─My Device Port</font></a>
+            <a href="{{ url_for('.wpc') }}"><font face="verdana" color="green">├─Wireless PC</font></a>
+            <a href="{{ url_for('.ixia') }}"><font face="verdana" color="green">├─Ixia Control</font></a>
+            <h5 class="menu_head current">Switch Debug</h5>
+            <a href="{{ url_for('.vlansearch') }}"><font face="verdana" color="green">├─VLAN Check(VLAB)</font></a>
+            <a href="{{ url_for('.vlab135swcfgstatus') }}"><font face="verdana" color="green">├─Config Queue</font></a>
+            <a href="{{ url_for('.vlanlist') }}"><font face="verdana" color="green">├─VLAN list(SWs)</font></a>
+            <h5 class="menu_head current">Auto Tools</h5>
+            <a href="{{ url_for('.dutcfgbatch') }}"><font face="verdana" color="green">├─DUT Config</font></a>
+        </div>
+    </div>
+</div>
+
+
+<div id="section" style="height:600px; overflow:auto">
+<table width="900px" border="1" cellspacing="10" cellpadding="10" align="justify">
+<colgroup>
+    <col span="2" style="background-color:#e9faff">
+    <col style="background-color:#f2fbfe">
+  </colgroup>
+
+<script language="javascript">
+function occupypc()
+{
+  if(window.confirm("Are you sure you want to occupy this PC？ If yes, Your Email account will receive an email with a wireless PC message in it "))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function releaseowner()
+{
+  if(window.confirm("Are you sure you want to release current owner？ Please confirm the usage to owner first"))
+  {
+   return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+function submitForm3(){
+    var form = document.getElementById("dutmapport");//获取form表单对象
+    form.submit();//form表单提交
+}
+
+function untag_hidden(){
+        if (document.getElementById('trunkradio').disabled==false){
+            document.getElementById('trunkradio').disabled =true;
+        }
+    }
+function tag_hidden(){
+        if (document.getElementById('trunkradio').disabled==true){
+            document.getElementById('trunkradio').disabled =false;
+        }
+    }
+
+function kpd(){
+if(event.keyCode<=47 || (event.keyCode>=65 && event.keyCode!=FF0C && event.keyCode!=8)) {
+event.returnValue=false;
+}
+}
+
+</script>
+<input type="button" name="Submit" onclick="javascript:history.back(-1);" value="Return to previous page">
+    <p></p>
+<tr><td colspan=7><h3><b>Devices Configure</b></h3>
+</td></tr>
+</table>
+
+<table border="1" style="background:#efefef;width:480px;height:40px; text-align:center">
+    <tr><td><b>Product list:</b></td>
+        <td>
+        <form id="dutmapport" method="get" action="/dutsetting">
+        <input type="hidden" name="dutselete" value="dutselete">
+        <select onchange="submitForm3();" name="kind" style="background:#fff;border:1px solid #ccc;">
+            {% if idfilter != "NA" %}
+            <option value="{{ idfilter.id }}" selected>({{ idfilter.id }}) {{ idfilter.Product }}</option>
+            {% else %}
+            <option value="none" selected>-Selete-</option>
+            {% endif %}
+            {% for user in userfilter %}
+            {% if user.Product != "NA" %}
+            <option value="{{ user.id}}:{{ user.Product }}">({{ user.id }}) {{ user.Product }} </option>
+            {%else %}
+            {%endif %}
+            {% endfor %}
+        </select>
+        </form>
+        </td>
+        <td>
+        <form id="portmap" method="post" action="/dutsetting">
+            <input type="hidden" name="dutnum" value="{{ idfilter.id }}">
+            <input type="hidden" name="idfilter" value="NA">
+            <input type="hidden" name="pagemark" value="dutlist">
+            <input type="hidden" name="duttype" value="{{ duttype }}">
+            <select name="kind" id="select" onChange="selectchange()" style="background:#fff;border:1px solid #ccc;">
+                  {% for portmap in dutportmap %}
+                    <option value="{{ portmap.name}}">{{ portmap.name }}</option>
+                    {% endfor %}
+            </select>
+
+            <button type="submit" value="Submit"><b>Get configuration</b></button>
+        </form>
+    </td></tr>
+</table>
+
+<p>
+<table width="500px" border="1" cellspacing="10" cellpadding="10" align="justify">
+    <colgroup>
+    <col span="2" style="background-color:#e9faff">
+    <col style="background-color:#f2fbfe">
+  </colgroup>
+    <tr><td colspan=10><b>Interface config</b></td></tr>
+  <caption>DUT Interface list information</caption>
+    <form action="/dutsetting" method="post">
+		<tr><td><b>Product ID:</b></td>
+			<td ><input type="text" id="productid" name="productid" value="{{ dutinfo.id }}" maxlength="45" readonly style="border:0px; background:#EDEDED"></td>
+		</tr>
+		<tr><td><b>Product name:</b></td>
+			<td ><input type="text" id="productname" name="productname" value="{{ dutinfo.Product }}" readonly style="border:0px; background:#EDEDED"></td>
+		</tr>
+        <tr><td><b>Product console ip:</b></td>
+			<td ><input type="text" id="productconsoleip" name="productconsoleip" value="{{ dutinfo.productconsoleip }}" readonly style="border:0px; background:#EDEDED"></td>
+		</tr>
+        <tr><td><b>Product console port:</b></td>
+			<td ><input type="text" id="productconsoleport" name="productconsoleport" value="{{ dutinfo.productconsoleport}}" readonly style="border:0px; background:#EDEDED"></td>
+		</tr>
+        <tr><td><b>DUT Interface :</b></td><td>
+            <input type="hidden" name="pagemark" value="swsetting">
+            <input type="hidden" name="orgswmode" value="{{ portinfo.swmode }}">
+            <input type="hidden" name="swip" value="{{ portinfo.swip }}">
+            <input type="hidden" name="orgportmode" value="{{ portinfo.portmode }}">
+            <input type="hidden" name="orgportstatus" value="{{ portinfo.portstatus }}">
+            <input type="hidden" name="orguntags" value="{{ portinfo.untags }}">
+            <input type="hidden" name="orgtags" value="{{ portinfo.tags }}">
+            <input type="hidden" name="orgstp" value="{{ portinfo.stpstatus }}">
+			<input type="text" id="dutinterface" name="dutinterface" value="{{ portinfo.name }}" datatype="s0-6" readonly style="border:0px; background:#EDEDED">
+        </td></tr>
+		<tr><td><b>Switch ID :</b></td>
+			<td ><input type="text" id="swid" name="swid" value="{{ portinfo.SwitchID }}" readonly style="border:0px; background:#EDEDED"></td></tr>
+        <tr><td><b>Switch Port :</b></td>
+			<td ><input type="text" id="swport" name="swport" value="{{ portinfo.SwitchPort }}" readonly style="border:0px; background:#EDEDED"></td></tr>
+		<tr><td><b>port Mode :</b></td>
+		<td>
+            {% if portinfo['portmode'] == 'access' %}
+                <label><input name="portmode" type="radio" onClick="untag_hidden()" value="access" checked>access <img src="static/checkmark.png">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label><input name="portmode" type="radio" onClick="tag_hidden()" value="trunk" >trunk </label>
+            {% elif portinfo['portmode'] == 'trunk' %}
+                <label><input name="portmode" type="radio" onClick="untag_hidden()" value="access" >access &nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label><input name="portmode" type="radio" onClick="tag_hidden()" value="trunk" checked>trunk <img src="static/checkmark.png"></label>
+            {% else %}
+                <label><input name="portmode" type="radio" onClick="tag_hidden()" value="access" checked>access &nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label><input name="portmode" type="radio" onClick="tag_hidden()" value="trunk" >trunk </label>
+            {% endif %}
+        </td>
+		</tr>
+
+        <tr><td><b>port Status :</b></td>
+		<td>
+            {% if portinfo['portstatus'] == 'Up' %}
+                <label><input name="portstatus" type="radio" value="Up" checked>enabled <img src="static/checkmark.png">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label><input name="portstatus" type="radio" value="Down" >disabled &nbsp;&nbsp;&nbsp;&nbsp;</label>
+            {% elif portinfo['portstatus'] == 'Down' %}
+                <label><input name="portstatus" type="radio" value="Up" >enabled &nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label><input name="portstatus" type="radio" value="Down" checked>disabled <img src="static/checkmark.png">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            {% else %}
+                <label><input name="portstatus" type="radio" value="Up" checked>enabled &nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label><input name="portstatus" type="radio" value="Down" >disabled &nbsp;&nbsp;&nbsp;&nbsp;</label>
+            {% endif %}
+        </td>
+		</tr>
+
+        <tr><td><b>Untag vlan:</b></td>
+            <td>
+                <input type="text" name="untagvlan" size="25" value="{{ portinfo.untags }}" oninput="value=value.replace(/[^\d]/g,'')" style="border:0px; background:#C0FF3E">
+            </td>
+            </tr>
+        <tr>
+            <td><b>tag vlan:</b></td>
+            <td>
+                <input type="text" name="tagvlan" size="25" value="{{ portinfo.tags }}" oninput="value=value.replace(/[^\d\,\-]/g,'')" style="border:0px; background:#C0FF3E">
+                 <Br /> <font color="#0000FF" size="2"><b>Your authorized VLAN: {{ vlanranges }}</b> </font></td>
+        </tr>
+
+        <tr><td><b>Spanning Tree :</b></td>
+		<td>
+            {% if portinfo['stpstatus'] == 'on'%}
+            <label><input name="stp" type="radio" value="on" checked> on <img src="static/checkmark.png">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <label><input name="stp" type="radio" value="off" >off </label>
+            {% elif portinfo['stpstatus'] == 'off' %}
+            <label><input name="stp" type="radio" value="on" > on &nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <label><input name="stp" type="radio" value="off" checked>off <img src="static/checkmark.png"></label>
+            {% else %}
+            <label><input name="stp" type="radio" value="on" checked> on &nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <label><input name="stp" type="radio" value="off" >off </label>
+            {% endif %}
+            <Br /> <font color="#0000FF" size="2"><b>For L2 bridge/wire mode, please off it</b> </font>
+        </td>
+		</tr>
+
+        <tr><td></td><td><button type="submit" value="Submit"><b>Configure</b></button></td></tr>
+     </form>
+</table>
+
+<p></p>
+<div id="log" style="height:300px; overflow:auto">
+
+<table class="gridtable" width="900px" border="1" cellspacing="10" cellpadding="10" align="justify">
+<tr><th><h5>Switch configure result</h5></th></tr>
+<tr><td>
+{% for sw_line in swconfigresult %}
+    {{ sw_line }}<br />
+{% endfor %}
+ </td></tr>
+</table>
+
+<table class="gridtable" width="900px" border="1" cellspacing="10" cellpadding="10" align="justify">
+<tr><th><h5>User Log - operated devices</h5></th></tr>
+<tr><td>
+{% for log_line in log_print %}
+    {{ log_line }}<br />
+{% endfor %}
+ </td></tr>
+</table>
+</div>
+
+</div>
+
+<div class="col-md-4" style="width:250px; height:100px; background:white; float:right;">
+    <br>
+    <p>Go Back to first page <a href="{{ url_for('.index') }}">Click here</a>.</p>
+</div>
+
+<div id="footer" align="right">
+Copyright Sonicwall.com
+</div>
+
+</body>
+</html>
+
+{% endblock %}
