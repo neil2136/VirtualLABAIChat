@@ -3,6 +3,7 @@
 ## 项目简介
 
 VLab 设备管理系统是一个基于 Flask 的 Web 应用，提供设备管理、用户认证和 AI 对话功能。系统集成了 AI Agent 服务，支持通过自然语言查询、借用和归还设备。
+<img width="1865" height="1032" alt="image" src="https://github.com/user-attachments/assets/421132d3-d08f-4644-a0a2-114ba631a40f" />
 
 ## 主要功能
 
